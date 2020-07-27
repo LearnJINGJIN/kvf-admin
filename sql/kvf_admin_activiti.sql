@@ -6,16 +6,16 @@
 DROP TABLE IF EXISTS `wf_form`;
 CREATE TABLE `wf_form`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '表单代号',
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '表单名称',
+  `code` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '表单代号',
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '表单名称',
   `type` tinyint(2) NOT NULL DEFAULT 0 COMMENT '表单类型。0：简单表单；1：复杂表单；',
-  `theme` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '表单主题。不配置默认为表单名称',
-  `design_data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '表单设计数据。',
-  `js_code` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '表单js代码。仅当复杂表单才有',
+  `theme` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '表单主题。不配置默认为表单名称',
+  `design_data` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '表单设计数据。',
+  `js_code` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '表单js代码。仅当复杂表单才有',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '表单设计表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '表单设计表' ROW_FORMAT = Dynamic;
 
 
 -- ----------------------------
@@ -24,10 +24,10 @@ CREATE TABLE `wf_form`  (
 DROP TABLE IF EXISTS `wf_process_form`;
 CREATE TABLE `wf_process_form`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `model_id` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '流程模型ID',
-  `form_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '表单代号',
+  `model_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '流程模型ID',
+  `form_code` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '表单代号',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '流程表单关联表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '流程表单关联表' ROW_FORMAT = Dynamic;
 
 
 
