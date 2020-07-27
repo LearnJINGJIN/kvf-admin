@@ -1,4 +1,3 @@
-
 -- quartz自带表结构
 -- 需要用到定时任务才需要创建
 DROP TABLE IF EXISTS `qrtz_blob_triggers`;
