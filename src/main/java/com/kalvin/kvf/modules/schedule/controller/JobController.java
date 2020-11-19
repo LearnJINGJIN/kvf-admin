@@ -78,6 +78,16 @@ public class JobController {
         jobService.resumeJob(id);
         return R.ok();
     }
+    /**
+     * 立即执行定时任务
+     * @param id 任务ID
+     */
+    @RequiresPermissions("schedule:job:triggerJob")
+    @PostMapping(value = "triggerJob/{id}")
+    public R triggerJob(@PathVariable Long id) {
+        R r=jobService.triggerJob(id);
+        return r;
+    }
 
     /**
      * 更新定时任务

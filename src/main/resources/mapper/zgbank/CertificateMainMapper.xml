@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalvin.kvf.modules.zgbank.mapper.CertificateMainMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zgbank.entity.CertificateMain">
+        <id column="id" property="id" />
+        <result column="certificate_name" property="certificateName" />
+        <result column="certificate_type" property="certificateType" />
+        <result column="certificate_about_machine" property="certificateAboutMachine" />
+        <result column="certificate_start_time" property="certificateStartTime" />
+        <result column="certificate_end_time" property="certificateEndTime" />
+        <result column="user_id" property="userId" />
+        <result column="remark" property="remark" />
+        <result column="send_msg_times" property="sendMsgTimes" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       id, certificate_name, certificate_type, certificate_about_machine, certificate_start_time, certificate_end_time, user_id, remark, send_msg_times, create_time
+    </sql>
+
+    <select id="selectCertificateMainList" resultType="com.kalvin.kvf.modules.zgbank.entity.CertificateMain">
+        select <include refid="Base_Column_List" /> from zgbank_certificate_main
+        <trim prefix="where" prefixOverrides="and">
+            <if test="certificateMain.certificateName != null and certificateMain.certificateName != ''">
+                and certificate_name like concat(#{certificateMain.certificateName}, "%")
+            </if>
+            <if test="certificateMain.userId != null">
+                and user_id = #{certificateMain.userId}
+            </if>
+        </trim>
+    </select>
+
+</mapper>

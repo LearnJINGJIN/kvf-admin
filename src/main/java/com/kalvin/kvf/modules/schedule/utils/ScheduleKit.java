@@ -54,6 +54,13 @@ public class ScheduleKit {
             throw new KvfException("恢复启动定时任务失败");
         }
     }
+    public static void triggerJob(Long jobId) {
+        try {
+            scheduler.triggerJob(getJobKey(jobId));
+        } catch (SchedulerException e) {
+            throw new KvfException("立即执行定时任务失败");
+        }
+    }
 
     public static void update(Long jobId, Job job) {
         try {

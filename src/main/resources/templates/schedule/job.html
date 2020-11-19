@@ -54,6 +54,7 @@
     <button class="layui-btn layui-btn-sm layui-bg-blue" lay-event="pause">暂停</button>
 <!--    <button class="layui-btn layui-btn-sm layui-bg-orange" lay-event="resume">恢复</button>-->
     <button class="layui-btn layui-btn-sm layui-bg-cyan" lay-event="resume">运行</button>
+    <button class="layui-btn layui-btn-sm layui-bg-red" lay-event="triggerJob">立即执行</button>
 </script>
 
 <!--表格行工具栏模板-->
@@ -154,6 +155,26 @@
                                 if (r.code === req.status.ok) {
                                     table.reload(tableId);
                                     kvfKit.sucessMsg('已恢复/运行任务');
+                                } else {
+                                    kvfKit.errorMsg(r.msg);
+                                }
+                            }
+                        });
+                    });
+                    break;
+                case 'triggerJob':
+                    if(checkData.length === 0){
+                        return kvfKit.warningMsg('请选择数据');
+                    }
+                    layer.confirm('确定立即执行当前任务吗？', function(index) {
+                        //执行 Ajax 后重载
+                        $.ajax({
+                            type: req.type.post,
+                            url: BASE_WEB + 'schedule/job/triggerJob/' + checkData[0].id,
+                            success: function (r) {
+                                if (r.code === req.status.ok) {
+                                    table.reload(tableId);
+                                    kvfKit.sucessMsg('执行成功，请查看日志');
                                 } else {
                                     kvfKit.errorMsg(r.msg);
                                 }

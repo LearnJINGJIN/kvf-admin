@@ -2,6 +2,7 @@ package com.kalvin.kvf.modules.schedule.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.kalvin.kvf.common.dto.R;
 import com.kalvin.kvf.common.exception.KvfException;
 import com.kalvin.kvf.modules.schedule.constant.JobConstant;
 import com.kalvin.kvf.modules.schedule.utils.ScheduleKit;
@@ -52,6 +53,16 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
         job.setStatus(JobConstant.JOB_STATUS_RUNNING);
         super.updateById(job);
         ScheduleKit.resume(id);
+    }
+    @Transactional
+    @Override
+    public R triggerJob(Long id) {
+         Job job = this.checkJobExist(id);
+        if (job.getStatus()==0){
+            ScheduleKit.triggerJob(id);
+            return  R.ok();
+        }
+        return  R.fail("请先将定时任务改成运行状态！");
     }
 
     @Transactional

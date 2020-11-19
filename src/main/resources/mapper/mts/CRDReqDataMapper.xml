@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalvin.kvf.modules.mts.mapper.CRDReqDataMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.mts.entity.CRDReqData">
+        <result column="oper_type_code" property="operTypeCode" />
+        <result column="reason_code" property="reasonCode" />
+        <result column="refno" property="refno" />
+        <result column="cert_type_code" property="certTypeCode" />
+        <result column="pty_country_code" property="ptyCountryCode" />
+        <result column="id_code" property="idCode" />
+        <result column="person_name" property="personName" />
+        <result column="acctno" property="acctno" />
+        <result column="jy_ccy_code" property="jyCcyCode" />
+        <result column="jy_amt" property="jyAmt" />
+        <result column="qs_amt_rmb" property="qsAmtRmb" />
+        <result column="mcc_code" property="mccCode" />
+        <result column="card_type_code" property="cardTypeCode" />
+        <result column="card_chnl_code" property="cardChnlCode" />
+        <result column="bank_code" property="bankCode" />
+        <result column="branch_safecode" property="branchSafecode" />
+        <result column="biz_deal_time" property="bizDealTime" />
+        <result column="country_code" property="countryCode" />
+        <result column="bank_self_num" property="bankSelfNum" />
+        <result column="card_self_num" property="cardSelfNum" />
+        <result column="data_date" property="dataDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       oper_type_code, reason_code, refno, cert_type_code, pty_country_code, id_code, person_name, acctno, jy_ccy_code, jy_amt, qs_amt_rmb, mcc_code, card_type_code, card_chnl_code, bank_code, branch_safecode, biz_deal_time, country_code, bank_self_num, card_self_num, data_date
+    </sql>
+
+    <select id="queryData" resultType="com.kalvin.kvf.modules.mts.entity.CRDReqData">
+        select <include refid="Base_Column_List" /> from dc_mts_crd
+        WHERE data_date=#{date} and card_type_code=#{cardTypeCode}
+        order by refno asc
+    </select>
+
+    <select id="queryCRDReqData" resultType="com.kalvin.kvf.modules.mts.entity.CRDReqData">
+        select <include refid="Base_Column_List" /> from dc_mts_crd
+       WHERE refno=#{refno}
+    </select>
+</mapper>

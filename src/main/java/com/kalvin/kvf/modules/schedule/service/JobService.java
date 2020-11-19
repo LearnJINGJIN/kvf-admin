@@ -2,6 +2,7 @@ package com.kalvin.kvf.modules.schedule.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.kalvin.kvf.common.dto.R;
 import com.kalvin.kvf.modules.schedule.entity.Job;
 
 /**
@@ -24,6 +25,8 @@ public interface JobService extends IService<Job> {
     void pauseJob(Long id);
 
     void resumeJob(Long id);
+
+    R triggerJob(Long id);
 
     void updateJob(Job job);
 
