@@ -56,6 +56,8 @@ public class ImportCardExpFileJob extends QuartzJobBean {
             List<String> acceptFileList = (List<String>)redis.get("acceptFileList");
 //			String locDir = String.format("%s%s", CommonUtil.getKeyValue(CommonConstant.CARD_EXP_FILE_PATH_KEY),File.separator);
             if(null == acceptFileList || acceptFileList.size() == 0){
+                jobLog.setStatus(0);
+                jobLog.setReason("今日无违规交易信息");
                 return;
             }
             int size = acceptFileList.size();
