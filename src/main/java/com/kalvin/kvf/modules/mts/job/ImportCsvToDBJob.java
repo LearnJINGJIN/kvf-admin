@@ -49,8 +49,6 @@ public class ImportCsvToDBJob extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        ValueOperations<String, Object> redis = template.opsForValue();
-
         JobLog jobLog=new JobLog();
         jobLog.setBean("ImportCsvToDBJob");
         // 获得传入的参数
@@ -58,12 +56,7 @@ public class ImportCsvToDBJob extends QuartzJobBean {
         Map<String, String> paramMap = AdpUtil.getStringToMap(params.toString());
          try{
             String date=DateUtil.getTaskJobDate(paramMap.get("tx_date"));
-            if("1".equals(redis.get(date+"csvToDB"))||redis.get(date+"csvToDB")!=null){
-                 jobLog.setStatus(0);
-                jobLog.setReason(date+"日crx和crd已经入库了");
-            }else{
-                 //数据地址
-
+            //数据地址
                 String impfile=String.format("%s%s%s",
                         CommonUtil.getKeyValue(CommonConstant.SJ_INSERT_CR_PATH),
                         File.separator, date);
@@ -93,9 +86,7 @@ public class ImportCsvToDBJob extends QuartzJobBean {
                         }
                         continue;
                     }
-                }
-                redis.set(date+"csvToDB","1",Integer.valueOf(CommonUtil.getKeyValue(CommonConstant.REDIS_OUT_TIME)), TimeUnit.HOURS);
-                jobLog.setStatus(0);
+                 jobLog.setStatus(0);
                 jobLog.setReason("crx和crd文件入库成功");
             }
           }catch(Exception e){
