@@ -58,7 +58,7 @@ public class ImportBackFileJob extends QuartzJobBean {
             String uploadDate = DateUtil.getTaskJobDate(paramMap.get("upload_date"));
             @SuppressWarnings({ "unchecked", "rawtypes" })
             List<String> acceptFileList = (List<String>)redis.get("back_file_list");
-            if (acceptFileList.size()!=0){
+            if (acceptFileList!=null||acceptFileList.size()!=0){
                 List<FeedBackField> feedBackList=impFiles(acceptFileList, uploadDate);
                 service.saveBatch(feedBackList);
             }

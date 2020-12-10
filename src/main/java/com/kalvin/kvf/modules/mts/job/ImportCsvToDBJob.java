@@ -86,10 +86,10 @@ public class ImportCsvToDBJob extends QuartzJobBean {
                         }
                         continue;
                     }
-                 jobLog.setStatus(0);
-                jobLog.setReason("crx和crd文件入库成功");
             }
-          }catch(Exception e){
+             jobLog.setStatus(0);
+             jobLog.setReason("crx和crd文件入库成功");
+         }catch(Exception e){
              jobLog.setStatus(1);
             jobLog.setReason(e.getMessage());
             throw new JobExecutionException("crx和crd文件入库失败" , e);
