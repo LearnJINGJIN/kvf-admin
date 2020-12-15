@@ -8,7 +8,8 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
-
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.cache.Cache;
 /**
  * 作用：Shiro工具类<br>
  * 说明：(无)
@@ -78,7 +79,14 @@ public class ShiroKit {
     public static void flushPrivileges() {
         RealmSecurityManager rsm = (RealmSecurityManager) SecurityUtils.getSecurityManager();
         UserRealm realm = (UserRealm) rsm.getRealms().iterator().next();
-        realm.clearCachedAuthorization();
+       // realm.clearCachedAuthorization();
+        // 刷新所有在线用户权限
+        Cache<Object, AuthorizationInfo> cache = realm.getAuthorizationCache();
+        if (cache != null) {
+            for (Object key : cache.keys()) {
+                cache.remove(key);
+            }
+        }
     }
 
 }
