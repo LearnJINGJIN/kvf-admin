@@ -12,8 +12,8 @@
     <artifactId>kvf</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>kvf-admin</name>
-    <packaging>jar</packaging>
-    <description>Demo project for Spring Boot</description>
+    <packaging>war</packaging>
+    <description>zgbank</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -21,8 +21,8 @@
         <mybatis-plus.version>3.3.0</mybatis-plus.version>
         <druid.version>1.1.21</druid.version>
         <redis.version>2.2.5.RELEASE</redis.version>
-        <shiro.version>1.4.0</shiro.version>
-        <quartz.version>2.3.0</quartz.version>
+        <shiro.version>1.6.0</shiro.version>
+        <quartz.version>2.3.2</quartz.version>
         <hutool.version>4.5.1</hutool.version>
         <activiti.version>6.0.0</activiti.version>
         <apache.xmlgraphics.version>1.7</apache.xmlgraphics.version>
@@ -174,7 +174,16 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
             <version>${redis.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.55</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.transaction</groupId>
+            <artifactId>jta</artifactId>
+            <version>1.1</version>
+        </dependency>
         <!-- get set -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -216,7 +225,7 @@
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-ehcache</artifactId>
-            <version>1.3.2</version>
+            <version>${shiro.version}</version>
         </dependency>
 
         <!-- quartz定时任务 -->
@@ -237,7 +246,6 @@
             <artifactId>easy-captcha</artifactId>
             <version>1.6.2</version>
         </dependency>
-
         <!-- ueditor-->
         <!--<dependency>
             <groupId>com.gitee.qdbp.thirdparty</groupId>
@@ -258,9 +266,13 @@
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>1.3.1</version>
+            <version>1.3.3</version>
         </dependency>
-
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.6.1</version>
+        </dependency>
         <!-- activiti相关依赖 -->
         <dependency>
             <groupId>org.activiti</groupId>
@@ -324,6 +336,11 @@
             <groupId>org.eweb4j</groupId>
             <artifactId>fel</artifactId>
             <version>0.8</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.javacsv</groupId>
+            <artifactId>javacsv</artifactId>
+            <version>2.0</version>
         </dependency>
     </dependencies>
 
