@@ -15,7 +15,7 @@ public class R implements Serializable {
     private Integer code;
     private String msg;
     private Object data;
-    private Long total; // 分页信息：总条数
+    private Long count; // 分页信息：总条数
 
     public R() { }
 
@@ -24,7 +24,7 @@ public class R implements Serializable {
         this.msg = msg;
         if (data instanceof Page<?>) {
             Page<?> page = (Page<?>) data;
-            this.total = page.getTotal();
+            this.count = page.getTotal();
             this.data = page.getRecords();
         } else {
             this.data = data;
@@ -35,6 +35,9 @@ public class R implements Serializable {
         return new R(Constants.OK_CODE, Constants.OK_MSG, null);
     }
 
+    public static R ok(int code,Object data) {
+        return new R(code, Constants.OK_MSG, data);
+    }
     public static R ok(Object data) {
         return new R(Constants.OK_CODE, Constants.OK_MSG, data);
     }
@@ -42,6 +45,7 @@ public class R implements Serializable {
     public static R ok(String msg, Object data) {
         return new R(Constants.OK_CODE, msg, data);
     }
+
 
     public static R fail(String msg) {
         return new R(Constants.FAIL_CODE, msg, null);
@@ -63,12 +67,12 @@ public class R implements Serializable {
         return data;
     }
 
-    public Long getTotal() {
-        return total;
+    public Long getCount() {
+        return count;
     }
 
-    public R setTotal(Long total) {
-        this.total = total;
+    public R setCount(Long count) {
+        this.count = count;
         return this;
     }
 }

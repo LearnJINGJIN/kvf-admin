@@ -16,24 +16,32 @@
     <div class="layui-form-item">
         <label class="layui-form-label">证书类型</label>
         <div class="layui-input-block">
+            <select name="interest" lay-filter="aihao">
+                <option value=""></option>
+                <option value="1"  selected="">SM2</option>
+                <option value="2" >RSA</option>
+                <option value="3">其它</option>
+            </select>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">证书相关使用设备</label>
         <div class="layui-input-inline">
-            <input type="text" name="certificateAboutMachine" th:value="${editInfo.certificateAboutMachine}" lay-verify="required" placeholder="请输入证书相关使用设备" autocomplete="off" class="layui-input">
+            <input type="text"  name="certificateAboutMachine" th:value="${editInfo.certificateAboutMachine}" lay-verify="required" placeholder="请输入证书相关使用设备" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">使用开始时间yyyy-MM-dd</label>
+
+        <label class="layui-form-label">使用开始时间</label>
         <div class="layui-input-inline">
-            <input type="text" name="certificateStartTime" th:value="${editInfo.certificateStartTime}" lay-verify="required" placeholder="请输入使用开始时间yyyy-MM-dd" autocomplete="off" class="layui-input">
+            <input type="text" class="layui-input"  id="certificateStartTime"   th:value="${editInfo.certificateStartTime}"     placeholder="yyyy-MM-dd">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">使用结束时间yyyy-MM-dd</label>
+
+        <label class="layui-form-label">使用结束时间</label>
         <div class="layui-input-inline">
-            <input type="text" name="certificateEndTime" th:value="${editInfo.certificateEndTime}" placeholder="请输入使用结束时间yyyy-MM-dd" autocomplete="off" class="layui-input">
+            <input type="text" class="layui-input" id="certificateEndTime"  th:value="${editInfo.certificateEndTime}"     placeholder="yyyy-MM-dd">
         </div>
     </div>
     <div class="layui-form-item">
@@ -73,12 +81,15 @@
     layui.use(['form', 'laydate'], function () {
         var $ = layui.$, form = layui.form, laydate = layui.laydate;
 
-
+        //点我触发
         laydate.render({
-            elem: '#createTime' // 指定元素
-            ,type: 'datetime'
+            elem: '#certificateStartTime' // 指定元素
+            ,trigger: 'click' //采用click弹出
         });
-
+        laydate.render({
+            elem: '#certificateEndTime' // 指定元素
+            ,trigger: 'click' //采用click弹出
+        });
         //监听提交
         form.on('submit(kFormSubmit)', function(data){
             var field = data.field; //获取提交的字段

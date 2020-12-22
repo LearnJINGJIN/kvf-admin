@@ -84,7 +84,7 @@ public class UserController extends BaseController {
     @GetMapping(value = "list/data")
     public R listData(UserQueryVO queryVO) {
         Page<User> page = userService.listUserPage(queryVO);
-        return R.ok(page);
+        return R.ok(0,page);
     }
 
     @RequiresPermissions("sys:user:add")
@@ -166,6 +166,9 @@ public class UserController extends BaseController {
         userService.updateUserPassword(ShiroKit.getUserId(), password);
         return R.ok();
     }
-
+    @GetMapping(value = "get/{id}")
+    public R get(@PathVariable Long id) {
+        return R.ok(userService.getById(id));
+    }
 }
 

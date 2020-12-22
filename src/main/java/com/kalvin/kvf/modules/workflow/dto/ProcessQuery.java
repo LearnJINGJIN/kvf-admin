@@ -44,13 +44,13 @@ public class ProcessQuery<T> implements Serializable {
         // 由于activiti一些实体类是懒加载的，无法直接返回给前端。这里做一下转化
         if (this.data instanceof List) {
             final List<HashMap<String, Object>> list = (List<HashMap<String, Object>>) ((List) this.data).stream().map(BeanUtil::beanToMap).collect(Collectors.toList());
-            return R.ok(list).setTotal(this.count);
+            return R.ok(list).setCount(this.count);
         }
         return this.toR();
     }
 
     public R toR() {
-        return R.ok(this.data).setTotal(this.count);
+        return R.ok(this.data).setCount(this.count);
     }
 
     public T getData() {

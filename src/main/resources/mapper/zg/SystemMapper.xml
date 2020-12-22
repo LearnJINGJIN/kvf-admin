@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalvin.kvf.modules.zg.mapper.SystemMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.System">
+        <id column="id" property="id" />
+        <result column="sys_name" property="sysName" />
+        <result column="on_date" property="onDate" />
+        <result column="sys_desc" property="sysDesc" />
+        <result column="sys_status" property="sysStatus" />
+        <result column="sys_head_id" property="sysHeadId" />
+        <result column="sys_oper_id" property="sysOperId" />
+        <result column="sys_head_name" property="sysHeadName" />
+        <result column="sys_oper_name" property="sysOperName" />
+        <result column="out_date" property="outDate" />
+        <result column="data_addres" property="dataAddres" />
+        <result column="app_type" property="appType" />
+        <result column="flow_type" property="flowType" />
+        <result column="sys_level" property="sysLevel" />
+        <result column="im_system_type" property="imSystemType" />
+        <result column="remarks" property="remarks" />
+        <result column="create_user" property="createUser" />
+        <result column="create_date" property="createDate" />
+        <result column="update_date" property="updateDate" />
+        <result column="update_user" property="updateUser" />
+        <result column="dr" property="dr" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       t.id, t.sys_name, t.on_date, t.sys_desc, t.sys_status, t.sys_head_id, a.realname as sys_head_name,t.sys_oper_id,b.realname as sys_oper_name, t.out_date, t.data_addres, t.app_type, t.flow_type, t.sys_level, t.im_system_type, t.remarks, t.create_user, t.create_date, t.update_date, t.update_user, t.dr
+    </sql>
+
+    <select id="selectSystemList" resultType="com.kalvin.kvf.modules.zg.entity.System">
+        select <include refid="Base_Column_List" /> from zg_system t
+        left join sys_user a on a.id=t.sys_head_id
+        left join sys_user b on b.id=t.sys_oper_id
+        <trim prefix="where" prefixOverrides="and">
+            <if test="system.sysName != null and system.sysName != ''">
+                and t.sys_name like concat(#{system.sysName}, "%")
+            </if>
+            <if test="system.onDate != null and system.onDate != ''">
+                and t.on_date = #{system.onDate}
+            </if>
+            <if test="system.sysHeadId != null and system.sysHeadId != ''">
+                and t.sys_head_id = #{system.sysHeadId}
+            </if>
+            <if test="system.sysOperId != null and system.sysOperId != ''">
+                and t.sys_oper_id =#{system.sysOperId}
+            </if>
+            <if test="system.appType != null and system.appType != ''">
+                and t.app_type =#{system.appType}
+            </if>
+            <if test="system.flowType != null and system.flowType != ''">
+                and t.flow_type =#{system.flowType}
+            </if>
+            <if test="system.sysLevel != null and system.sysLevel != ''">
+                and t.sys_level =#{system.sysLevel}
+            </if>
+            <if test="system.imSystemType != null and system.imSystemType != ''">
+                and t.im_system_type =#{system.imSystemType}
+            </if>
+            <if test="system.sysStatus != null">
+                and sys_status = #{system.sysStatus}
+            </if>
+        </trim>
+    </select>
+    <select id="selectInfoById" resultType="com.kalvin.kvf.modules.zg.entity.System">
+        select <include refid="Base_Column_List" /> from zg_system t
+        left join sys_user a on a.id=t.sys_head_id
+        left join sys_user b on b.id=t.sys_oper_id
+        where t.id=#{var1}
+    </select>
+
+</mapper>

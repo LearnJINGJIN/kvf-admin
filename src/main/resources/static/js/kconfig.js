@@ -8,7 +8,7 @@ var config = {
         table: {
             cellMinWidth: 60
             ,request: {pageName : 'current', limitName : 'size'}
-            ,response : {statusName : 'code', statusCode : 200, msgName : 'msg', dataName : 'data', countName: 'total'}
+            ,response : {statusName : 'code', statusCode : 0, msgName : 'msg', dataName : 'data', countName: 'count'}
             ,height: 542
             ,defaultToolbar: ['filter', 'exports', 'print']  // 表格头部右侧按钮，若不需要，直接配置空数组
             ,page: {    //开启分页
@@ -41,7 +41,7 @@ var config = {
 
 var req = {
     status: {
-        ok: 200,
+        ok: 0,
         fail: 400,
         other: 333
     },
@@ -77,6 +77,7 @@ var api = {
         userUpdateInfo: BASE_WEB + 'sys/user/updateInfo',
         userResetPwd: BASE_WEB + 'sys/user/{id}/resetPwd',
         userChangePwd: BASE_WEB + 'sys/user/changePwd',
+        getUser: BASE_WEB + 'sys/user/get/',
         menuListData: BASE_WEB + 'sys/menu/list/data',
         menuRm: BASE_WEB + 'sys/menu/remove/',
         menuRmBatch: BASE_WEB + 'sys/menu/removeBatch',
@@ -129,9 +130,22 @@ var api = {
  */
 layui.config({
     base: BASE_WEB + 'static/plugins/lay-formselect/'
-}).extend({
+  }).extend({
     formSelects: 'formSelects-v4'
-});
+  });
+layui.config({
+     base: BASE_WEB + 'static/plugins/layui_exts/'
+  }).extend({
+    soulTable: 'soulTable/soulTable',
+    tableChild: 'soulTable/tableChild',
+    tableMerge: 'soulTable/tableMerge',
+    tableFilter: 'soulTable/tableFilter',
+    excel: 'soulTable/excel',
+     tableSelect: 'tableSelect/tableSelect'
+   });
+
+
+
 
 layui.use(['layer', 'laytpl'], function () {
     var layer = layui.layer;
@@ -140,7 +154,19 @@ layui.use(['layer', 'laytpl'], function () {
         // skin: 'layui-layer-molv' //默认皮肤
     });
 });
-
+layui.use(['soulTable'], function () {
+    layui.soulTable.config({
+        drag: true, // 默认关闭表格的列拖拽，可单独开启(简单拖拽，防止行数过多出现卡顿)
+        rowDrag: {
+            numbers: false
+        },
+        overflow: { // 默认所有表格都超出
+            type: 'tips',
+            header: true, // 表头支持 overflow
+            total: true // 合计行支持 overflow
+        }
+    })
+})
 /**
  * ajax 全局拦截器
  */
@@ -185,7 +211,7 @@ $.ajaxSetup({
     },
     success: function(r) {},
     statusCode:{
-        200: function(r) {
+        0: function(r) {
             // log('statusCode 200 r=', r);
         }
     },

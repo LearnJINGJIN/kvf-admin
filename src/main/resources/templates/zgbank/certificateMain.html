@@ -58,8 +58,7 @@
 <!--头部工具栏模板-->
 <script type="text/html" id="headToolbarTpl">
     <button class="layui-btn layui-btn-sm " lay-event="add">添加</button>
-    <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="batchdel">批量删除</button>
-</script>
+ </script>
 
 <!--表格行工具栏模板-->
 <script type="text/html" id="rowToolbarTpl">
@@ -83,7 +82,7 @@
     layui.use(['element', 'form', 'layer', 'table', 'laydate'], function () {
         var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, laydate = layui.laydate;
         var tableId = 'kContentTable';
-        var area = ['449px', '95%'];
+        var area = ['900px', '95%'];
 
         // 实例化table
         var tableIns = table.render($.extend(config.layui.table, {
@@ -125,32 +124,7 @@
                         }
                     });
                     break;
-                case 'batchdel':
-                    if(checkData.length === 0){
-                        return kvfKit.warningMsg('请选择数据');
-                    }
-                    layer.confirm('确定删除吗？', function(index) {
-                        var ids = [];
-                        $.each(checkData, function(i, n){
-                            ids[i] = n.id;
-                        });
 
-                        //执行 Ajax 后重载
-                        $.ajax({
-                            type: req.type.post,
-                            url: BASE_WEB + 'zgbank/certificateMain/batchdel',
-                            data: {ids: ids.toString()},
-                            success: function (r) {
-                                if (r.code === req.status.ok) {
-                                    table.reload(tableId);
-                                    kvfKit.sucessMsg('已删除');
-                                } else {
-                                    kvfKit.errorMsg(r.msg);
-                                }
-                            }
-                        });
-                    });
-                    break;
             }
         });
 

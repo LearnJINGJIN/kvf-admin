@@ -110,7 +110,7 @@ var kvfKit = {
         table.set({
             cellMinWidth: 60
             ,request: {pageName : 'current', limitName : 'size'}
-            ,response : {statusName : 'code', statusCode : 200, msgName : 'msg', dataName : 'data', countName: 'total'}
+            ,response : {statusName : 'code', statusCode : 0, msgName : 'msg', dataName : 'data', countName: 'count'}
             ,height: 472
             ,page: {    //开启分页
                 curr : 1,
