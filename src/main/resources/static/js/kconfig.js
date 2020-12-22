@@ -128,11 +128,7 @@ var api = {
 /**
  * layui 全局配置
  */
-layui.config({
-    base: BASE_WEB + 'static/plugins/lay-formselect/'
-  }).extend({
-    formSelects: 'formSelects-v4'
-  });
+
 layui.config({
      base: BASE_WEB + 'static/plugins/layui_exts/'
   }).extend({
@@ -141,9 +137,9 @@ layui.config({
     tableMerge: 'soulTable/tableMerge',
     tableFilter: 'soulTable/tableFilter',
     excel: 'soulTable/excel',
-     tableSelect: 'tableSelect/tableSelect'
+    tableSelect: 'tableSelect/tableSelect',
+    formSelects: 'lay-formselect/formSelects-v4'
    });
-
 
 
 
