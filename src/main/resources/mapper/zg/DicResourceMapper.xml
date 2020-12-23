@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalvin.kvf.modules.zg.mapper.DicResourceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.DicResource">
+        <id column="id" property="id" />
+        <result column="re_code" property="reCode" />
+        <result column="re_name" property="reName" />
+        <result column="remarks" property="remarks" />
+        <result column="dr" property="dr" />
+        <result column="create_user" property="createUser" />
+        <result column="create_date" property="createDate" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_date" property="updateDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       id, re_code, re_name, remarks, dr, create_user, create_date, update_user, update_date
+    </sql>
+
+    <select id="selectDicResourceList" resultType="com.kalvin.kvf.modules.zg.entity.DicResource">
+        select <include refid="Base_Column_List" /> from zg_dic_resource
+        <trim prefix="where" prefixOverrides="and">
+            <if test="dicResource.reName != null and dicResource.reName != ''">
+                and re_name like concat(#{dicResource.reName}, "%")
+            </if>
+        </trim>
+    </select>
+
+</mapper>

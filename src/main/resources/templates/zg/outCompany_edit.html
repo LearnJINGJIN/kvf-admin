@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="common/base::pagetitle"></title>
+    <link th:replace="common/base::static"/>
+</head>
+<body>
+<div class="layui-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">公司名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="companyName" th:value="${editInfo.companyName}" lay-verify="required" placeholder="请输入公司名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">征信代码</label>
+        <div class="layui-input-inline">
+            <input type="text" name="companyCode" th:value="${editInfo.companyCode}" lay-verify="required" placeholder="请输入社会统一征信代码" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">公司地址</label>
+        <div class="layui-input-inline">
+            <input type="text" name="companyAddr" th:value="${editInfo.companyAddr}" lay-verify="required" placeholder="请输入公司地址" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">法人代表</label>
+        <div class="layui-input-inline">
+            <input type="text" name="legalPerson" th:value="${editInfo.legalPerson}" lay-verify="required" placeholder="请输入法人代表" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">经营状态</label>
+        <input type="radio" name="companyStatus" value="0" title="正常经营" th:checked="${editInfo.companyStatus==0}">
+        <input type="radio" name="companyStatus" value="1" title="非正常经营" th:checked="${editInfo.companyStatus==1}">
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">公司规模</label>
+        <div class="layui-input-inline">
+            <input type="text" name="companySize" th:value="${editInfo.companySize}" placeholder="请输入公司规模" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否重要外包商</label>
+        <input type="radio" name="imOutsource" value="0" title="重要" th:checked="${editInfo.imOutsource==0}">
+        <input type="radio" name="imOutsource" value="1" title="非重要" th:checked="${editInfo.imOutsource==1}">
+    </div>
+    <div class="layui-form-item layui-hide">
+        <label class="layui-form-label">创建人</label>
+        <div class="layui-input-inline">
+            <input type="text" name="createId" th:value="${editInfo.createId}" placeholder="请输入创建人" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <label class="layui-form-label">创建时间</label>
+        <div class="layui-input-inline">
+            <input type="text" name="createDate" id="createDate" th:value="${#strings.replace(editInfo.createDate,'T',' ')}" placeholder="请输入创建时间" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <label class="layui-form-label">修改人</label>
+        <div class="layui-input-inline">
+            <input type="text" name="updateId" th:value="${editInfo.updateId}" placeholder="请输入修改人" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <label class="layui-form-label">修改时间</label>
+        <div class="layui-input-inline">
+            <input type="text" name="updateDate" id="updateDate" th:value="${#strings.replace(editInfo.updateDate,'T',' ')}" placeholder="请输入修改时间" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-inline">
+            <textarea placeholder="请输入公司描述" name="remarks" th:value="${editInfo.remarks}"  class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit="" lay-filter="kFormSubmit" id="kFormSubmit">
+        <input type="text" name="id" th:value="${editInfo.id}" autocomplete="off" class="layui-input">
+    </div>
+</div>
+
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+<script>
+    layui.use(['form', 'laydate'], function () {
+        var $ = layui.$, form = layui.form, laydate = layui.laydate;
+
+
+        laydate.render({
+            elem: '#createDate' // 指定元素
+            ,type: 'datetime'
+        });
+        laydate.render({
+            elem: '#updateDate' // 指定元素
+            ,type: 'datetime'
+        });
+
+        //监听提交
+        form.on('submit(kFormSubmit)', function(data){
+            var field = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+            var url = field.id ? 'zg/outCompany/edit' : 'zg/outCompany/add';
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            $.ajax({
+                type: req.type.post,
+                url: BASE_WEB + url,
+                data: field,
+                async: false,
+                success: function (r) {
+                    if (r.code === req.status.ok) {
+                        // 重载表格
+                        parent.layui.table.reload('kContentTable');
+                        parent.layer.close(index); //再执行关闭
+                    } else {
+                        kvfKit.errorMsg(r.msg);
+                    }
+                }
+            });
+
+        });
+    })
+</script>
+</body>
+</html>

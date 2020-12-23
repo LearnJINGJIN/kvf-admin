@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalvin.kvf.modules.zg.mapper.OutPersonMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.OutPerson">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="age" property="age" />
+        <result column="sex" property="sex" />
+        <result column="phone" property="phone" />
+        <result column="email" property="email" />
+        <result column="company_id" property="companyId" />
+        <result column="rating" property="rating" />
+        <result column="is_status" property="isStatus" />
+        <result column="create_user" property="createUser" />
+        <result column="create_date" property="createDate" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_date" property="updateDate" />
+        <result column="remarks" property="remarks" />
+        <result column="dr" property="dr" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       id, name, age, sex, phone, email, company_id, rating, is_status, create_user, create_date, update_user, update_date, remarks, dr
+    </sql>
+
+    <select id="selectOutPersonList" resultType="com.kalvin.kvf.modules.zg.entity.OutPerson">
+        select <include refid="Base_Column_List" /> from zg_out_person
+        <trim prefix="where" prefixOverrides="and">
+            <if test="outPerson.name != null and outPerson.name != ''">
+                and name like concat(#{outPerson.name}, "%")
+            </if>
+        </trim>
+    </select>
+
+</mapper>

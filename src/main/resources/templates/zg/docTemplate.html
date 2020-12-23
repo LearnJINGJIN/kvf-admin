@@ -17,9 +17,9 @@
                         <div class="layui-form layui-card-header kvf-card-header-auto">
                             <div class="layui-form-item">
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">所属系统id</label>
+                                    <label class="layui-form-label">文档名称</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="sysId" placeholder="请输入所属系统id" autocomplete="off" class="layui-input">
+                                        <input type="text" name="docName" placeholder="请输入文档名称" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
 
@@ -60,6 +60,10 @@
 </script>
 
 <!--表格列格式化模板 start-->
+<script type="text/html" id="stageStatusTpl">
+<!--todo由于注释不统一规范，无法为你生成格式化代码，请自行处理-->
+<span>{{d.stageStatus}}</span>
+</script>
 <!--表格列格式化模板 end-->
 
 <script type="text/javascript" th:inline="javascript">
@@ -71,14 +75,16 @@
         // 实例化table
         var tableIns = table.render($.extend(config.layui.table, {
             elem: '#' + tableId
-            ,url: BASE_WEB + 'zg/svnSystem/list/data' // 数据接口
+            ,url: BASE_WEB + 'zg/docTemplate/list/data' // 数据接口
             ,toolbar: '#headToolbarTpl'
             ,cols: [[ //表头
                 {type:'checkbox', fixed: 'left'}
-                ,{field: 'synAddr', title: 'svn地址', width: 130}
+                ,{field: 'docName', title: '文档名称', width: 130}
+                ,{field: 'stageStatus', title: '所属阶段', templet: '#stageStatusTpl'}
                 ,{field: 'createUser', title: '创建人', width: 130}
-                ,{field: 'updateDate', title: '修改时间', sort: true, width: 130}
-                ,{field: 'remarks', title: '备注'}
+                ,{field: 'createDate', title: '创建时间', width: 130}
+                ,{field: 'updateUser', title: '修改人', width: 130}
+                ,{field: 'updateDate', title: '修改时间', width: 130}
                 ,{field: '', title: '操作', width: 235, fixed: 'right', templet: '#rowToolbarTpl'}
             ]]
         }));
@@ -92,7 +98,7 @@
                     layer.open({
                         type: 2
                         ,title: '添加'
-                        ,content: BASE_WEB + 'zg/svnSystem/edit'
+                        ,content: BASE_WEB + 'zg/docTemplate/edit'
                         ,maxmin: true
                         ,area: area   // 宽高
                         ,btn: ['确定', '取消']
@@ -116,7 +122,7 @@
                 layer.open({
                     type: 2
                     ,title: '编辑'
-                    ,content: BASE_WEB + 'zg/svnSystem/edit?id=' + data.id
+                    ,content: BASE_WEB + 'zg/docTemplate/edit?id=' + data.id
                     ,maxmin: true
                     ,area: area   // 宽高
                     ,btn: ['确定', '取消']
@@ -132,7 +138,7 @@
                     //执行 Ajax 后重载
                     $.ajax({
                         type: req.type.post,
-                        url: BASE_WEB + 'zg/svnSystem/del/' + data.id,
+                        url: BASE_WEB + 'zg/docTemplate/del/' + data.id,
                         async: false,
                         success: function (r) {
                             if (r.code === req.status.ok) {

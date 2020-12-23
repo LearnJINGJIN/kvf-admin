@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalvin.kvf.modules.zg.mapper.RiskCompanyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.RiskCompany">
+        <id column="id" property="id" />
+        <result column="risk_desc" property="riskDesc" />
+        <result column="company_id" property="companyId" />
+        <result column="risk_level" property="riskLevel" />
+        <result column="create_user" property="createUser" />
+        <result column="create_date" property="createDate" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_date" property="updateDate" />
+        <result column="dr" property="dr" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       id, risk_desc, company_id, risk_level, create_user, create_date, update_user, update_date, dr
+    </sql>
+
+    <select id="selectRiskCompanyList" resultType="com.kalvin.kvf.modules.zg.entity.RiskCompany">
+        select <include refid="Base_Column_List" /> from zg_risk_company
+        <trim prefix="where" prefixOverrides="and">
+            <if test="riskCompany.companyId != null">
+                and company_id = #{riskCompany.companyId}
+            </if>
+        </trim>
+    </select>
+
+</mapper>

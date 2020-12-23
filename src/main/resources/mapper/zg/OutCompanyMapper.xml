@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalvin.kvf.modules.zg.mapper.OutCompanyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.OutCompany">
+        <id column="id" property="id" />
+        <result column="company_name" property="companyName" />
+        <result column="company_code" property="companyCode" />
+        <result column="company_addr" property="companyAddr" />
+        <result column="legal_person" property="legalPerson" />
+        <result column="company_status" property="companyStatus" />
+        <result column="company_size" property="companySize" />
+        <result column="im_outsource" property="imOutsource" />
+        <result column="create_id" property="createId" />
+        <result column="create_date" property="createDate" />
+        <result column="update_id" property="updateId" />
+        <result column="update_date" property="updateDate" />
+        <result column="remarks" property="remarks" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       id, company_name, company_code, company_addr, legal_person, company_status, company_size, im_outsource, create_id, create_date, update_id, update_date, remarks
+    </sql>
+
+    <select id="selectOutCompanyList" resultType="com.kalvin.kvf.modules.zg.entity.OutCompany">
+        select <include refid="Base_Column_List" /> from zg_out_company
+        <trim prefix="where" prefixOverrides="and">
+            <if test="outCompany.companyName != null and outCompany.companyName != ''">
+                and company_name like concat(#{outCompany.companyName}, "%")
+            </if>
+        </trim>
+    </select>
+
+</mapper>
