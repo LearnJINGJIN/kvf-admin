@@ -1,6 +1,7 @@
 package com.kalvin.kvf.modules.zg.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.kalvin.kvf.common.utils.ShiroKit;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import com.kalvin.kvf.modules.zg.service.SystemService;
  * 系统基本表 前端控制器
  * </p>
  * @since 2020-12-15 17:20:28
+ * jingjin
  */
 @RestController
 @RequestMapping("zg/system")
@@ -52,6 +54,7 @@ public class SystemController extends BaseController {
     @RequiresPermissions("zg:system:add")
     @PostMapping(value = "add")
     public R add(System system) {
+        system.setCreateUser(ShiroKit.getUserId());
         systemService.save(system);
         return R.ok();
     }
@@ -59,6 +62,7 @@ public class SystemController extends BaseController {
     @RequiresPermissions("zg:system:edit")
     @PostMapping(value = "edit")
     public R edit(System system) {
+        system.setUpdateUser(ShiroKit.getUserId());
         systemService.updateById(system);
         return R.ok();
     }
