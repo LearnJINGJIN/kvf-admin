@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalvin.kvf.modules.zg.mapper.SystemAppMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.SystemApp">
+        <id column="id" property="id" />
+        <result column="sys_id" property="sysId" />
+        <result column="sys_name" property="sysName" />
+        <result column="config_type" property="configType" />
+        <result column="app_ip" property="appIp" />
+        <result column="ip_account" property="ipAccount" />
+        <result column="dev_language" property="devLanguage" />
+        <result column="oper_sys_type" property="operSysType" />
+        <result column="oper_sys_version" property="operSysVersion" />
+        <result column="is_web" property="isWeb" />
+        <result column="web_url" property="webUrl" />
+        <result column="web_account" property="webAccount" />
+        <result column="remark" property="remark" />
+        <result column="dr" property="dr" />
+        <result column="create_user" property="createUser" />
+        <result column="create_date" property="createDate" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_date" property="updateDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       t.id, t.sys_id, t.config_type, t.app_ip, t.ip_account, t.dev_language, t.oper_sys_type, t.oper_sys_version, t.is_web, t.web_url, t.web_account, t.remark, t.dr, t.create_user, t.create_date, t.update_user, t.update_date,a.sys_name
+    </sql>
+
+    <select id="selectSystemAppList" resultType="com.kalvin.kvf.modules.zg.entity.SystemApp">
+        select <include refid="Base_Column_List" /> from zg_system_app t
+        left join zg_system a on a.id=t.sys_id
+        <trim prefix="where" prefixOverrides="and">
+            <if test="systemApp.configType != null">
+                and t.config_type = #{systemApp.configType}
+            </if>
+            <if test="systemApp.appIp != null and systemApp.appIp != ''">
+                and t.app_ip like concat(#{systemApp.appIp}, "%")
+            </if>
+            <if test="systemApp.sysName != null and systemApp.sysName != ''">
+                and a.sys_name like concat(#{systemApp.sysName}, "%")
+             </if>
+        </trim>
+    </select>
+    <select id="selectInfoById" resultType="com.kalvin.kvf.modules.zg.entity.SystemApp">
+        select <include refid="Base_Column_List" /> from zg_system_app t
+        left join zg_system a on a.id=t.sys_id
+        where t.id=#{id}
+    </select>
+
+</mapper>

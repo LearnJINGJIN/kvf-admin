@@ -70,7 +70,7 @@
         select <include refid="Base_Column_List" /> from zg_system t
         left join sys_user a on a.id=t.sys_head_id
         left join sys_user b on b.id=t.sys_oper_id
-        where t.id=#{var1}
+        where t.id=#{id}
     </select>
 
 </mapper>

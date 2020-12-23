@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="common/base::pagetitle"></title>
+    <link th:replace="common/base::static"/>
+</head>
+<body>
+<form class="layui-form layui-form-pane" action="">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">所属系统名称</label>
+            <div class="layui-input-inline">
+                <input type="text" id="sysName" th:value="${editInfo.sysName}" lay-verify="required" placeholder="请选择所属系统" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">环境类别</label>
+            <div class="layui-input-inline">
+                <select name="configType" class="layui-select" lay-verify="required">
+                    <option value="1" th:selected="${editInfo.configType == 1}">dev</option>
+                    <option value="2" th:selected="${editInfo.configType == 2}">sit</option>
+                    <option value="3" th:selected="${editInfo.configType == 3}">uat</option>
+                    <option value="4" th:selected="${editInfo.configType == 4}">prod</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item" style="display: none">
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" id="sysId" name="sysId" th:value="${editInfo.sysId==null?'':editInfo.sysId}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">ip</label>
+            <div class="layui-input-inline">
+                <input type="text" name="appIp" th:value="${editInfo.appIp}" lay-verify="required|ip" placeholder="请输入应用ip" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">账号/密码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="ipAccount" th:value="${editInfo.ipAccount}" lay-verify="required" placeholder="请输入账号/密码，多个以“，”区分" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">开发语言</label>
+            <div class="layui-input-inline">
+                <select name="devLanguage" class="layui-select" lay-verify="required">
+                    <option value="1" th:selected="${editInfo.devLanguage == 1}">java</option>
+                    <option value="2" th:selected="${editInfo.devLanguage == 2}">c</option>
+                    <option value="3" th:selected="${editInfo.devLanguage == 3}">c++</option>
+                    <option value="4" th:selected="${editInfo.devLanguage == 4}">ios</option>
+                    <option value="5" th:selected="${editInfo.devLanguage == 5}">android</option>
+                    <option value="6" th:selected="${editInfo.devLanguage == 6}">php</option>
+                    <option value="7" th:selected="${editInfo.devLanguage == 7}">python</option>
+                    <option value="8" th:selected="${editInfo.devLanguage == 8}">sql</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">操作系统类型</label>
+            <div class="layui-input-inline">
+                <select name="operSysType" class="layui-select" lay-verify="required">
+                    <option value="1" th:selected="${editInfo.operSysType == 1}">linux</option>
+                    <option value="2" th:selected="${editInfo.operSysType == 2}">windows</option>
+                    <option value="3" th:selected="${editInfo.operSysType == 3}">unix</option>
+                    <option value="4" th:selected="${editInfo.operSysType == 4}">mac</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">操作系统版本号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="operSysVersion" th:value="${editInfo.operSysVersion}" lay-verify="required" placeholder="请输入操作系统版本号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">是否包含后官平台</label>
+            <div class="layui-input-inline" id="isPurchased">
+                <input type="radio" name="isWeb" value="0" title="是" autocomplete="off" class="layui-input" th:checked="${editInfo.isWeb==0}" lay-filter="webCont" >
+                <input type="radio" name="isWeb" value="1" title="否" autocomplete="off" class="layui-input" th:checked="${editInfo.isWeb==1}" lay-filter="webCont">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item count">
+        <div class="layui-inline">
+            <label class="layui-form-label">后管url地址</label>
+            <div class="layui-input-inline">
+                <input type="text" id="webUrl" name="webUrl" th:value="${editInfo.webUrl}" placeholder="请输入后管url地址" autocomplete="off" class="layui-input"  >
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">后管账号/密码</label>
+            <div class="layui-input-inline">
+                <input type="text" id="webAccount" name="webAccount" th:value="${editInfo.webAccount}" placeholder="请输入后管账号/密码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入备注"  name="remark" th:value="${editInfo.remark}" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit="" lay-filter="kFormSubmit" id="kFormSubmit">
+        <input type="text" name="id" th:value="${editInfo.id}" autocomplete="off" class="layui-input">
+    </div>
+</div>
+</form>
+<script type="text/html" id="sysStatusTpl">
+    {{#  if(d.sysStatus == 0){ }}
+    <span class="layui-badge layui-bg-blue">运行中</span>
+    {{#  } else if(d.sysStatus == 1) { }}
+    <span class="layui-badge layui-bg-black">已下线</span>
+    {{#  } else if(d.sysStatus == 2) { }}
+    <span class="layui-badge layui-bg-green">建设中</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
+</script>
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+<script>
+    layui.use(['form', 'tableSelect'], function () {
+        var $ = layui.$, form = layui.form,tableSelect = layui.tableSelect;
+
+        form.verify({
+            ip: [
+                /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
+                ,'IP地址不符合规则'
+            ]
+        });
+        form.on('radio(webCont)', function (data) {
+
+            if (data.value==0) {
+                $(".count").show();
+            }
+            else {
+                $(".count").hide();
+                $('#webUrl').val("");
+                $('#webAccount').val("");
+            }
+            form.render();
+        });
+
+        tableSelect.render({
+            elem: '#sysName',
+            checkedKey: 'id',
+            table: {
+                url: BASE_WEB + 'zg/system/list/data',
+                method: 'post',
+                cols: [
+                    [
+                        { type: 'radio' }
+                        ,{field: 'id', title: 'id', hide:true}
+                        ,{field: 'sysName', title: '系统名称', width:200}
+                        ,{field: 'onDate', title: '上线日期', width:150}
+                        ,{field: 'sysStatus', title: '系统状态', width:80, templet: '#sysStatusTpl'}
+                    ]
+                ]
+            },
+            done: function (elem, data) {
+                layui.each(data.data, function (index, item) {
+                    elem.val(item.sysName);
+                    $('#sysId').val(item.id);
+                })
+                //alert(JSON.stringify(data.data.realname))
+            }
+        });
+        //监听提交
+        form.on('submit(kFormSubmit)', function(data){
+            var field = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+            var url = field.id ? 'zg/systemApp/edit' : 'zg/systemApp/add';
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            $.ajax({
+                type: req.type.post,
+                url: BASE_WEB + url,
+                data: field,
+                async: false,
+                success: function (r) {
+                    if (r.code === req.status.ok) {
+                        // 重载表格
+                        parent.layui.table.reload('kContentTable');
+                        parent.layer.close(index); //再执行关闭
+                    } else {
+                        kvfKit.errorMsg(r.msg);
+                    }
+                }
+            });
+
+        });
+    })
+</script>
+</body>
+</html>
