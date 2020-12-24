@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalvin.kvf.modules.zg.mapper.SystemRelationshipMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.SystemRelationship">
+        <id column="id" property="id" />
+        <result column="use_des" property="useDes" />
+        <result column="config_id" property="configId" />
+        <result column="call_type" property="callType" />
+        <result column="port" property="port" />
+        <result column="target_config_id" property="targetConfigId" />
+        <result column="is_use" property="isUse" />
+        <result column="user_id" property="userId" />
+        <result column="remarks" property="remarks" />
+        <result column="dr" property="dr" />
+        <result column="create_user" property="createUser" />
+        <result column="create_date" property="createDate" />
+        <result column="update_user" property="updateUser" />
+        <result column="sys_name" property="sysName" />
+        <result column="app_ip" property="appIp" />
+        <result column="target_app_ip" property="targetAppIp" />
+        <result column="target_sys_name" property="targetSysName" />
+        <result column="user_name" property="userName" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       t.id, t.use_des, t.config_id, t.call_type,c.sys_name,
+	  c.app_ip, t.port, t.target_config_id, d.sys_name as target_sys_name,
+	  d.app_ip as target_app_ip, t.is_use,
+	  t.user_id, t.remarks, t.dr, t.create_user, t.create_date, t.update_user, t.update_date,e.realname as user_name
+    </sql>
+
+    <select id="selectSystemRelationshipList" resultType="com.kalvin.kvf.modules.zg.entity.SystemRelationship">
+        select <include refid="Base_Column_List" /> from zg_system_relationship t
+        left join (select a.id,a.app_ip,b.sys_name from zg_system_app a left join zg_system b on b.id=a.sys_id) c on c.id=t.config_id
+        left join (select a.id,a.app_ip,b.sys_name from zg_system_app a left join zg_system b on b.id=a.sys_id) d  on d.id=t.target_config_id
+        left join sys_user e on e.id=t.user_id
+        <trim prefix="where" prefixOverrides="and">
+            <if test="systemRelationship.sysName != null and systemRelationship.sysName != ''">
+                and c.sys_name = #{systemRelationship.sysName}
+            </if>
+            <if test="systemRelationship.appIp != null and systemRelationship.appIp != ''">
+                and c.app_ip = #{systemRelationship.appIp}
+            </if>
+            <if test="systemRelationship.port != null and systemRelationship.port != ''">
+                and t.port = #{systemRelationship.port}
+            </if>
+            <if test="systemRelationship.isUse != null and systemRelationship.isUse != ''">
+                and t.is_use = #{systemRelationship.isUse}
+            </if>
+        </trim>
+    </select>
+    <select id="selectInfoById" resultType="com.kalvin.kvf.modules.zg.entity.SystemRelationship">
+        select <include refid="Base_Column_List" /> from zg_system_relationship t
+        left join (select a.id,a.app_ip,b.sys_name from zg_system_app a left join zg_system b on b.id=a.sys_id) c on c.id=t.config_id
+        left join (select a.id,a.app_ip,b.sys_name from zg_system_app a left join zg_system b on b.id=a.sys_id) d  on d.id=t.target_config_id
+        left join sys_user e on e.id=t.user_id
+         where t.id=#{id}
+    </select>
+
+</mapper>

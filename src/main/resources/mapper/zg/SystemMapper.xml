@@ -61,7 +61,7 @@
             <if test="system.imSystemType != null and system.imSystemType != ''">
                 and t.im_system_type =#{system.imSystemType}
             </if>
-            <if test="system.sysStatus != null">
+            <if test="system.sysStatus != null and system.sysStatus != ''">
                 and sys_status = #{system.sysStatus}
             </if>
         </trim>

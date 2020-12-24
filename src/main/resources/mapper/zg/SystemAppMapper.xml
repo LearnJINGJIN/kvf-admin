@@ -33,7 +33,7 @@
         select <include refid="Base_Column_List" /> from zg_system_app t
         left join zg_system a on a.id=t.sys_id
         <trim prefix="where" prefixOverrides="and">
-            <if test="systemApp.configType != null">
+            <if test="systemApp.configType != null and systemApp.configType != ''">
                 and t.config_type = #{systemApp.configType}
             </if>
             <if test="systemApp.appIp != null and systemApp.appIp != ''">

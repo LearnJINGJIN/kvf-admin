@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="common/base::pagetitle"></title>
+    <link th:replace="common/base::static"/>
+</head>
+<body>
+<form class="layui-form layui-form-pane" action="">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">源系统名称</label>
+            <div class="layui-input-inline">
+                <input type="text" id="sysName" th:value="${editInfo.sysName}" lay-verify="required" placeholder="请选择所属系统" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">源ip</label>
+            <div class="layui-input-inline">
+                <input type="text" id="appIp" th:value="${editInfo.appIp}"   readonly  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item" style="display: none">
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" id="configId" name="configId" th:value="${editInfo.configId==null?'':editInfo.configId}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">访问关系</label>
+            <div class="layui-input-inline">
+                <input type="radio" name="callType" value="1" title="<span ><i class='fa fa-long-arrow-right'></i></span>" autocomplete="off" class="layui-input" th:checked="${editInfo.callType==1}">
+                <input type="radio" name="callType" value="2" title="<span ><i class='fa fa-long-arrow-left'></i></span>" autocomplete="off" class="layui-input" th:checked="${editInfo.callType==2}">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">端口</label>
+            <div class="layui-input-inline">
+                <input type="text" name="port" th:value="${editInfo.port}" lay-verify="required" placeholder="请输入端口" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">目标系统名称</label>
+            <div class="layui-input-inline">
+                <input type="text" id="targetSysName" th:value="${editInfo.targetSysName}" lay-verify="required" placeholder="请选择目标系统" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">目标ip</label>
+            <div class="layui-input-inline">
+                <input type="text" id="targetAppIp" th:value="${editInfo.targetAppIp}"  readonly   autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item" style="display: none">
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" id="targetConfigId" name="targetConfigId" th:value="${editInfo.targetConfigId==null?'':editInfo.targetConfigId}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">使用状态</label>
+            <div class="layui-input-inline">
+                <input type="radio" name="isUse" value="0" title="正常" autocomplete="off" class="layui-input" th:checked="${editInfo.isUse==0}" checked>
+                <input type="radio" name="isUse" value="1" title="禁用" autocomplete="off" class="layui-input" th:checked="${editInfo.isUse==1}">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">使用人</label>
+            <div class="layui-input-inline">
+                <input type="text" id="userName" th:value="${editInfo.userName}" lay-verify="required" placeholder="请选择使用人" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item" style="display: none">
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" id="userId" name="userId" th:value="${editInfo.userId==null?'':editInfo.userId}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">用途描述</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入用途描述"  name="useDes"  th:text="${editInfo.useDes}"  class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入备注"  name="remarks" th:text="${editInfo.remarks}"   class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit="" lay-filter="kFormSubmit" id="kFormSubmit">
+        <input type="text" name="id" th:value="${editInfo.id}" autocomplete="off" class="layui-input">
+    </div>
+</form>
+<script type="text/html" id="configTypeTpl">
+    {{#  if(d.configType == 1){ }}
+    <span class="layui-badge layui-bg-blue">dev</span>
+    {{#  } else if(d.configType == 2) { }}
+    <span class="layui-badge layui-bg-black">sit</span>
+    {{#  } else if(d.configType == 3) { }}
+    <span class="layui-badge layui-bg-green">uat</span>
+    {{#  } else if(d.configType == 4) { }}
+    <span class="layui-badge layui-bg-green">prod</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
+</script>
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+<script>
+    layui.use(['form','tableSelect'], function () {
+        var $ = layui.$, form = layui.form,tableSelect = layui.tableSelect;
+        tableSelect.render({
+            elem: '#sysName',
+            checkedKey: 'id',
+            searchKey: 'sysName',
+            searchPlaceholder: '系统名称',
+            table: {
+                url:  BASE_WEB + 'zg/systemApp/list/data',
+                method: 'post',
+                cols: [
+                    [
+                        { type: 'radio' }
+                        ,{field: 'id', title: 'id', hide:true}
+                        ,{field: 'sysName', title: '系统名称', width:200}
+                        ,{field: 'configType', title: '环境类别', templet: '#configTypeTpl'}
+                        ,{field: 'appIp', title: '应用ip', width: 130}
+                    ]
+                ]
+            },
+            done: function (elem, data) {
+                layui.each(data.data, function (index, item) {
+                    elem.val(item.sysName);
+                    $('#configId').val(item.id);
+                    $('#appIp').val(item.appIp);
+                })
+                //alert(JSON.stringify(data.data.realname))
+            }
+        });
+        tableSelect.render({
+            elem: '#targetSysName',
+            checkedKey: 'id',
+            searchKey: 'sysName',
+            searchPlaceholder: '系统名称',
+            table: {
+                url:  BASE_WEB + 'zg/systemApp/list/data',
+                method: 'post',
+                cols: [
+                    [
+                        { type: 'radio' }
+                        ,{field: 'id', title: 'id', hide:true}
+                        ,{field: 'sysName', title: '系统名称', width:200}
+                        ,{field: 'configType', title: '环境类别', templet: '#configTypeTpl'}
+                        ,{field: 'appIp', title: '应用ip', width: 130}
+                    ]
+                ]
+            },
+            done: function (elem, data) {
+                layui.each(data.data, function (index, item) {
+                    elem.val(item.sysName);
+                    $('#targetConfigId').val(item.id);
+                    $('#targetAppIp').val(item.appIp);
+                })
+                //alert(JSON.stringify(data.data.realname))
+            }
+        });
+        tableSelect.render({
+            elem: '#userName',
+            checkedKey: 'id',
+            table: {
+                url: api.sys.userListData ,
+                cols: [
+                    [
+                        { type: 'radio' }
+                        ,{field: 'id', title: 'id', hide:true}
+                        ,{field: 'realname', title: '姓名', width:100}
+                        ,{field: 'sex', title: '性别', width:80, sort: true, templet: '#sexTpl'}
+                        ,{field: 'deptId', title: '所属部门', sort: true, templet: '#deptTpl'}
+                        ,{field: 'status', title: '用户状态', align: 'center', sort: true, templet: '#statusTpl', width: 100}
+                    ]
+                ]
+            },
+            done: function (elem, data) {
+                layui.each(data.data, function (index, item) {
+                    elem.val(item.realname);
+                    $('#userId').val(item.id);
+                })
+                //alert(JSON.stringify(data.data.realname))
+            }
+        });
+        //监听提交
+        form.on('submit(kFormSubmit)', function(data){
+            var field = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+            var url = field.id ? 'zg/systemRelationship/edit' : 'zg/systemRelationship/add';
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            $.ajax({
+                type: req.type.post,
+                url: BASE_WEB + url,
+                data: field,
+                async: false,
+                success: function (r) {
+                    if (r.code === req.status.ok) {
+                        // 重载表格
+                        parent.layui.table.reload('kContentTable');
+                        parent.layer.close(index); //再执行关闭
+                    } else {
+                        kvfKit.errorMsg(r.msg);
+                    }
+                }
+            });
+
+        });
+    })
+</script>
+</body>
+</html>

@@ -108,7 +108,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">备注</label>
         <div class="layui-input-block">
-            <textarea placeholder="请输入备注"  name="remark" th:value="${editInfo.remark}" class="layui-textarea"></textarea>
+            <textarea placeholder="请输入备注"  name="remark" th:text="${editInfo.remark}"   class="layui-textarea"></textarea>
         </div>
     </div>
     <div class="layui-form-item layui-hide">
@@ -133,7 +133,7 @@
 <script>
     layui.use(['form', 'tableSelect'], function () {
         var $ = layui.$, form = layui.form,tableSelect = layui.tableSelect;
-
+        //新增ip校验
         form.verify({
             ip: [
                 /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
