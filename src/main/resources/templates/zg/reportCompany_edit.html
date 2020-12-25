@@ -17,7 +17,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">调查年度</label>
         <div class="layui-input-inline">
-            <input type="text" name="reportYear" th:value="${editInfo.reportYear}" lay-verify="required" placeholder="请输入调查年度" autocomplete="off" class="layui-input">
+            <input type="text" name="reportYear" id="reportYear" th:value="${#strings.replace(editInfo.reportYear,'T',' ')}" placeholder="请输入创建时间" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
@@ -76,6 +76,10 @@
         laydate.render({
             elem: '#upateDate' // 指定元素
             ,type: 'datetime'
+        });
+        laydate.render({
+            elem: '#reportYear' // 指定元素
+            ,type: 'year'
         });
 
         //监听提交

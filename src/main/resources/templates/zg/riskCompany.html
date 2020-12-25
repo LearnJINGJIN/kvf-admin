@@ -61,12 +61,22 @@
 
 <!--表格列格式化模板 start-->
 <script type="text/html" id="riskLevelTpl">
-<!--todo由于注释不统一规范，无法为你生成格式化代码，请自行处理-->
-<span>{{d.riskLevel}}</span>
+    {{#  if(d.riskLevel == 1){ }}
+    <span class="layui-badge layui-bg-orange">轻微</span>
+    {{#  } else if(d.riskLevel == 2) { }}
+    <span class="layui-badge layui-bg-cyan">中等</span>
+    {{#  } else if(d.riskLevel == 3) { }}
+    <span class="layui-badge layui-bg-red">严重</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
 </script>
 <script type="text/html" id="createDateTpl">
-<!--todo由于注释不统一规范，无法为你生成格式化代码，请自行处理-->
 <span>{{d.createDate}}</span>
+</script>
+<script type="text/html" id="updateDateTpl">
+<!--todo由于注释不统一规范，无法为你生成格式化代码，请自行处理-->
+<span>{{d.updateDate}}</span>
 </script>
 <!--表格列格式化模板 end-->
 
@@ -83,11 +93,13 @@
             ,toolbar: '#headToolbarTpl'
             ,cols: [[ //表头
                 {type:'checkbox', fixed: 'left'}
-                ,{field: 'companyId', title: '所属公司id'}
-                ,{field: 'riskLevel', title: '风险等级', sort: true, width: 130, templet: '#riskLevelTpl'}
+                ,{field: 'companyId', title: '所属公司id', width: 100}
                 ,{field: 'riskDesc', title: '风险描述', width: 130}
+                ,{field: 'riskLevel', title: '风险等级', width: 130, templet: '#riskLevelTpl'}
                 ,{field: 'createUser', title: '创建人', width: 130}
                 ,{field: 'createDate', title: '创建时间', sort: true, width: 130, templet: '#createDateTpl'}
+                ,{field: 'updateUser', title: '修改人', width: 130}
+                ,{field: 'updateDate', title: '修改时间', sort: true, width: 130, templet: '#updateDateTpl'}
                 ,{field: '', title: '操作', width: 235, fixed: 'right', templet: '#rowToolbarTpl'}
             ]]
         }));

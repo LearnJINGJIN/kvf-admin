@@ -8,7 +8,7 @@ import com.kalvin.kvf.modules.zg.entity.RiskCompany;
  * <p>
  *  服务类
  * </p>
- * @since 2020-12-17 11:53:25
+ * @since 2020-12-25 09:53:24
  */
 public interface RiskCompanyService extends IService<RiskCompany> {
 

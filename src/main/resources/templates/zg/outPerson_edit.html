@@ -21,9 +21,8 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">性别</label>
-        <input type="radio" name="imOutsource" value="1" title="男" th:checked="${editInfo.sex==1}">
-        <input type="radio" name="imOutsource" value="0" title="女" th:checked="${editInfo.sex==0}">
-        </div>
+        <input type="radio" name="sex" value="1" title="男" th:checked="${editInfo.sex==1}">
+        <input type="radio" name="sex" value="0" title="女" th:checked="${editInfo.sex==0}">
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">联系电话</label>
@@ -45,15 +44,13 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">职务类型</label>
-        <input type="radio" name="imOutsource" value="1" title="商务" th:checked="${editInfo.sex==1}">
-        <input type="radio" name="imOutsource" value="0" title="技术" th:checked="${editInfo.sex==2}">
-        </div>
+        <input type="radio" name="rating" value="1" title="商务" th:checked="${editInfo.rating==1}">
+        <input type="radio" name="rating" value="2" title="技术" th:checked="${editInfo.rating==2}">
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">是否驻场</label>
-        <input type="radio" name="imOutsource" value="1" title="是" th:checked="${editInfo.sex==1}">
-        <input type="radio" name="imOutsource" value="0" title="否" th:checked="${editInfo.sex==2}">
-        </div>
+        <input type="radio" name="isStatus" value="1" title="是" th:checked="${editInfo.isStatus==1}">
+        <input type="radio" name="isStatus" value="2" title="否" th:checked="${editInfo.isStatus==2}">
     </div>
     <div class="layui-form-item layui-hide">
         <label class="layui-form-label">创建人</label>

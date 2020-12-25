@@ -61,8 +61,13 @@
 
 <!--表格列格式化模板 start-->
 <script type="text/html" id="companyStatusTpl">
-<!--todo由于注释不统一规范，无法为你生成格式化代码，请自行处理-->
-<span>{{d.companyStatus}}</span>
+{{#  if(d.companyStatus == 0){ }}
+<span class="layui-badge layui-bg-blue">正常经营</span>
+{{#  } else if(d.companyStatus == 1) { }}
+<span class="layui-badge layui-bg-black">非正常经营</span>
+{{#  } else { }}
+<span class="layui-badge layui-bg-gray">未知</span>
+{{# } }}
 </script>
 <!--表格列格式化模板 end-->
 

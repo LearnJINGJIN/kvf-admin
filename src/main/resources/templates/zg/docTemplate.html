@@ -61,8 +61,28 @@
 
 <!--表格列格式化模板 start-->
 <script type="text/html" id="stageStatusTpl">
-<!--todo由于注释不统一规范，无法为你生成格式化代码，请自行处理-->
-<span>{{d.stageStatus}}</span>
+    {{#  if(d.stageStatus == 1){ }}
+    <span class="layui-badge layui-bg-blue">需求阶段</span>
+    {{#  } else if(d.stageStatus == 2) { }}
+    <span class="layui-badge layui-bg-black">立项阶段</span>
+    {{#  } else if(d.stageStatus == 3) { }}
+    <span class="layui-badge layui-bg-green">招标阶段</span>
+    {{#  } else if(d.stageStatus == 4) { }}
+    <span class="layui-badge layui-bg-blue">采购阶段</span>
+    {{#  } else if(d.stageStatus == 5) { }}
+    <span class="layui-badge layui-bg-black">开发阶段</span>
+    {{#  } else if(d.stageStatus == 6) { }}
+    <span class="layui-badge layui-bg-green">测试阶段</span>
+    {{#  } else if(d.stageStatus == 7) { }}
+    <span class="layui-badge layui-bg-blue">上线阶段</span>
+    {{#  } else if(d.stageStatus == 8) { }}
+    <span class="layui-badge layui-bg-black">验收阶段</span>
+    {{#  } else if(d.stageStatus == 9) { }}
+    <span class="layui-badge layui-bg-green">评级阶段</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
+<!--<span>{{d.stageStatus}}</span>-->
 </script>
 <!--表格列格式化模板 end-->
 

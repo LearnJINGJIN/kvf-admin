@@ -10,6 +10,7 @@ import com.kalvin.kvf.common.entity.BaseEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
 
 /**
  * <p>
@@ -34,8 +35,8 @@ public class ReportCompany extends BaseEntity {
     /**
      * 调查年度
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate reportYear;
+    @DateTimeFormat(pattern = "yyyy")
+    private Year reportYear;
 
     /**
      * 所属公司id

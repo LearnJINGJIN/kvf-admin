@@ -10,7 +10,7 @@ import java.util.List;
  * <p>
  *  Mapper 接口
  * </p>
- * @since 2020-12-17 11:53:25
+ * @since 2020-12-25 09:53:24
  */
 public interface RiskCompanyMapper extends BaseMapper<RiskCompany> {
 

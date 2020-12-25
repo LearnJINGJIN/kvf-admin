@@ -61,16 +61,31 @@
 
 <!--表格列格式化模板 start-->
 <script type="text/html" id="sexTpl">
-<!--todo由于注释不统一规范，无法为你生成格式化代码，请自行处理-->
-<span>{{d.sex}}</span>
+    {{#  if(d.sex == 0){ }}
+    <span class="layui-badge layui-bg-red">女</span>
+    {{#  } else if(d.sex == 1) { }}
+    <span class="layui-badge layui-bg-blue">男</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
 </script>
 <script type="text/html" id="ratingTpl">
-<!--todo由于注释不统一规范，无法为你生成格式化代码，请自行处理-->
-<span>{{d.rating}}</span>
+    {{#  if(d.rating == 1){ }}
+    <span class="layui-badge layui-bg-red">商务</span>
+    {{#  } else if(d.rating == 2) { }}
+    <span class="layui-badge layui-bg-blue">技术</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
 </script>
 <script type="text/html" id="isStatusTpl">
-<!--todo由于注释不统一规范，无法为你生成格式化代码，请自行处理-->
-<span>{{d.isStatus}}</span>
+    {{#  if(d.isStatus == 1){ }}
+    <span class="layui-badge layui-bg-red">是</span>
+    {{#  } else if(d.isStatus == 2) { }}
+    <span class="layui-badge layui-bg-blue">否</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
 </script>
 <!--表格列格式化模板 end-->
 
