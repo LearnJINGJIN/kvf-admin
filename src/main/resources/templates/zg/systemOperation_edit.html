@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="common/base::pagetitle"></title>
+    <link th:replace="common/base::static"/>
+</head>
+<body>
+<form class="layui-form layui-form-pane" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">系统名称</label>
+        <div class="layui-input-inline">
+            <input type="text" id="sysName" th:value="${editInfo.sysName}" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" style="display: none">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="text" id="sysId" name="sysId" th:value="${editInfo.sysId}"    autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">应用启动步骤</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入应用启动步骤"  name="appStart" th:text="${editInfo.appStart}"   class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">应用停止步骤</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入应用停止步骤"  name="appStop" th:text="${editInfo.appStop}"   class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">web后管启动步骤</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入web后管启动步骤"  name="webStart" th:text="${editInfo.webStart}"   class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">web后管停止步骤</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入web后管停止步骤"  name="webStop" th:text="${editInfo.webStop}"   class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">前置启动步骤</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入前置启动步骤"  name="preStart" th:text="${editInfo.preStart}"   class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">前置停止步骤</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入前置停止步骤"  name="preStop" th:text="${editInfo.preStop}"   class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入备注"  name="remarks" th:text="${editInfo.remarks}"   class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit="" lay-filter="kFormSubmit" id="kFormSubmit">
+        <input type="text" name="id" th:value="${editInfo.id}" autocomplete="off" class="layui-input">
+    </div>
+</form>
+<script type="text/html" id="sysStatusTpl">
+    {{#  if(d.sysStatus == 0){ }}
+    <span class="layui-badge layui-bg-blue">运行中</span>
+    {{#  } else if(d.sysStatus == 1) { }}
+    <span class="layui-badge layui-bg-black">已下线</span>
+    {{#  } else if(d.sysStatus == 2) { }}
+    <span class="layui-badge layui-bg-green">建设中</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
+</script>
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+<script>
+    layui.use(['form', 'laydate','tableSelect'], function () {
+        var $ = layui.$, form = layui.form, tableSelect = layui.tableSelect;
+        tableSelect.render({
+            elem: '#sysName',
+            checkedKey: 'id',
+            table: {
+                url: BASE_WEB + 'zg/system/list/data',
+                method: 'post',
+                cols: [
+                    [
+                        { type: 'radio' }
+                        ,{field: 'id', title: 'id', hide:true}
+                        ,{field: 'sysName', title: '系统名称', width:200}
+                        ,{field: 'onDate', title: '上线日期', width:150}
+                        ,{field: 'sysStatus', title: '系统状态', width:80, templet: '#sysStatusTpl'}
+                    ]
+                ]
+            },
+            done: function (elem, data) {
+                layui.each(data.data, function (index, item) {
+                    elem.val(item.sysName);
+                    $('#sysId').val(item.id);
+                })
+                //alert(JSON.stringify(data.data.realname))
+            }
+        });
+
+
+        //监听提交
+        form.on('submit(kFormSubmit)', function(data){
+            var field = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+            var url = field.id ? 'zg/systemOperation/edit' : 'zg/systemOperation/add';
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            $.ajax({
+                type: req.type.post,
+                url: BASE_WEB + url,
+                data: field,
+                async: false,
+                success: function (r) {
+                    if (r.code === req.status.ok) {
+                        // 重载表格
+                        parent.layui.table.reload('kContentTable');
+                        parent.layer.close(index); //再执行关闭
+                    } else {
+                        kvfKit.errorMsg(r.msg);
+                    }
+                }
+            });
+
+        });
+    })
+</script>
+</body>
+</html>

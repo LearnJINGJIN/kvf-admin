@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title th:replace="common/base::pagetitle"></title>
+    <link th:replace="common/base::static"/>
+</head>
+<body style="background-color: #f2f2f2;">
+
+<div id="kPage" class="layui-fluid" style="padding: 0">
+    <div class="layui-row">
+        <div class="layui-col-md12" id="kMainContentCol">
+            <div class="layui-fluid kvf-fluid-padding15">
+                <div class="layui-card">
+                    <form>
+                        <div class="layui-form layui-card-header kvf-card-header-auto">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">系统名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="sysName" placeholder="请输入系统名称" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline">
+                                    <button class="layui-btn " lay-submit="" lay-filter="kTableSearchFilter">
+                                        <i class="layui-icon layui-icon-search"></i>
+                                    </button>
+                                    <button class="layui-btn " type="reset" data-event="refresh">
+                                        <i class="layui-icon layui-icon-refresh-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="layui-card-body">
+                        <table id="kContentTable" lay-filter="kContentTable"></table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+
+<!--头部工具栏模板-->
+<script type="text/html" id="headToolbarTpl">
+    <button class="layui-btn layui-btn-sm " lay-event="add">添加</button>
+</script>
+
+<!--表格行工具栏模板-->
+<script type="text/html" id="rowToolbarTpl">
+    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+</script>
+
+<!--表格列格式化模板 start-->
+<!--表格列格式化模板 end-->
+
+<script type="text/javascript" th:inline="javascript">
+    layui.use(['element', 'form', 'layer', 'table','soulTable'], function () {
+        var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, soulTable = layui.soulTable;
+        var tableId = 'kContentTable';
+        var area = ['780px', '95%'];
+
+        // 实例化table
+        var tableIns = table.render($.extend(config.layui.table, {
+            elem: '#' + tableId
+            ,url: BASE_WEB + 'zg/systemOperation/list/data' // 数据接口
+            ,toolbar: '#headToolbarTpl'
+            ,overflow: 'tips'
+            ,method: 'post' //这里可以写post请求,默认get
+            ,cols: [[ //表头
+                {type:'checkbox', fixed: 'left'}
+                ,{field: 'sysName', title: '系统名称', width: 130}
+                ,{field: 'appStart', title: '应用启动步骤',width: 130,autoWidth: false}
+                ,{field: 'appStop', title: '应用停止步骤', width: 130,autoWidth: false}
+                ,{field: 'dbStart', title: '数据库启动步骤',width: 130,autoWidth: false}
+                ,{field: 'dbStop', title: '数据库停止步骤', width: 130,autoWidth: false}
+                ,{field: 'webStart', title: 'web后管启动步骤', width: 130,autoWidth: false}
+                ,{field: 'webStop', title: 'web后管停止步骤', width: 130,autoWidth: false}
+                ,{field: 'preStart', title: '前置启动步骤', width: 130,autoWidth: false}
+                ,{field: 'preStop', title: '前置停止步骤', width: 130,autoWidth: false}
+                ,{field: 'remarks', title: '备注', width: 130,autoWidth: false}
+                ,{field: '', title: '操作', width: 235, fixed: 'right', templet: '#rowToolbarTpl'}
+            ]]
+            ,filter: {
+                clearFilter: true,
+                items:['column','data','excel'] // 只显示表格列和导出excel两个菜单项
+            }
+            ,excel: { // 导出excel配置, （以下值均为默认值）
+                on: true, //是否启用, 默认开启
+                filename: '系统操作管理.xlsx', // 文件名
+                head: { // 表头样式
+                    family: 'Calibri', // 字体
+                    size: 12, // 字号
+                    color: 'FFFFFF', // 字体颜色
+                    bgColor: 'FF5722' // 背景颜色
+                },
+                font: { // 正文样式
+                    family: 'Calibri', // 字体
+                    size: 12, // 字号
+                    color: 'FFFFFF', // 字体颜色
+                    bgColor: '01AAED' //背景颜色
+                }
+            }
+            ,autoColumnWidth: {
+                init: true
+            }
+            ,done: function () {
+                soulTable.render(this)
+            }
+        }));
+
+        // 监听表格头部事件
+        table.on('toolbar(' + tableId + ')', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            var checkData = checkStatus.data; // 得到选中的数据
+            switch(obj.event) {
+                case 'add':
+                    layer.open({
+                        type: 2
+                        ,title: '添加'
+                        ,content: BASE_WEB + 'zg/systemOperation/edit'
+                        ,maxmin: true
+                        ,area: area   // 宽高
+                        ,btn: ['确定', '取消']
+                        ,yes: function(index, layero){
+                            //点击确认触发 iframe 内容中的按钮提交
+                            var submit = layero.find('iframe').contents().find("#kFormSubmit");
+                            submit.click();
+                        }
+                    });
+                    break;
+            }
+        });
+
+        // 表格行按钮 监听事件
+        table.on('tool(' + tableId + ')', function (obj) {
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+            if (layEvent === 'edit') {
+                layer.open({
+                    type: 2
+                    ,title: '编辑'
+                    ,content: BASE_WEB + 'zg/systemOperation/edit?id=' + data.id
+                    ,maxmin: true
+                    ,area: area   // 宽高
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        //点击确认触发 iframe 内容中的按钮提交
+                        var submit = layero.find('iframe').contents().find("#kFormSubmit");
+                        submit.click();
+                    }
+                });
+            }
+            if (layEvent === 'del') {
+                layer.confirm('确定删除吗？', function(index) {
+                    //执行 Ajax 后重载
+                    $.ajax({
+                        type: req.type.post,
+                        url: BASE_WEB + 'zg/systemOperation/del/' + data.id,
+                        async: false,
+                        success: function (r) {
+                            if (r.code === req.status.ok) {
+                                table.reload(tableId);
+                                kvfKit.sucessMsg('已删除');
+                            } else {
+                                kvfKit.errorMsg(r.msg);
+                            }
+                        }
+                    });
+                });
+            }
+        });
+
+
+        // 监听查询
+        form.on('submit(kTableSearchFilter)', function (obj) {
+            renderTableData(obj.field);
+            return false;
+        });
+
+        var active = {
+            refresh: function () {
+                var $form = $('form');
+                $form[0].reset();
+                renderTableData(kvfKit.getFormJson($form));
+            }
+        };
+
+        kvfKit.activeInit(active);
+
+        function renderTableData(params) {
+            params = params ? params : {};
+
+            tableIns.reload({
+                where: params,
+                page: {curr: 1}
+            });
+        }
+
+        // 绑定监听回车事件
+        kvfKit.bindEnterEventForLayuiForm();
+
+    });
+</script>
+
+</body>
+</html>

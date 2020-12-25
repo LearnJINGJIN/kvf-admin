@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalvin.kvf.modules.zg.mapper.SystemOperationMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.SystemOperation">
+        <id column="id" property="id" />
+        <result column="sys_id" property="sysId" />
+        <result column="app_start" property="appStart" />
+        <result column="app_stop" property="appStop" />
+        <result column="db_start" property="dbStart" />
+        <result column="db_stop" property="dbStop" />
+        <result column="web_start" property="webStart" />
+        <result column="web_stop" property="webStop" />
+        <result column="pre_start" property="preStart" />
+        <result column="pre_stop" property="preStop" />
+        <result column="remarks" property="remarks" />
+        <result column="dr" property="dr" />
+        <result column="create_user" property="createUser" />
+        <result column="create_date" property="createDate" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_date" property="updateDate" />
+        <result column="sys_name" property="sysName" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       t.id, t.sys_id, t.app_start, t.app_stop,t.db_stop,t.db_start,t.web_start,
+       t.web_stop, t.pre_start, t.pre_stop, t.remarks,
+       t.dr, t.create_user, t.create_date, t.update_user, t.update_date,a.sys_name
+    </sql>
+
+    <select id="selectSystemOperationList" resultType="com.kalvin.kvf.modules.zg.entity.SystemOperation">
+        select <include refid="Base_Column_List" /> from zg_system_operation t
+        left join zg_system a on a.id=t.sys_id
+        <trim prefix="where" prefixOverrides="and">
+            <if test="systemOperation.sysId != null">
+                and sys_id = #{systemOperation.sysId}
+            </if>
+        </trim>
+    </select>
+    <select id="selectInfoById" resultType="com.kalvin.kvf.modules.zg.entity.SystemOperation">
+        select <include refid="Base_Column_List" /> from zg_system_operation TABLE t
+        left join zg_system a on a.id=t.sys_id
+        where t.id=#{id}
+    </select>
+
+</mapper>
