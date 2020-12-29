@@ -24,5 +24,8 @@ public class RiskCompanyServiceImpl extends ServiceImpl<RiskCompanyMapper, RiskC
         List<RiskCompany> riskCompanys = baseMapper.selectRiskCompanyList(riskCompany, page);
         return page.setRecords(riskCompanys);
     }
-
+    @Override
+    public RiskCompany getInfoById(Long id) {
+        return baseMapper.selectInfoById(id);
+    }
 }

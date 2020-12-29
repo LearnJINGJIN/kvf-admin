@@ -25,4 +25,8 @@ public class OutPersonServiceImpl extends ServiceImpl<OutPersonMapper, OutPerson
         return page.setRecords(outPersons);
     }
 
+    @Override
+    public OutPerson getInfoById(Long id) {
+        return baseMapper.selectInfoById(id);
+    }
 }

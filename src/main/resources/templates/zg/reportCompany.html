@@ -66,7 +66,7 @@
     layui.use(['element', 'form', 'layer', 'table', 'laydate'], function () {
         var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, laydate = layui.laydate;
         var tableId = 'kContentTable';
-        var area = ['449px', '95%'];
+        var area = ['66%', '95%'];
 
         // 实例化table
         var tableIns = table.render($.extend(config.layui.table, {
@@ -75,10 +75,10 @@
             ,toolbar: '#headToolbarTpl'
             ,cols: [[ //表头
                 {type:'checkbox', fixed: 'left'}
-                ,{field: 'companyId', title: '所属公司id'}
+                ,{field: 'companyName', title: '所属公司', filter: true}
                 ,{field: 'reportYear', title: '调查年度', sort: true, width: 130}
                 ,{field: 'riskLevel', title: '风险等级', width: 130}
-                ,{field: 'createUser', title: '创建人', width: 130}
+                // ,{field: 'createUser', title: '创建人', width: 130}
                 ,{field: '', title: '操作', width: 235, fixed: 'right', templet: '#rowToolbarTpl'}
             ]]
         }));

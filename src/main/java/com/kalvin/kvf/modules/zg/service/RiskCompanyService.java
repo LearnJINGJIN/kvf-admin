@@ -18,5 +18,5 @@ public interface RiskCompanyService extends IService<RiskCompany> {
      * @return page
      */
     Page<RiskCompany> listRiskCompanyPage(RiskCompany riskCompany);
-
+    RiskCompany getInfoById(Long id);
 }

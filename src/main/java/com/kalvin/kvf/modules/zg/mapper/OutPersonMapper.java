@@ -22,4 +22,5 @@ public interface OutPersonMapper extends BaseMapper<OutPerson> {
      */
     List<OutPerson> selectOutPersonList(OutPerson outPerson, IPage page);
 
+    OutPerson selectInfoById(Long id);
 }

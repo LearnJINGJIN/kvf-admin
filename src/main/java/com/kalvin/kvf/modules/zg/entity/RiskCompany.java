@@ -36,6 +36,11 @@ public class RiskCompany extends BaseEntity {
     private String riskDesc;
 
     /**
+     * 所属公司
+     */
+    private String companyName;
+
+    /**
      * 所属公司id
      */
     private Long companyId;

@@ -25,4 +25,8 @@ public class SvnSystemServiceImpl extends ServiceImpl<SvnSystemMapper, SvnSystem
         return page.setRecords(svnSystems);
     }
 
+    @Override
+    public SvnSystem getInfoById(Long id) {
+        return baseMapper.selectInfoById(id);
+    }
 }

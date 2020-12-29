@@ -39,7 +39,7 @@ public class RiskCompanyController extends BaseController {
         if (id == null) {
             riskCompany = new RiskCompany();
         } else {
-            riskCompany = riskCompanyService.getById(id);
+            riskCompany = riskCompanyService.getInfoById(id);
         }
         mv.addObject("editInfo", riskCompany);
         return mv;

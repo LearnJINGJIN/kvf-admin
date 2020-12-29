@@ -37,9 +37,9 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">关联所属公司</label>
+        <label class="layui-form-label">所属公司</label>
         <div class="layui-input-inline">
-            <input type="text" name="companyId" th:value="${editInfo.companyId}" lay-verify="required" placeholder="请输入关联所属公司" autocomplete="off" class="layui-input">
+            <input type="text" id="companyName" th:value="${editInfo.companyName==null?'':editInfo.companyName}" lay-verify="required" placeholder="请输入关联所属公司" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
@@ -79,7 +79,13 @@
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">备注</label>
         <div class="layui-input-block">
-            <textarea placeholder="请输入备注" name="remarks" th:value="${editInfo.remarks}"  class="layui-textarea"></textarea>
+            <textarea placeholder="请输入备注" name="remarks" th:text="${editInfo.remarks}"  class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <div class="layui-input-inline">
+            <input type="text" id="companyId" name="companyId" th:value="${editInfo.companyId==null?'':editInfo.companyId}" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item layui-hide">
@@ -97,8 +103,8 @@
 <script th:replace="common/base::context"></script>
 <script th:replace="common/base::mainjs"></script>
 <script>
-    layui.use(['form', 'laydate'], function () {
-        var $ = layui.$, form = layui.form, laydate = layui.laydate;
+    layui.use(['form', 'laydate','tableSelect'], function () {
+        var $ = layui.$, form = layui.form, laydate = layui.laydate, tableSelect = layui.tableSelect;
 
 
         laydate.render({
@@ -110,6 +116,30 @@
             ,type: 'datetime'
         });
 
+        tableSelect.render({
+            elem: '#companyName',
+            checkedKey: 'id',
+            table: {
+                url: BASE_WEB + 'zg/outCompany/list/data',
+                cols: [
+                    [
+                        { type: 'radio' }
+                        ,{field: 'id', title: 'id', hide:true}
+                        ,{field: 'companyName', title: '公司名称', width: 200}
+                        ,{field: 'companyStatus', title: '公司经营状态', width: 130, templet: '#companyStatusTpl'}
+                        ,{field: 'companySize', title: '公司规模', width: 130}
+                        ,{field: 'companyCode', title: '社会统一征信代码'}
+                    ]
+                ]
+            },
+            done: function (elem, data) {
+                layui.each(data.data, function (index, item) {
+                    elem.val(item.companyName);
+                    $('#companyId').val(item.id);
+                })
+                //alert(JSON.stringify(data.data.realname))
+            }
+        });
         //监听提交
         form.on('submit(kFormSubmit)', function(data){
             var field = data.field; //获取提交的字段

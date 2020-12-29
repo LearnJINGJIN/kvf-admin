@@ -17,9 +17,9 @@
                         <div class="layui-form layui-card-header kvf-card-header-auto">
                             <div class="layui-form-item">
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">所属系统id</label>
+                                    <label class="layui-form-label">所属系统</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="sysId" placeholder="请输入所属系统id" autocomplete="off" class="layui-input">
+                                        <input type="text" name="sysName" placeholder="请输入所属系统" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
 
@@ -66,7 +66,7 @@
     layui.use(['element', 'form', 'layer', 'table', 'laydate'], function () {
         var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, laydate = layui.laydate;
         var tableId = 'kContentTable';
-        var area = ['449px', '95%'];
+        var area = ['66%', '95%'];
 
         // 实例化table
         var tableIns = table.render($.extend(config.layui.table, {
@@ -76,8 +76,9 @@
             ,cols: [[ //表头
                 {type:'checkbox', fixed: 'left'}
                 ,{field: 'synAddr', title: 'svn地址', width: 130}
-                ,{field: 'createUser', title: '创建人', width: 130}
-                ,{field: 'updateDate', title: '修改时间', sort: true, width: 130}
+                ,{field: 'sysName', title: '所属系统', width: 130,filter: true}
+                // ,{field: 'createUser', title: '创建人', width: 130}
+                // ,{field: 'updateDate', title: '修改时间', sort: true, width: 130}
                 ,{field: 'remarks', title: '备注'}
                 ,{field: '', title: '操作', width: 235, fixed: 'right', templet: '#rowToolbarTpl'}
             ]]

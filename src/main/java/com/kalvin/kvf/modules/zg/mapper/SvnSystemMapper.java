@@ -22,4 +22,5 @@ public interface SvnSystemMapper extends BaseMapper<SvnSystem> {
      */
     List<SvnSystem> selectSvnSystemList(SvnSystem svnSystem, IPage page);
 
+    SvnSystem selectInfoById(Long id);
 }

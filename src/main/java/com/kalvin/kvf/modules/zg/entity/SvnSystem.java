@@ -34,7 +34,10 @@ public class SvnSystem extends BaseEntity {
      * 所属系统id
      */
     private Long sysId;
-
+    /**
+     * 所属系统名称
+     */
+    private String sysName;
     /**
      * svn地址
      */

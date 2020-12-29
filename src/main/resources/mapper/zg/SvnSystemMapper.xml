@@ -6,6 +6,7 @@
     <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.SvnSystem">
         <id column="id" property="id" />
         <result column="sys_id" property="sysId" />
+        <result column="sys_name" property="sysName" />
         <result column="syn_addr" property="synAddr" />
         <result column="remarks" property="remarks" />
         <result column="dr" property="dr" />
@@ -17,16 +18,24 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-       id, sys_id, syn_addr, remarks, dr, create_user, create_date, update_user, update_date
+       t.id, t.sys_id, t.syn_addr, t.remarks, t.dr, t.create_user, t.create_date, t.update_user, t.update_date,a.sys_name
     </sql>
 
     <select id="selectSvnSystemList" resultType="com.kalvin.kvf.modules.zg.entity.SvnSystem">
-        select <include refid="Base_Column_List" /> from zg_svn_system
+        select <include refid="Base_Column_List" /> from zg_svn_system t left join zg_system a on a.id=t.sys_id
         <trim prefix="where" prefixOverrides="and">
-            <if test="svnSystem.sysId != null">
-                and sys_id = #{svnSystem.sysId}
+<!--            <if test="svnSystem.sysId != null">-->
+<!--                and t.sys_id = #{svnSystem.sysId}-->
+<!--            </if>-->
+            <if test="svnSystem.sysName != null and svnSystem.sysName != ''">
+                and a.sys_name like concat(#{svnSystem.sysName}, "%")
             </if>
         </trim>
+    </select>
+    <select id="selectInfoById" resultType="com.kalvin.kvf.modules.zg.entity.SvnSystem">
+        select <include refid="Base_Column_List" /> from zg_svn_system t
+        left join zg_system a on a.id=t.sys_id
+        where t.id=#{id}
     </select>
 
 </mapper>

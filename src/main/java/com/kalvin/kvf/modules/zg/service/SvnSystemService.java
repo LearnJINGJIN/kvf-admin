@@ -18,5 +18,5 @@ public interface SvnSystemService extends IService<SvnSystem> {
      * @return page
      */
     Page<SvnSystem> listSvnSystemPage(SvnSystem svnSystem);
-
+    SvnSystem getInfoById(Long id);
 }

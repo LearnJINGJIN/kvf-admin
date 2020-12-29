@@ -39,7 +39,7 @@ public class OutPersonController extends BaseController {
         if (id == null) {
             outPerson = new OutPerson();
         } else {
-            outPerson = outPersonService.getById(id);
+            outPerson = outPersonService.getInfoById(id);
         }
         mv.addObject("editInfo", outPerson);
         return mv;

@@ -21,5 +21,5 @@ public interface ReportCompanyMapper extends BaseMapper<ReportCompany> {
      * @return list
      */
     List<ReportCompany> selectReportCompanyList(ReportCompany reportCompany, IPage page);
-
+    ReportCompany selectInfoById(Long id);
 }

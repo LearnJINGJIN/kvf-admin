@@ -39,7 +39,7 @@ public class ReportCompanyController extends BaseController {
         if (id == null) {
             reportCompany = new ReportCompany();
         } else {
-            reportCompany = reportCompanyService.getById(id);
+            reportCompany = reportCompanyService.getInfoById(id);
         }
         mv.addObject("editInfo", reportCompany);
         return mv;

@@ -10,6 +10,7 @@
         <result column="sex" property="sex" />
         <result column="phone" property="phone" />
         <result column="email" property="email" />
+        <result column="company_name" property="companyName" />
         <result column="company_id" property="companyId" />
         <result column="rating" property="rating" />
         <result column="is_status" property="isStatus" />
@@ -23,11 +24,11 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-       id, name, age, sex, phone, email, company_id, rating, is_status, create_user, create_date, update_user, update_date, remarks, dr
+       t.id, t.name, t.age, t.sex, t.phone, t.email, t.company_id, t.rating, t.is_status, t.create_user, t.create_date, t.update_user, t.update_date, t.remarks, t.dr, a.company_name
     </sql>
 
     <select id="selectOutPersonList" resultType="com.kalvin.kvf.modules.zg.entity.OutPerson">
-        select <include refid="Base_Column_List" /> from zg_out_person
+        select <include refid="Base_Column_List" /> from zg_out_person t left join zg_out_company a on a.id=t.company_id
         <trim prefix="where" prefixOverrides="and">
             <if test="outPerson.name != null and outPerson.name != ''">
                 and name like concat(#{outPerson.name}, "%")
@@ -35,4 +36,9 @@
         </trim>
     </select>
 
+    <select id="selectInfoById" resultType="com.kalvin.kvf.modules.zg.entity.OutPerson">
+        select <include refid="Base_Column_List" /> from zg_out_person t
+        left join zg_out_company a on a.id=t.company_id
+        where t.id=#{id}
+    </select>
 </mapper>

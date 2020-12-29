@@ -40,7 +40,7 @@ public class SvnSystemController extends BaseController {
         if (id == null) {
             svnSystem = new SvnSystem();
         } else {
-            svnSystem = svnSystemService.getById(id);
+            svnSystem = svnSystemService.getInfoById(id);
         }
         mv.addObject("editInfo", svnSystem);
         return mv;

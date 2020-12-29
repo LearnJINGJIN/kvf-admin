@@ -18,5 +18,5 @@ public interface ReportCompanyService extends IService<ReportCompany> {
      * @return page
      */
     Page<ReportCompany> listReportCompanyPage(ReportCompany reportCompany);
-
+    ReportCompany getInfoById(Long id);
 }

@@ -34,7 +34,10 @@ public class OutPerson extends BaseEntity {
      * 姓名
      */
     private String name;
-
+    /**
+     * 所属公司
+     */
+    private String companyName;
     /**
      * 年龄
      */
