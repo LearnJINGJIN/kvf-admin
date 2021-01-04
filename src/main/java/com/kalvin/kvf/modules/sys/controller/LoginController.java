@@ -63,7 +63,6 @@ public class LoginController extends BaseController {
             Subject subject = ShiroKit.getSubject();
             UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe);
             subject.login(token);
-
             ShiroKit.setSessionAttribute("user", username);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);

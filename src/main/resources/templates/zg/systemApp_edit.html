@@ -17,11 +17,11 @@
         <div class="layui-inline">
             <label class="layui-form-label">环境类别</label>
             <div class="layui-input-inline">
-                <select name="configType" class="layui-select" lay-verify="required">
-                    <option value="1" th:selected="${editInfo.configType == 1}">dev</option>
-                    <option value="2" th:selected="${editInfo.configType == 2}">sit</option>
-                    <option value="3" th:selected="${editInfo.configType == 3}">uat</option>
-                    <option value="4" th:selected="${editInfo.configType == 4}">prod</option>
+                <select name="configType"  class="selDict" dict="configType" th:value="${editInfo.configType}" lay-verify="required">
+                    <!--<option value="1" th:selected="${editInfo.configType == 1}">dev</option>-->
+                    <!--<option value="2" th:selected="${editInfo.configType == 2}">sit</option>-->
+                    <!--<option value="3" th:selected="${editInfo.configType == 3}">uat</option>-->
+                    <!--<option value="4" th:selected="${editInfo.configType == 4}">prod</option>-->
                 </select>
             </div>
         </div>
@@ -52,26 +52,26 @@
         <div class="layui-inline">
             <label class="layui-form-label">开发语言</label>
             <div class="layui-input-inline">
-                <select name="devLanguage" class="layui-select" lay-verify="required">
-                    <option value="1" th:selected="${editInfo.devLanguage == 1}">java</option>
-                    <option value="2" th:selected="${editInfo.devLanguage == 2}">c</option>
-                    <option value="3" th:selected="${editInfo.devLanguage == 3}">c++</option>
-                    <option value="4" th:selected="${editInfo.devLanguage == 4}">ios</option>
-                    <option value="5" th:selected="${editInfo.devLanguage == 5}">android</option>
-                    <option value="6" th:selected="${editInfo.devLanguage == 6}">php</option>
-                    <option value="7" th:selected="${editInfo.devLanguage == 7}">python</option>
-                    <option value="8" th:selected="${editInfo.devLanguage == 8}">sql</option>
+                <select name="devLanguage" class="selDict" dict="devLanguage" th:value="${editInfo.devLanguage}"  lay-verify="required">
+                    <!--<option value="1" th:selected="${editInfo.devLanguage == 1}">java</option>-->
+                    <!--<option value="2" th:selected="${editInfo.devLanguage == 2}">c</option>-->
+                    <!--<option value="3" th:selected="${editInfo.devLanguage == 3}">c++</option>-->
+                    <!--<option value="4" th:selected="${editInfo.devLanguage == 4}">ios</option>-->
+                    <!--<option value="5" th:selected="${editInfo.devLanguage == 5}">android</option>-->
+                    <!--<option value="6" th:selected="${editInfo.devLanguage == 6}">php</option>-->
+                    <!--<option value="7" th:selected="${editInfo.devLanguage == 7}">python</option>-->
+                    <!--<option value="8" th:selected="${editInfo.devLanguage == 8}">sql</option>-->
                 </select>
             </div>
         </div>
         <div class="layui-inline">
             <label class="layui-form-label">操作系统类型</label>
             <div class="layui-input-inline">
-                <select name="operSysType" class="layui-select" lay-verify="required">
-                    <option value="1" th:selected="${editInfo.operSysType == 1}">linux</option>
-                    <option value="2" th:selected="${editInfo.operSysType == 2}">windows</option>
-                    <option value="3" th:selected="${editInfo.operSysType == 3}">unix</option>
-                    <option value="4" th:selected="${editInfo.operSysType == 4}">mac</option>
+                <select name="operSysType" class="selDict" dict="operSysType" th:value="${editInfo.operSysType}"   lay-verify="required">
+                    <!--<option value="1" th:selected="${editInfo.operSysType == 1}">linux</option>-->
+                    <!--<option value="2" th:selected="${editInfo.operSysType == 2}">windows</option>-->
+                    <!--<option value="3" th:selected="${editInfo.operSysType == 3}">unix</option>-->
+                    <!--<option value="4" th:selected="${editInfo.operSysType == 4}">mac</option>-->
                 </select>
             </div>
         </div>
@@ -131,8 +131,10 @@
 <script th:replace="common/base::context"></script>
 <script th:replace="common/base::mainjs"></script>
 <script>
-    layui.use(['form', 'tableSelect'], function () {
-        var $ = layui.$, form = layui.form,tableSelect = layui.tableSelect;
+    layui.use(['form', 'tableSelect','dict'], function () {
+        var $ = layui.$, form = layui.form,tableSelect = layui.tableSelect,dict=layui.dict;
+        dict.render();
+        form.render("select");
         //新增ip校验
         form.verify({
             ip: [

@@ -36,8 +36,8 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     }
 
     @Override
-    public List<Dict> listAllDictItemByCode(String code) {
-        return baseMapper.selectAllDictItemByCode(code);
+    public List<Dict> listAllDictItemByCode(String code,String value) {
+        return baseMapper.selectAllDictItemByCode(code,value);
     }
 
     @Override

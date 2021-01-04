@@ -145,11 +145,8 @@
                 data:  {id : id, status : status},
                 async: false,
                 success: function (r) {
-                    if (r.code === req.status.ok) {
-                        // 重载表格
-                        table.reload(tableId);
-                     } else {
-                        kvfKit.errorMsg(r.msg);
+                    if (r.code !== req.status.ok) {
+                         kvfKit.errorMsg(r.msg);
                     }
                 }
             });

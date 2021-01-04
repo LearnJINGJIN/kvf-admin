@@ -110,8 +110,8 @@ var api = {
         userRoleRmBatch: BASE_WEB + 'sys/userRole/removeBatch',
         userRoleCount: BASE_WEB + 'sys/userRole/count',
         getUserRoleNames: BASE_WEB + 'sys/userRole/get/roleNames/',
-        logListData: BASE_WEB + 'sys/log/list/data'
-
+        logListData: BASE_WEB + 'sys/log/list/data',
+        dictByCodeListData:  BASE_WEB+'sys/dict/getAllDictByCode'
     },
     gen: {
         tableListData: BASE_WEB + 'generator/list/tableData',
@@ -138,7 +138,8 @@ layui.config({
     tableFilter: 'soulTable/tableFilter',
     excel: 'soulTable/excel',
     tableSelect: 'tableSelect/tableSelect',
-    formSelects: 'lay-formselect/formSelects-v4'
+    formSelects: 'lay-formselect/formSelects-v4',
+    dict:'/dict/dict'
    });
 
 

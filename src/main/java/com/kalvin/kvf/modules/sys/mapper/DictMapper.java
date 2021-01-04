@@ -25,8 +25,9 @@ public interface DictMapper extends BaseMapper<Dict> {
     /**
      * 根据字典码查询下面所有的字典项条目
      * @param code 字典码
-     * @return
+     * @param value 值
+      * @return
      */
-    List<Dict> selectAllDictItemByCode(String code);
+    List<Dict> selectAllDictItemByCode(String code,String value);
 
 }

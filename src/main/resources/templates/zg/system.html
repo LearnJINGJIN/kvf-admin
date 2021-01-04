@@ -80,16 +80,8 @@
 {{# } }}
 </script>
 <script type="text/html" id="appTypeTpl">
- {{#  if(d.appType == 1){ }}
-<span >双活</span>
-{{#  } else if(d.appType == 2) { }}
-<span >冷备</span>
-{{#  } else if(d.appType == 3) { }}
-<span >单工</span>
-{{#  } else { }}
-<span class="layui-badge layui-bg-gray">未知</span>
-{{# } }}
-
+    {{# var data = kvfKit.get(api.sys.dictByCodeListData,{code:'apparch',value:d.appType}).data; }}
+    {{# return data ? data.name : '<span class="layui-badge-rim">未分配</span>'; }}
 </script>
 <script type="text/html" id="flowTypeTpl">
     {{#  if(d.flowType == 0){ }}
@@ -152,16 +144,16 @@
                 ,{field: 'sysName', title: '系统名称',fixed: 'left', width: 130,filter: true}
                 ,{field: 'onDate', title: '上线日期', sort: true,filter: {type: 'date[yyyy-MM-dd]'}}
                 ,{field: 'sysDesc', title: '功能描述', width: 130,autoWidth: false}
-                ,{field: 'sysHeadId', title: '系统负责人', width: 130,templet: '#userTp1',filter: true}
-                ,{field: 'sysOperId', title: '运维负责人', width: 130,templet: '#userTp2',filter: true}
+                ,{field: 'sysHeadId', title: '系统负责人', width: 130,templet: '#userTp1'}
+                ,{field: 'sysOperId', title: '运维负责人', width: 130,templet: '#userTp2'}
                 ,{field: 'dataAddres', title: '资料存放地址', width: 130}
-                ,{field: 'appType', title: '应用架构类型', width: 130, templet: '#appTypeTpl',filter: true}
-                ,{field: 'flowType', title: '流量控制类型', width: 130, templet: '#flowTypeTpl',filter: true}
-                ,{field: 'sysLevel', title: '级别', width: 130, templet: '#sysLevelTpl',filter: true}
-                ,{field: 'imSystemType', title: '灾备类型', width: 130, templet: '#imSystemTypeTpl',filter: true}
+                ,{field: 'appType', title: '应用架构类型', width: 130, templet: '#appTypeTpl'}
+                ,{field: 'flowType', title: '流量控制类型', width: 130, templet: '#flowTypeTpl'}
+                ,{field: 'sysLevel', title: '级别', width: 130, templet: '#sysLevelTpl'}
+                ,{field: 'imSystemType', title: '灾备类型', width: 130, templet: '#imSystemTypeTpl'}
                 ,{field: 'outDate', title: '下线日期', width: 130, filter: {type: 'date[yyyy-MM-dd]'}}
                 ,{field: 'remarks', title: '备注', width: 130,autoWidth: false}
-                ,{field: 'sysStatus', title: '系统状态', width: 130, templet: '#sysStatusTpl',fixed: 'right',filter: true}
+                ,{field: 'sysStatus', title: '系统状态', width: 130, templet: '#sysStatusTpl',fixed: 'right'}
                 ,{field: '', title: '操作', width: 235, fixed: 'right', templet: '#rowToolbarTpl'}
             ]]
             ,filter: {
