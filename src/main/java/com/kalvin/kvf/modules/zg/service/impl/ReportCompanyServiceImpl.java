@@ -24,5 +24,8 @@ public class ReportCompanyServiceImpl extends ServiceImpl<ReportCompanyMapper, R
         List<ReportCompany> reportCompanys = baseMapper.selectReportCompanyList(reportCompany, page);
         return page.setRecords(reportCompanys);
     }
-
+    @Override
+    public ReportCompany getInfoById(Long id) {
+        return baseMapper.selectInfoById(id);
+    }
 }

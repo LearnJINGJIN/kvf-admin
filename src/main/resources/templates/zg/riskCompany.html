@@ -84,7 +84,7 @@
     layui.use(['element', 'form', 'layer', 'table', 'laydate'], function () {
         var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, laydate = layui.laydate;
         var tableId = 'kContentTable';
-        var area = ['449px', '95%'];
+        var area = ['66%', '95%'];
 
         // 实例化table
         var tableIns = table.render($.extend(config.layui.table, {
@@ -93,13 +93,13 @@
             ,toolbar: '#headToolbarTpl'
             ,cols: [[ //表头
                 {type:'checkbox', fixed: 'left'}
-                ,{field: 'companyId', title: '所属公司id', width: 100}
-                ,{field: 'riskDesc', title: '风险描述', width: 130}
+                ,{field: 'companyName', title: '所属公司', width: 100,filter: true}
                 ,{field: 'riskLevel', title: '风险等级', width: 130, templet: '#riskLevelTpl'}
-                ,{field: 'createUser', title: '创建人', width: 130}
-                ,{field: 'createDate', title: '创建时间', sort: true, width: 130, templet: '#createDateTpl'}
-                ,{field: 'updateUser', title: '修改人', width: 130}
-                ,{field: 'updateDate', title: '修改时间', sort: true, width: 130, templet: '#updateDateTpl'}
+                ,{field: 'riskDesc', title: '风险描述'}
+                // ,{field: 'createUser', title: '创建人', width: 130}
+                // ,{field: 'createDate', title: '创建时间', sort: true, width: 130, templet: '#createDateTpl'}
+                // ,{field: 'updateUser', title: '修改人', width: 130}
+                // ,{field: 'updateDate', title: '修改时间', sort: true, width: 130, templet: '#updateDateTpl'}
                 ,{field: '', title: '操作', width: 235, fixed: 'right', templet: '#rowToolbarTpl'}
             ]]
         }));

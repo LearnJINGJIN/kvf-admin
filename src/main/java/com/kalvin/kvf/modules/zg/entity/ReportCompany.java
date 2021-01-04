@@ -44,6 +44,11 @@ public class ReportCompany extends BaseEntity {
     private Long companyId;
 
     /**
+     * 所属公司
+     */
+    private String companyName;
+
+    /**
      * 风险等级
      */
     private String riskLevel;

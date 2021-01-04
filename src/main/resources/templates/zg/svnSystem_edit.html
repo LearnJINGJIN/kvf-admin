@@ -8,9 +8,9 @@
 <body>
 <div class="layui-form" style="padding: 20px 30px 0 0;">
     <div class="layui-form-item">
-        <label class="layui-form-label">所属系统id</label>
+        <label class="layui-form-label">所属系统</label>
         <div class="layui-input-inline">
-            <input type="text" name="sysId" th:value="${editInfo.sysId}" lay-verify="required" placeholder="请输入所属系统id" autocomplete="off" class="layui-input">
+            <input type="text" id="sysName" th:value="${editInfo.sysName==null?'':editInfo.sysName}" lay-verify="required" placeholder="请输入所属系统" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
@@ -28,7 +28,12 @@
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">备注</label>
         <div class="layui-input-inline">
-            <textarea placeholder="请输入备注" name="remarks" th:value="${editInfo.remarks}"  class="layui-textarea"></textarea>
+            <textarea placeholder="请输入备注" name="remarks" th:text="${editInfo.remarks}"  class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <div class="layui-input-inline">
+            <input type="text" id="sysId" name="sysId" th:value="${editInfo.sysId==null?'':editInfo.sysId}" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item layui-hide">
@@ -39,9 +44,21 @@
 
 <script th:replace="common/base::context"></script>
 <script th:replace="common/base::mainjs"></script>
+<script type="text/html" id="sysStatusTpl">
+    {{#  if(d.sysStatus == 0){ }}
+    <span class="layui-badge layui-bg-blue">运行中</span>
+    {{#  } else if(d.sysStatus == 1) { }}
+    <span class="layui-badge layui-bg-black">已下线</span>
+    {{#  } else if(d.sysStatus == 2) { }}
+    <span class="layui-badge layui-bg-green">建设中</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
+</script>
+
 <script>
-    layui.use(['form', 'laydate'], function () {
-        var $ = layui.$, form = layui.form, laydate = layui.laydate;
+    layui.use(['form', 'laydate','tableSelect'], function () {
+        var $ = layui.$, form = layui.form, laydate = layui.laydate, tableSelect=layui.tableSelect;
 
 
         laydate.render({
@@ -52,7 +69,30 @@
             elem: '#updateDate' // 指定元素
             ,type: 'datetime'
         });
-
+        tableSelect.render({
+            elem: '#sysName',
+            checkedKey: 'id',
+            table: {
+                url: BASE_WEB + 'zg/system/list/data',
+                method: 'post',
+                cols: [
+                    [
+                        { type: 'radio' }
+                        ,{field: 'id', title: 'id', hide:true}
+                        ,{field: 'sysName', title: '系统名称', width:200}
+                        ,{field: 'sysStatus', title: '系统状态', width:80, templet: '#sysStatusTpl'}
+                        ,{field: 'onDate', title: '上线日期'}
+                    ]
+                ]
+            },
+            done: function (elem, data) {
+                layui.each(data.data, function (index, item) {
+                    elem.val(item.sysName);
+                    $('#sysId').val(item.id);
+                })
+                //alert(JSON.stringify(data.data.realname))
+            }
+        });
         //监听提交
         form.on('submit(kFormSubmit)', function(data){
             var field = data.field; //获取提交的字段

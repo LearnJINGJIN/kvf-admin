@@ -21,5 +21,5 @@ public interface RiskCompanyMapper extends BaseMapper<RiskCompany> {
      * @return list
      */
     List<RiskCompany> selectRiskCompanyList(RiskCompany riskCompany, IPage page);
-
+    RiskCompany selectInfoById(Long id);
 }

@@ -18,5 +18,5 @@ public interface OutPersonService extends IService<OutPerson> {
      * @return page
      */
     Page<OutPerson> listOutPersonPage(OutPerson outPerson);
-
+    OutPerson getInfoById(Long id);
 }

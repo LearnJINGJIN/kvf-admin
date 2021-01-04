@@ -14,19 +14,19 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">所属公司id</label>
+        <label class="layui-form-label">所属公司</label>
         <div class="layui-input-inline">
-            <input type="text" name="companyId" th:value="${editInfo.companyId}" lay-verify="required" placeholder="请输入所属公司id" autocomplete="off" class="layui-input">
+            <input type="text" id="companyName" th:value="${editInfo.companyName}" lay-verify="required" placeholder="请输入所属公司id" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item ">
         <label class="layui-form-label">风险等级</label>
         <div class="layui-input-inline">
-            <select class="layui-select" lay-verify="required">
-                <option name="riskLevel" value="0">请选择</option>
-                <option name="riskLevel" value="1" th:selected="${editInfo.riskLevel}">轻微</option>
-                <option name="riskLevel" value="2" th:selected="${editInfo.riskLevel}">中等</option>
-                <option name="riskLevel" value="3" th:selected="${editInfo.riskLevel}">严重</option>
+            <select class="layui-select" lay-verify="required" name="riskLevel">
+                <option value="0">请选择</option>
+                <option value="1" th:selected="${editInfo.riskLevel}">轻微</option>
+                <option value="2" th:selected="${editInfo.riskLevel}">中等</option>
+                <option value="3" th:selected="${editInfo.riskLevel}">严重</option>
             </select>
         </div>
     </div>
@@ -55,6 +55,12 @@
         </div>
     </div>
     <div class="layui-form-item layui-hide">
+        <div class="layui-input-inline">
+            <input type="text" id="companyId" name="companyId" th:value="${editInfo.companyId==null?'':editInfo.companyId}" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
         <label class="layui-form-label">删除标志位0-正常 1-删除</label>
         <div class="layui-input-block">
         </div>
@@ -69,8 +75,8 @@
 <script th:replace="common/base::context"></script>
 <script th:replace="common/base::mainjs"></script>
 <script>
-    layui.use(['form', 'laydate'], function () {
-        var $ = layui.$, form = layui.form, laydate = layui.laydate;
+    layui.use(['form', 'laydate', 'tableSelect'], function () {
+        var $ = layui.$, form = layui.form, laydate = layui.laydate,tableSelect = layui.tableSelect;
 
 
         laydate.render({
@@ -80,6 +86,31 @@
         laydate.render({
             elem: '#updateDate' // 指定元素
             ,type: 'datetime'
+        });
+
+        tableSelect.render({
+            elem: '#companyName',
+            checkedKey: 'id',
+            table: {
+                url: BASE_WEB + 'zg/outCompany/list/data',
+                cols: [
+                    [
+                        { type: 'radio' }
+                        ,{field: 'id', title: 'id', hide:true}
+                        ,{field: 'companyName', title: '公司名称', width: 200}
+                        ,{field: 'companyStatus', title: '公司经营状态', width: 130, templet: '#companyStatusTpl'}
+                        ,{field: 'companySize', title: '公司规模', width: 130}
+                        ,{field: 'companyCode', title: '社会统一征信代码'}
+                    ]
+                ]
+            },
+            done: function (elem, data) {
+                layui.each(data.data, function (index, item) {
+                    elem.val(item.companyName);
+                    $('#companyId').val(item.id);
+                })
+                //alert(JSON.stringify(data.data.realname))
+            }
         });
 
         //监听提交

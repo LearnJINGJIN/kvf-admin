@@ -87,13 +87,18 @@
     <span class="layui-badge layui-bg-gray">未知</span>
     {{# } }}
 </script>
+<script type="text/html" id="companyTpl">
+    {{# var data = kvfKit.get(api.sys.getCompany + d.companyId).data; }}
+    {{# return data ? data.companyName : '<span class="layui-badge-rim">未分配</span>'; }}
+</script>
+
 <!--表格列格式化模板 end-->
 
 <script type="text/javascript" th:inline="javascript">
     layui.use(['element', 'form', 'layer', 'table', 'laydate'], function () {
         var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, laydate = layui.laydate;
         var tableId = 'kContentTable';
-        var area = ['449px', '95%'];
+        var area = ['66%', '95%'];
 
         // 实例化table
         var tableIns = table.render($.extend(config.layui.table, {
@@ -105,7 +110,7 @@
                 ,{field: 'name', title: '姓名', width: 130}
                 ,{field: 'age', title: '年龄'}
                 ,{field: 'sex', title: '性别', width: 130, templet: '#sexTpl'}
-                ,{field: 'companyId', title: '所属公司', width: 130}
+                ,{field: 'companyId', title: '所属公司', width: 130, templet: '#companyTpl',filter: true}
                 ,{field: 'rating', title: '职务类型', width: 130, templet: '#ratingTpl'}
                 ,{field: 'isStatus', title: '是否驻场', width: 130, templet: '#isStatusTpl'}
                 ,{field: '', title: '操作', width: 235, fixed: 'right', templet: '#rowToolbarTpl'}

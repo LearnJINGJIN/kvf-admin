@@ -27,7 +27,7 @@
     <div class="layui-inline">
         <label class="layui-form-label">所属阶段</label>
         <div class="layui-input-inline">
-            <select name="stageStatus">
+            <select name="stageStatus"  lay-verify="required">
                 <option value="0" th:selected="${editInfo.stageStatus == 0}">请选择阶段</option>
                 <option value="1" th:selected="${editInfo.stageStatus == 1}">1-需求阶段</option>
                 <option value="2" th:selected="${editInfo.stageStatus == 2}">2-立项阶段</option>
@@ -79,7 +79,7 @@
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">备注</label>
         <div class="layui-input-block">
-            <textarea placeholder="请输入内容" name="remarks" th:value="${editInfo.remarks}"  class="layui-textarea"></textarea>
+            <textarea placeholder="请输入内容" name="remarks" th:text="${editInfo.remarks}"  class="layui-textarea"></textarea>
         </div>
     </div>
     <div class="layui-form-item layui-hide">
