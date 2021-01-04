@@ -141,7 +141,8 @@ layui.config({
     tableFilter: 'soulTable/tableFilter',
     excel: 'soulTable/excel',
     tableSelect: 'tableSelect/tableSelect',
-    formSelects: 'lay-formselect/formSelects-v4'
+    formSelects: 'lay-formselect/formSelects-v4',
+    dict: 'dict/dict'
    });
 
 
