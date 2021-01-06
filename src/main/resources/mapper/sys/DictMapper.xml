@@ -57,6 +57,9 @@
             sys_dict
         WHERE
             parent_id = ( SELECT id FROM sys_dict WHERE CODE = #{code} )
+        <if test="value != null and value != ''">
+            and value =#{value}
+        </if>
         AND `status` = 0
     </select>
 

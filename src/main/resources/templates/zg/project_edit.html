@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="common/base::pagetitle"></title>
+    <link th:replace="common/base::static"/>
+</head>
+<body>
+<div class="layui-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">项目/需求名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="projectName" th:value="${editInfo.projectName}" lay-verify="required" placeholder="请输入项目/需求名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">项目/需求等级</label>
+        <div class="layui-input-block">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">申请人id</label>
+        <div class="layui-input-inline">
+            <input type="text" name="infoId" th:value="${editInfo.infoId}" lay-verify="required" placeholder="请输入申请人id" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">申请时间</label>
+        <div class="layui-input-inline">
+            <input type="text" name="infoDate" id="infoDate" th:value="${#strings.replace(editInfo.infoDate,'T',' ')}" lay-verify="required" placeholder="请输入申请时间" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">业务流程描述</label>
+        <div class="layui-input-inline">
+            <input type="text" name="proDesc" th:value="${editInfo.proDesc}" lay-verify="required" placeholder="请输入业务流程描述" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">现有业务流程描述</label>
+        <div class="layui-input-inline">
+            <input type="text" name="existProDesc" th:value="${editInfo.existProDesc}" placeholder="请输入现有业务流程描述" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">相关具体业务流程描述</label>
+        <div class="layui-input-inline">
+            <input type="text" name="relaProDesc" th:value="${editInfo.relaProDesc}" placeholder="请输入相关具体业务流程描述" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">期望完成日期</label>
+        <div class="layui-input-inline">
+            <input type="text" name="expectDate" id="expectDate" th:value="${#strings.replace(editInfo.expectDate,'T',' ')}" lay-verify="required" placeholder="请输入期望完成日期" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">实际完成日期</label>
+        <div class="layui-input-inline">
+            <input type="text" name="actualDate" id="actualDate" th:value="${#strings.replace(editInfo.actualDate,'T',' ')}" placeholder="请输入实际完成日期" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">附件地址</label>
+        <div class="layui-input-inline">
+            <input type="text" name="acceFile" th:value="${editInfo.acceFile}" placeholder="请输入附件地址" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属阶段(1-需求、2-立项、3-招标、4-合同、5-开发、6-测试、7-环境申请、8-上线，9-验收)</label>
+        <div class="layui-input-block">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">需求变更次数</label>
+        <div class="layui-input-inline">
+            <input type="text" name="numChanges" th:value="${editInfo.numChanges}" lay-verify="required" placeholder="请输入需求变更次数" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">0-正常 1-删除</label>
+        <div class="layui-input-block">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="text" name="createUser" th:value="${editInfo.createUser}" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="text" name="createDate" id="createDate" th:value="${#strings.replace(editInfo.createDate,'T',' ')}" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="text" name="updateUser" th:value="${editInfo.updateUser}" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="text" name="updateDate" id="updateDate" th:value="${#strings.replace(editInfo.updateDate,'T',' ')}" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit="" lay-filter="kFormSubmit" id="kFormSubmit">
+        <input type="text" name="id" th:value="${editInfo.id}" autocomplete="off" class="layui-input">
+    </div>
+</div>
+
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+<script>
+    layui.use(['form', 'laydate'], function () {
+        var $ = layui.$, form = layui.form, laydate = layui.laydate;
+
+
+        laydate.render({
+            elem: '#infoDate' // 指定元素
+        });
+        laydate.render({
+            elem: '#expectDate' // 指定元素
+        });
+        laydate.render({
+            elem: '#actualDate' // 指定元素
+        });
+        laydate.render({
+            elem: '#createDate' // 指定元素
+            ,type: 'datetime'
+        });
+        laydate.render({
+            elem: '#updateDate' // 指定元素
+            ,type: 'datetime'
+        });
+
+        //监听提交
+        form.on('submit(kFormSubmit)', function(data){
+            var field = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+            var url = field.id ? 'zg/project/edit' : 'zg/project/add';
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            $.ajax({
+                type: req.type.post,
+                url: BASE_WEB + url,
+                data: field,
+                async: false,
+                success: function (r) {
+                    if (r.code === req.status.ok) {
+                        // 重载表格
+                        parent.layui.table.reload('kContentTable');
+                        parent.layer.close(index); //再执行关闭
+                    } else {
+                        kvfKit.errorMsg(r.msg);
+                    }
+                }
+            });
+
+        });
+    })
+</script>
+</body>
+</html>

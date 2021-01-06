@@ -7,6 +7,7 @@ import com.kalvin.kvf.modules.sys.entity.Dict;
 import com.kalvin.kvf.modules.sys.service.DictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -91,6 +92,16 @@ public class DictController extends BaseController {
     public R get(@PathVariable Long id) {
         return R.ok(dictService.getById(id));
     }
+    @GetMapping(value = "getAllDictByCode")
+//    @Cacheable(value="dict")
+    public R getAllDictByCode(Dict dict) {
+        List<Dict> dictList = dictService.listAllDictItemByCode(dict.getCode(), dict.getValue());
+        if(dictList.size()>1){
+            return R.ok(dictList);
+        }else {
+            return R.ok(dictList.get(0));
+        }
+     }
 
 }
 

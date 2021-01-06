@@ -54,11 +54,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">架构类型</label>
             <div class="layui-input-inline">
-                <select name="appType">
-                    <option value="1" th:selected="${editInfo.appType == 1}">双活</option>
-                    <option value="2" th:selected="${editInfo.appType == 2}">冷备</option>
-                    <option value="3" th:selected="${editInfo.appType == 3}">单工</option>
-                </select>
+                <select name="appType" class="selDict" dict="apparch" th:value="${editInfo.appType}"></select>
             </div>
         </div>
         <div class="layui-inline">
@@ -157,9 +153,11 @@
 <script th:replace="common/base::mainjs"></script>
 
 <script>
-    layui.use(['form', 'laydate','tableSelect'], function () {
-        var $ = layui.$, form = layui.form, laydate = layui.laydate,tableSelect=layui.tableSelect;
-          laydate.render({
+       layui.use(['form', 'laydate','tableSelect','dict'], function () {
+        var $ = layui.$, form = layui.form, laydate = layui.laydate,tableSelect=layui.tableSelect,dict=layui.dict;
+        dict.render();
+        form.render("select");
+        laydate.render({
             elem: '#onDate' // 指定元素
             ,trigger: 'click' //采用click弹出
         });
@@ -167,6 +165,18 @@
             elem: '#outDate' // 指定元素
             ,trigger: 'click' //采用click弹出
         });
+           // var appType="${editInfo.appType}";
+
+        //    var appType = [[${editInfo.appType}]];
+        //     kvfKit.get(api.sys.dictByCodeListData,{code:'apparch'},function(data){
+        //
+        //      $.each(data.data,function(index,item){
+        //         $('#appType').append(new Option(item.name,item.value));//往下拉菜单里添加元素
+        //         //设置value（这个值就可以是在更新的时候后台传递到前台的值）为2的值为默认选中
+        //         $('#appType').val(appType);
+        //     });
+        // });
+        // form.render("select");
         tableSelect.render({
             elem: '#sysHeadName',
             checkedKey: 'id',

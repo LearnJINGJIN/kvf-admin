@@ -28,7 +28,7 @@ public interface DictService extends IService<Dict> {
      * @param code 字典码
      * @return
      */
-    List<Dict> listAllDictItemByCode(String code);
+    List<Dict> listAllDictItemByCode(String code,String value);
 
     List<Dict> listByParentId(Long parentId);
 
