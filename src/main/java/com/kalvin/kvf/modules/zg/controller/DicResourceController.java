@@ -1,6 +1,7 @@
 package com.kalvin.kvf.modules.zg.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.kalvin.kvf.common.utils.ShiroKit;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +55,7 @@ public class DicResourceController extends BaseController {
     @RequiresPermissions("zg:dicResource:add")
     @PostMapping(value = "add")
     public R add(DicResource dicResource) {
+        dicResource.setCreateUser(ShiroKit.getUserId());
         dicResourceService.save(dicResource);
         return R.ok();
     }
@@ -61,6 +63,7 @@ public class DicResourceController extends BaseController {
     @RequiresPermissions("zg:dicResource:edit")
     @PostMapping(value = "edit")
     public R edit(DicResource dicResource) {
+        dicResource.setUpdateUser(ShiroKit.getUserId());
         dicResourceService.updateById(dicResource);
         return R.ok();
     }

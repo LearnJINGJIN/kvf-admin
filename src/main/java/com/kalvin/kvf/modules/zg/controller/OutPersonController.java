@@ -1,6 +1,7 @@
 package com.kalvin.kvf.modules.zg.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.kalvin.kvf.common.utils.ShiroKit;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +55,7 @@ public class OutPersonController extends BaseController {
     @RequiresPermissions("zg:outPerson:add")
     @PostMapping(value = "add")
     public R add(OutPerson outPerson) {
+        outPerson.setCreateUser(ShiroKit.getUserId());
         outPersonService.save(outPerson);
         return R.ok();
     }
@@ -61,6 +63,7 @@ public class OutPersonController extends BaseController {
     @RequiresPermissions("zg:outPerson:edit")
     @PostMapping(value = "edit")
     public R edit(OutPerson outPerson) {
+        outPerson.setUpdateUser(ShiroKit.getUserId());
         outPersonService.updateById(outPerson);
         return R.ok();
     }

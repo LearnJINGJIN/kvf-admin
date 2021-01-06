@@ -6,28 +6,28 @@
     <link th:replace="common/base::static"/>
 </head>
 <body>
-<div class="layui-form" style="padding: 20px 30px 0 0;">
+<form class="layui-form layui-form-pane" action="" style="padding:20px">
     <div class="layui-form-item">
-        <label class="layui-form-label">公司名称</label>
-        <div class="layui-input-inline">
+        <label class="layui-form-label layui-card-body">公司名称</label>
+        <div class="layui-input-block">
             <input type="text" name="companyName" th:value="${editInfo.companyName}" lay-verify="required" placeholder="请输入公司名称" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">征信代码</label>
-        <div class="layui-input-inline">
+        <div class="layui-input-block">
             <input type="text" name="companyCode" th:value="${editInfo.companyCode}" lay-verify="required" placeholder="请输入社会统一征信代码" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">公司地址</label>
-        <div class="layui-input-inline">
-            <input type="text" name="companyAddr" th:value="${editInfo.companyAddr}" lay-verify="required" placeholder="请输入公司地址" autocomplete="off" class="layui-input">
+        <div class="layui-input-block">
+            <textarea placeholder="请输入公司地址" name="remarks" th:text="${editInfo.companyAddr}" lay-verify="required" class="layui-textarea"></textarea>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">法人代表</label>
-        <div class="layui-input-inline">
+        <div class="layui-input-block">
             <input type="text" name="legalPerson" th:value="${editInfo.legalPerson}" lay-verify="required" placeholder="请输入法人代表" autocomplete="off" class="layui-input">
         </div>
     </div>
@@ -38,7 +38,7 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">公司规模</label>
-        <div class="layui-input-inline">
+        <div class="layui-input-block">
             <input type="text" name="companySize" th:value="${editInfo.companySize}" placeholder="请输入公司规模" autocomplete="off" class="layui-input">
         </div>
     </div>
@@ -46,6 +46,41 @@
         <label class="layui-form-label">是否重要外包商</label>
         <input type="radio" name="imOutsource" value="0" title="重要" th:checked="${editInfo.imOutsource==0}">
         <input type="radio" name="imOutsource" value="1" title="非重要" th:checked="${editInfo.imOutsource==1}">
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">注册资本</label>
+        <div class="layui-input-block">
+            <input type="text" name="regCapital" th:value="${editInfo.regCapital}" lay-verify="required" placeholder="请输入注册资本" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">前5大股东</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入前5大股东" name="remarks" th:text="${editInfo.topShareholders}" lay-verify="required" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">与本机构关联关系</label>
+        <input type="radio" name="relationship" value="1" title="是" th:checked="${editInfo.relationship==1}">
+        <input type="radio" name="relationship" value="0" title="否" th:checked="${editInfo.relationship==0}">
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">已取得有效资质</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入已取得的有效资质" name="remarks" th:text="${editInfo.effQualification}"  class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">外包服务项目及内容</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入外包服务项目及内容" name="remarks" th:text="${editInfo.proContents}" lay-verify="required" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">风险管理和第三方审计要求</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入风险管理和第三方审计要求" name="remarks" th:text="${editInfo.riskAudit}"  class="layui-textarea"></textarea>
+        </div>
     </div>
     <div class="layui-form-item layui-hide">
         <label class="layui-form-label">创建人</label>
@@ -74,7 +109,7 @@
 
     <div class="layui-form-item">
         <label class="layui-form-label">备注</label>
-        <div class="layui-input-inline">
+        <div class="layui-input-block">
             <textarea placeholder="请输入公司描述" name="remarks" th:text="${editInfo.remarks}"  class="layui-textarea"></textarea>
         </div>
     </div>
@@ -83,7 +118,7 @@
         <input type="button" lay-submit="" lay-filter="kFormSubmit" id="kFormSubmit">
         <input type="text" name="id" th:value="${editInfo.id}" autocomplete="off" class="layui-input">
     </div>
-</div>
+</form>
 
 <script th:replace="common/base::context"></script>
 <script th:replace="common/base::mainjs"></script>

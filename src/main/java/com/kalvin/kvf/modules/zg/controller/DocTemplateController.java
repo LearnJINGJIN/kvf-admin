@@ -1,6 +1,7 @@
 package com.kalvin.kvf.modules.zg.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.kalvin.kvf.common.utils.ShiroKit;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +55,7 @@ public class DocTemplateController extends BaseController {
     @RequiresPermissions("zg:docTemplate:add")
     @PostMapping(value = "add")
     public R add(DocTemplate docTemplate) {
+        docTemplate.setCreateUser(ShiroKit.getUserId());
         docTemplateService.save(docTemplate);
         return R.ok();
     }
@@ -61,6 +63,7 @@ public class DocTemplateController extends BaseController {
     @RequiresPermissions("zg:docTemplate:edit")
     @PostMapping(value = "edit")
     public R edit(DocTemplate docTemplate) {
+        docTemplate.setUpdateUser(ShiroKit.getUserId());
         docTemplateService.updateById(docTemplate);
         return R.ok();
     }

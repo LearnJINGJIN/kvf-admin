@@ -6,16 +6,16 @@
     <link th:replace="common/base::static"/>
 </head>
 <body>
-<div class="layui-form" style="padding: 20px 30px 0 0;">
+<form class="layui-form layui-form-pane" action="" style="padding:20px">
     <div class="layui-form-item">
         <label class="layui-form-label">姓名</label>
-        <div class="layui-input-inline">
+        <div class="layui-input-block">
             <input type="text" name="name" th:value="${editInfo.name}" lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">年龄</label>
-        <div class="layui-input-inline">
+        <div class="layui-input-block">
             <input type="text" name="age" th:value="${editInfo.age}" placeholder="请输入年龄" autocomplete="off" class="layui-input">
         </div>
     </div>
@@ -26,19 +26,19 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">联系电话</label>
-        <div class="layui-input-inline">
+        <div class="layui-input-block">
             <input type="text" name="phone" th:value="${editInfo.phone}" lay-verify="required" placeholder="请输入联系电话" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">邮箱</label>
-        <div class="layui-input-inline">
+        <div class="layui-input-block">
             <input type="text" name="email" th:value="${editInfo.email}" lay-verify="required" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">所属公司</label>
-        <div class="layui-input-inline">
+        <div class="layui-input-block">
             <input type="text" id="companyName" th:value="${editInfo.companyName==null?'':editInfo.companyName}" lay-verify="required" placeholder="请输入关联所属公司" autocomplete="off" class="layui-input">
         </div>
     </div>
@@ -76,7 +76,7 @@
             <input type="text" name="updateDate" id="updateDate" th:value="${#strings.replace(editInfo.updateDate,'T',' ')}" placeholder="请输入修改时间" autocomplete="off" class="layui-input">
         </div>
     </div>
-    <div class="layui-form-item layui-form-text">
+    <div class="layui-form-item">
         <label class="layui-form-label">备注</label>
         <div class="layui-input-block">
             <textarea placeholder="请输入备注" name="remarks" th:text="${editInfo.remarks}"  class="layui-textarea"></textarea>
@@ -98,7 +98,7 @@
         <input type="button" lay-submit="" lay-filter="kFormSubmit" id="kFormSubmit">
         <input type="text" name="id" th:value="${editInfo.id}" autocomplete="off" class="layui-input">
     </div>
-</div>
+</form>
 
 <script th:replace="common/base::context"></script>
 <script th:replace="common/base::mainjs"></script>

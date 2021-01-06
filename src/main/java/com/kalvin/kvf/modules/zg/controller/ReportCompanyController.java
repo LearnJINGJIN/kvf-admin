@@ -1,6 +1,7 @@
 package com.kalvin.kvf.modules.zg.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.kalvin.kvf.common.utils.ShiroKit;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +55,7 @@ public class ReportCompanyController extends BaseController {
     @RequiresPermissions("zg:reportCompany:add")
     @PostMapping(value = "add")
     public R add(ReportCompany reportCompany) {
+        reportCompany.setCreateUser(ShiroKit.getUserId());
         reportCompanyService.save(reportCompany);
         return R.ok();
     }
@@ -61,6 +63,7 @@ public class ReportCompanyController extends BaseController {
     @RequiresPermissions("zg:reportCompany:edit")
     @PostMapping(value = "edit")
     public R edit(ReportCompany reportCompany) {
+        reportCompany.setUpdateUser(ShiroKit.getUserId());
         reportCompanyService.updateById(reportCompany);
         return R.ok();
     }

@@ -92,4 +92,33 @@ public class OutCompany extends BaseEntity {
      */
     private String remarks;
 
+    /**
+     * 注册资本
+     */
+    private String regCapital;
+
+    /**
+     * 前5大股东
+     */
+    private String topShareholders;
+
+    /**
+     * 与本机构关联关系
+     */
+    private Integer relationship;
+
+    /**
+     * 已取得的有效资质
+     */
+    private String effQualification;
+
+    /**
+     * 外包服务项目以及内容
+     */
+    private String proContents;
+
+    /**
+     * 对外包服务商提出的风险管理和第三方审计要求
+     */
+    private String riskAudit;
 }

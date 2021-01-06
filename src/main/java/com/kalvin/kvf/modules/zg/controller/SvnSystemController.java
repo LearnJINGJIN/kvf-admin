@@ -1,6 +1,7 @@
 package com.kalvin.kvf.modules.zg.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.kalvin.kvf.common.utils.ShiroKit;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -55,6 +56,7 @@ public class SvnSystemController extends BaseController {
     @RequiresPermissions("zg:svnSystem:add")
     @PostMapping(value = "add")
     public R add(SvnSystem svnSystem) {
+        svnSystem.setCreateUser(ShiroKit.getUserId());
         svnSystemService.save(svnSystem);
         return R.ok();
     }
@@ -62,6 +64,7 @@ public class SvnSystemController extends BaseController {
     @RequiresPermissions("zg:svnSystem:edit")
     @PostMapping(value = "edit")
     public R edit(SvnSystem svnSystem) {
+        svnSystem.setUpdateUser(ShiroKit.getUserId());
         svnSystemService.updateById(svnSystem);
         return R.ok();
     }

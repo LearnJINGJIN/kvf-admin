@@ -17,11 +17,17 @@
         <result column="update_id" property="updateId" />
         <result column="update_date" property="updateDate" />
         <result column="remarks" property="remarks" />
+        <result column="reg_capital" property="regCapital" />
+        <result column="top_shareholders" property="topShareholders" />
+        <result column="relationship" property="relationship" />
+        <result column="eff_qualification" property="effQualification" />
+        <result column="pro_contents" property="proContents" />
+        <result column="risk_audit" property="riskAudit" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-       id, company_name, company_code, company_addr, legal_person, company_status, company_size, im_outsource, create_id, create_date, update_id, update_date, remarks
+       id, company_name, company_code, company_addr, legal_person, company_status, company_size, im_outsource, create_id, create_date, update_id, update_date, remarks,reg_capital,top_shareholders,relationship,eff_qualification,pro_contents,risk_audit
     </sql>
 
     <select id="selectOutCompanyList" resultType="com.kalvin.kvf.modules.zg.entity.OutCompany">

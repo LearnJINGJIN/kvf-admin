@@ -6,23 +6,23 @@
     <link th:replace="common/base::static"/>
 </head>
 <body>
-<div class="layui-form" style="padding: 20px 30px 0 0;">
+<form class="layui-form layui-form-pane" action="" style="padding:20px">
 
     <div class="layui-form-item">
         <label class="layui-form-label">所属公司</label>
-        <div class="layui-input-inline">
+        <div class="layui-input-block">
             <input type="text" id="companyName" name="companyName" th:value="${editInfo.companyName==null?'':editInfo.companyName}" lay-verify="required" placeholder="请输入所属公司id" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">调查年度</label>
-        <div class="layui-input-inline">
+        <div class="layui-input-block">
             <input type="text" name="reportYear" id="reportYear" th:value="${#strings.replace(editInfo.reportYear,'T',' ')}" placeholder="请输入创建时间" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">风险等级</label>
-        <div class="layui-input-inline">
+        <div class="layui-input-block">
             <input type="text" name="riskLevel" th:value="${editInfo.riskLevel}" lay-verify="required" placeholder="请输入风险等级" autocomplete="off" class="layui-input">
         </div>
     </div>
@@ -65,7 +65,7 @@
         <input type="button" lay-submit="" lay-filter="kFormSubmit" id="kFormSubmit">
         <input type="text" name="id" th:value="${editInfo.id}" autocomplete="off" class="layui-input">
     </div>
-</div>
+</form>
 
 <script th:replace="common/base::context"></script>
 <script th:replace="common/base::mainjs"></script>
