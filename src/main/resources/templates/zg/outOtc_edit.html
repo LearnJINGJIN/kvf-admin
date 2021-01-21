@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="common/base::pagetitle"></title>
+    <link th:replace="common/base::static"/>
+</head>
+<body>
+<div class="layui-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">外包人员</label>
+        <div class="layui-input-block">
+            <input type="text" id="personName" th:value="${editInfo.personName==null?'':editInfo.personName}" lay-verify="required" placeholder="请选择外包人员" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">合同</label>
+        <div class="layui-input-block">
+            <input type="text" name="contractId" th:value="${editInfo.contractId}" lay-verify="required" placeholder="请输入合同" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">采购人月</label>
+        <div class="layui-input-block">
+            <input type="text" name="personMonth" th:value="${editInfo.personMonth}" lay-verify="required" placeholder="请输入采购人月" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">入场时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="startTime" id="startTime" th:value="${#strings.replace(editInfo.startTime,'T',' ')}" lay-verify="required" placeholder="请输入入场时间" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">计划工作时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="planTime" id="planTime" th:value="${#strings.replace(editInfo.planTime,'T',' ')}" lay-verify="required" placeholder="请输入计划工作时间" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">单价</label>
+        <div class="layui-input-block">
+            <input type="text" name="unitPrice" th:value="${editInfo.unitPrice}" lay-verify="required" placeholder="请输入单价" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">已支付</label>
+        <div class="layui-input-block">
+            <input type="text" name="havePay" th:value="${editInfo.havePay}" placeholder="请输入已支付" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">剩余待支付</label>
+        <div class="layui-input-block">
+            <input type="text" name="pendPay" th:value="${editInfo.pendPay}" placeholder="请输入剩余待支付" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <input type="radio" name="status" value="0" title="正常" th:checked="${editInfo.status==0}">
+        <input type="radio" name="status" value="1" title="离场" th:checked="${editInfo.status==1}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入备注" name="remarks" th:text="${editInfo.remarks}"  class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <label class="layui-form-label">创建人</label>
+        <div class="layui-input-inline">
+            <input type="text" name="createUser" th:value="${editInfo.createUser}" placeholder="请输入创建人" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <label class="layui-form-label">创建时间</label>
+        <div class="layui-input-inline">
+            <input type="text" name="createDate" id="createDate" th:value="${#strings.replace(editInfo.createDate,'T',' ')}" placeholder="请输入创建时间" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <label class="layui-form-label">更新人</label>
+        <div class="layui-input-inline">
+            <input type="text" name="updateUser" th:value="${editInfo.updateUser}" placeholder="请输入更新人" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <label class="layui-form-label">更新日期</label>
+        <div class="layui-input-inline">
+            <input type="text" name="updateDate" id="updateDate" th:value="${#strings.replace(editInfo.updateDate,'T',' ')}" placeholder="请输入更新日期" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <label class="layui-form-label">删除标志位</label>
+        <div class="layui-input-block">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <div class="layui-input-inline">
+            <input type="text" id="personId" name="personId" th:value="${editInfo.personId==null?'':editInfo.personId}" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+<!--<div class="layui-form-item layui-hide">-->
+<!--    <label class="layui-form-label">合同id</label>-->
+<!--    <div class="layui-input-inline">-->
+<!--        <input type="text" name="contractId" id="contractId" th:value="${editInfo.contractId}" placeholder="请输入合同id" autocomplete="off" class="layui-input">-->
+<!--    </div>-->
+<!--</div>-->
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit="" lay-filter="kFormSubmit" id="kFormSubmit">
+        <input type="text" name="id" th:value="${editInfo.id}" autocomplete="off" class="layui-input">
+    </div>
+</div>
+
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+
+<script type="text/html" id="sexTpl">
+    {{#  if(d.sex == 0){ }}
+    <span class="layui-badge layui-bg-red">女</span>
+    {{#  } else if(d.sex == 1) { }}
+    <span class="layui-badge layui-bg-blue">男</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
+</script>
+<script type="text/html" id="ratingTpl">
+    {{#  if(d.rating == 1){ }}
+    <span class="layui-badge layui-bg-red">商务</span>
+    {{#  } else if(d.rating == 2) { }}
+    <span class="layui-badge layui-bg-blue">技术</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
+</script>
+<script type="text/html" id="isStatusTpl">
+    {{#  if(d.isStatus == 1){ }}
+    <span class="layui-badge layui-bg-red">是</span>
+    {{#  } else if(d.isStatus == 2) { }}
+    <span class="layui-badge layui-bg-blue">否</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
+</script>
+
+<script>
+    layui.use(['form', 'laydate', 'tableSelect'], function () {
+        var $ = layui.$, form = layui.form, laydate = layui.laydate, tableSelect = layui.tableSelect;
+
+
+        laydate.render({
+            elem: '#startTime' // 指定元素
+            ,type: 'datetime'
+        });
+        laydate.render({
+            elem: '#planTime' // 指定元素
+            ,type: 'datetime'
+        });
+        laydate.render({
+            elem: '#createDate' // 指定元素
+            ,type: 'datetime'
+        });
+        laydate.render({
+            elem: '#updateDate' // 指定元素
+            ,type: 'datetime'
+        });
+
+        tableSelect.render({
+            elem: '#personName',
+            checkedKey: 'id',
+            table: {
+                url: BASE_WEB + 'zg/outPerson/list/data',
+                cols: [
+                    [
+                        { type: 'radio' }
+                        ,{field: 'id', title: 'id', hide:true}
+                        ,{field: 'name', title: '姓名', width: 130}
+                        ,{field: 'age', title: '年龄'}
+                        ,{field: 'sex', title: '性别', width: 130, templet: '#sexTpl'}
+                        ,{field: 'rating', title: '职务类型', width: 130, templet: '#ratingTpl'}
+                        ,{field: 'isStatus', title: '是否驻场', width: 130, templet: '#isStatusTpl'}
+                    ]
+                ]
+            },
+            done: function (elem, data) {
+                layui.each(data.data, function (index, item) {
+                    elem.val(item.personName);
+                    $('#personId').val(item.id);
+                })
+                //alert(JSON.stringify(data.data.realname))
+            }
+        });
+
+
+        //监听提交
+        form.on('submit(kFormSubmit)', function(data){
+            var field = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+            var url = field.id ? 'zg/outOtc/edit' : 'zg/outOtc/add';
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            $.ajax({
+                type: req.type.post,
+                url: BASE_WEB + url,
+                data: field,
+                async: false,
+                success: function (r) {
+                    if (r.code === req.status.ok) {
+                        // 重载表格
+                        parent.layui.table.reload('kContentTable');
+                        parent.layer.close(index); //再执行关闭
+                    } else {
+                        kvfKit.errorMsg(r.msg);
+                    }
+                }
+            });
+
+        });
+    })
+</script>
+</body>
+</html>

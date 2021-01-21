@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalvin.kvf.modules.zg.mapper.OutOtcMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.OutOtc">
+        <id column="id" property="id" />
+        <result column="person_id" property="personId" />
+        <result column="contract_id" property="contractId" />
+        <result column="person_month" property="personMonth" />
+        <result column="start_time" property="startTime" />
+        <result column="plan_time" property="planTime" />
+        <result column="unit_price" property="unitPrice" />
+        <result column="have_pay" property="havePay" />
+        <result column="pend_pay" property="pendPay" />
+        <result column="status" property="status" />
+        <result column="remarks" property="remarks" />
+        <result column="person_name" property="personName" />
+        <result column="create_user" property="createUser" />
+        <result column="create_date" property="createDate" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_date" property="updateDate" />
+        <result column="dr" property="dr" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       t.id, t.person_id, t.contract_id, t.person_month, t.start_time, t.plan_time, t.unit_price, t.have_pay, t.pend_pay, t.status, t.remarks, t.create_user, t.create_date, t.update_user, t.update_date, t.dr, a.person_name
+    </sql>
+
+    <select id="selectOutOtcList" resultType="com.kalvin.kvf.modules.zg.entity.OutOtc">
+        select <include refid="Base_Column_List" /> from zg_out_otc
+        <trim prefix="where" prefixOverrides="and">
+            <if test="outOtc.personId != null">
+                and person_id = #{outOtc.personId}
+            </if>
+        </trim>
+    </select>
+
+    <select id="selectInfoById" resultType="com.kalvin.kvf.modules.zg.entity.OutOtc">
+        select <include refid="Base_Column_List" /> from zg_out_person t
+        left join zg_out_otc a on a.id=t.person_id
+        where t.id=#{id}
+    </select>
+</mapper>
