@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalvin.kvf.modules.zg.mapper.OutsourceProjectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.OutsourceProject">
+        <id column="id" property="id" />
+        <result column="pro_name" property="proName" />
+        <result column="pro_type" property="proType" />
+        <result column="head_id" property="headId" />
+        <result column="head_name" property="headName" />
+        <result column="pro_imp" property="proImp" />
+        <result column="is_otc_pack" property="isOtcPack" />
+        <result column="is_cross_pack" property="isCrossPack" />
+        <result column="is_ass_pack" property="isAssPack" />
+        <result column="company_id" property="companyId" />
+        <result column="company_name" property="companyName" />
+        <result column="start_date" property="startDate" />
+        <result column="end_date" property="endDate" />
+        <result column="org_human_imput" property="orgHumanImput" />
+        <result column="out_human_imput" property="outHumanImput" />
+        <result column="content" property="content" />
+        <result column="is_job" property="isJob" />
+        <result column="dr" property="dr" />
+        <result column="create_user" property="createUser" />
+        <result column="create_date" property="createDate" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_date" property="updateDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       t.id, t.pro_name, t.pro_type, t.head_id, t.pro_imp, t.is_otc_pack,
+       t.is_cross_pack, t.is_ass_pack, t.company_id, t.start_date, t.end_date,
+       t.org_human_imput, t.out_human_imput, t.content,t.is_job, t.dr, t.create_user, t.create_date, t.update_user, t.update_date,
+       a.realname as head_name,b.company_name
+    </sql>
+
+    <select id="selectOutsourceProjectList" resultType="com.kalvin.kvf.modules.zg.entity.OutsourceProject">
+        select <include refid="Base_Column_List" /> from zg_outsource_project t
+        left join sys_user a on a.id=t.head_id
+        left join zg_out_company b on b.id=t.company_id
+        <trim prefix="where" prefixOverrides="and">
+            <if test="outsourceProject.proName != null and outsourceProject.proName != ''">
+                and pro_name like concat(#{outsourceProject.proName}, "%")
+            </if>
+            <if test="outsourceProject.headId != null">
+                and head_id = #{outsourceProject.headId}
+            </if>
+            <if test="outsourceProject.proType != null">
+                and pro_type = #{outsourceProject.proType}
+            </if>
+        </trim>
+    </select>
+    <select id="selectOutsourceProjectbyId" resultType="com.kalvin.kvf.modules.zg.entity.OutsourceProject">
+        select <include refid="Base_Column_List" /> from zg_outsource_project t
+        left join sys_user a on a.id=t.head_id
+        left join zg_out_company b on b.id=t.company_id
+        where t.id=#{id}
+    </select>
+
+</mapper>

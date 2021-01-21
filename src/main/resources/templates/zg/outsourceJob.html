@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title th:replace="common/base::pagetitle"></title>
+    <link th:replace="common/base::static"/>
+</head>
+<body style="background-color: #f2f2f2;">
+
+
+    <div class="layui-card-body">
+        <div class="layui-form-item" style="display: none">
+            <div class="layui-input-inline">
+                <input type="text"  id="proId" th:value="${proId}">
+            </div>
+        </div>
+        <table id="kContentTable" lay-filter="kContentTable"></table>
+    </div>
+
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+
+<!--头部工具栏模板-->
+<script type="text/html" id="headToolbarTpl">
+    <button class="layui-btn layui-btn-sm " lay-event="add">添加</button>
+ </script>
+
+<!--表格行工具栏模板-->
+<script type="text/html" id="rowToolbarTpl">
+     <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+</script>
+
+<!--表格列格式化模板 start-->
+<script type="text/html" id="priorityTpl">
+  {{#  if(d.priority == 0){ }}
+<span class="layui-badge layui-bg-green">较低</span>
+{{#  } else if(d.priority == 1) { }}
+<span class="layui-badge layui-bg-blue">最低</span>
+{{#  } else if(d.priority == 2) { }}
+<span class="layui-badge layui-bg-black">普通</span>
+{{#  } else if(d.priority == 3) { }}
+<span class="layui-badge layui-bg-orange">较高</span>
+{{#  } else if(d.priority == 4) { }}
+<span class="layui-badge layui-bg-red">最高</span>
+{{#  } else { }}
+<span class="layui-badge layui-bg-gray">未知</span>
+{{# } }}
+</script>
+<script type="text/html" id="jobStatusTpl">
+  {{#  if(d.jobStatus == 0){ }}
+<span class="layui-badge ">未开始</span>
+{{#  } else if(d.jobStatus == 1) { }}
+<span class="layui-badge">进行中</span>
+{{#  } else if(d.jobStatus == 2) { }}
+<span class="layui-badge">已完成</span>
+{{#  } else { }}
+<span class="layui-badge layui-bg-gray">未知</span>
+{{# } }}
+</script>
+<!--表格列格式化模板 end-->
+
+<script type="text/javascript" th:inline="javascript">
+    layui.use(['element', 'form', 'layer', 'table', 'laydate','soulTable'], function () {
+        var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, soulTable = layui.soulTable;
+        var tableId = 'kContentTable';
+        var area = ['70%', '95%'];
+        var proId=document.getElementById("proId").value;
+        //alert(JSON.stringify(proId));
+
+        // 实例化table
+        var tableIns = table.render($.extend(config.layui.table, {
+            elem: '#' + tableId
+            ,url: BASE_WEB + 'zg/outsourceJob/list/data'// 数据接口
+            ,where:{proId:proId}
+            ,toolbar: '#headToolbarTpl'
+            ,overflow: 'tips'
+            ,method: 'post' //这里可以写post请求,默认get
+            ,cols: [[ //表头
+                {type:'checkbox', fixed: 'left'}
+                ,{field: 'jobName', title: '任务名称',width: 660,autoWidth: false}
+                ,{field: 'priority', title: '优先级', width: 130, templet: '#priorityTpl'}
+                ,{field: 'headName', title: '任务负责人', width: 130}
+                ,{field: '', title: '操作', width: 235, fixed: 'right', templet: '#rowToolbarTpl'}
+            ]]
+            ,autoColumnWidth: {
+                init: true
+            }
+            ,done: function () {
+                soulTable.render(this)
+            }
+        }));
+
+        // 监听表格头部事件
+        table.on('toolbar(' + tableId + ')', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            var checkData = checkStatus.data; // 得到选中的数据
+            switch(obj.event) {
+                case 'add':
+                    layer.open({
+                        type: 2
+                        ,title: '添加'
+                        ,content: BASE_WEB + 'zg/outsourceJob/edit'
+                        ,maxmin: true
+                        ,area: area   // 宽高
+                        ,btn: ['确定', '取消']
+                        ,yes: function(index, layero){
+                            //点击确认触发 iframe 内容中的按钮提交
+                            var submit = layero.find('iframe').contents().find("#kFormSubmit");
+                            submit.click();
+                        }
+                    });
+                    break;
+            }
+        });
+
+        // 表格行按钮 监听事件
+        table.on('tool(' + tableId + ')', function (obj) {
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+
+            if (layEvent === 'del') {
+                layer.confirm('确定删除吗？', function(index) {
+                    //执行 Ajax 后重载
+                    $.ajax({
+                        type: req.type.post,
+                        url: BASE_WEB + 'zg/outsourceJob/del/' + data.id,
+                        async: false,
+                        success: function (r) {
+                            if (r.code === req.status.ok) {
+                                table.reload(tableId);
+                                kvfKit.sucessMsg('已删除');
+                            } else {
+                                kvfKit.errorMsg(r.msg);
+                            }
+                        }
+                    });
+                });
+            }
+        });
+        //监听行双击事件
+        table.on('rowDouble(kContentTable)', function(obj){
+            var data=obj.data;
+            layer.open({
+                type: 2
+                ,title: '任务明细'
+                ,content: BASE_WEB + 'zg/outsourceJob/edit?id=' + data.id
+                ,maxmin: true
+                ,area: area   // 宽高
+                ,btn: ['确定','取消']
+                ,yes: function(index, layero){
+                    //点击确认触发 iframe 内容中的按钮提交
+                    var submit = layero.find('iframe').contents().find("#kFormSubmit");
+                    submit.click();
+                }
+            });
+        });
+
+
+
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalvin.kvf.modules.zg.mapper.OutsourceJobMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.OutsourceJob">
+        <id column="id" property="id" />
+        <result column="pro_id" property="proId" />
+        <result column="pro_name" property="proName" />
+        <result column="job_name" property="jobName" />
+        <result column="priority" property="priority" />
+        <result column="head_id" property="headId" />
+        <result column="head_name" property="headName" />
+        <result column="start_date" property="startDate" />
+        <result column="end_date" property="endDate" />
+        <result column="job_status" property="jobStatus" />
+        <result column="remarks" property="remarks" />
+        <result column="dr" property="dr" />
+        <result column="create_user" property="createUser" />
+        <result column="create_date" property="createDate" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_date" property="updateDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       t.id, t.pro_id,t.job_name, t.priority, t.head_id,a.realname as head_name, t.start_date, t.end_date,
+       t.job_status, t.remarks, t.dr,b.pro_name, t.create_user, t.create_date, t.update_user, t.update_date
+    </sql>
+
+    <select id="selectOutsourceJobList" resultType="com.kalvin.kvf.modules.zg.entity.OutsourceJob">
+        select <include refid="Base_Column_List" /> from zg_outsource_job t
+        left join sys_user a on a.id=t.head_id
+        left join zg_outsource_project b on b.id=t.pro_id
+        <trim prefix="where" prefixOverrides="and">
+            <if test="outsourceJob.proId != null">
+                and pro_id = #{outsourceJob.proId}
+            </if>
+        </trim>
+    </select>
+    <select id="selectOutsourceJobById" resultType="com.kalvin.kvf.modules.zg.entity.OutsourceJob">
+        select <include refid="Base_Column_List" /> from zg_outsource_job t
+        left join sys_user a on a.id=t.head_id
+        left join zg_outsource_project b on b.id=t.pro_id
+        where t.id=#{id}
+    </select>
+
+</mapper>

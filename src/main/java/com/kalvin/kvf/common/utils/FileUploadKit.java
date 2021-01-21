@@ -10,8 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * 文件上传工具
@@ -42,11 +41,20 @@ public class FileUploadKit {
                 String newFilename = filename.substring(0, index) + "_" + RandomUtil.randomNumbers(5) + filename.substring(index);
                 file = new File(basePath + "/" + path + "/" + newFilename);
             }
-            if (file.createNewFile()) {
-                multipartFile.transferTo(file);
-            } else {
-                throw new KvfException("文件上传失败");
+            InputStream is=multipartFile.getInputStream();
+            OutputStream os=new FileOutputStream(file);
+            int bytesRead = 0;
+            byte[] buffer = new byte[8192];
+            while ((bytesRead = is.read(buffer, 0, 8192)) != -1) {
+                os.write(buffer, 0, bytesRead);
             }
+            os.close();
+            is.close();
+//             if (file.createNewFile()) {
+//                multipartFile.transferTo(file);
+//            } else {
+//                throw new KvfException("文件上传失败");
+//            }
         } catch (IOException e) {
             throw new KvfException("文件上传失败：" + e.getMessage() + filePath);
         }

@@ -65,7 +65,8 @@ var api = {
         selUserView: BASE_WEB + 'common/selUser',
         userMenus: BASE_WEB + 'index/menus',  // 用户目录菜单（左侧）
         userNavMenus: BASE_WEB + 'index/navMenus',  // 用户导航菜单（横向）
-        fileUpload: BASE_WEB + 'common/fileUpload'
+        fileUpload: BASE_WEB + 'common/fileUpload',
+        download:BASE_WEB + 'common/downloadFile'
     },
     sys: {  // 系统模块接口
         userListData: BASE_WEB + 'sys/user/list/data',

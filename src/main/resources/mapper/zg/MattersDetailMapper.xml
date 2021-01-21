@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalvin.kvf.modules.zg.mapper.MattersDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.MattersDetail">
+        <id column="id" property="id" />
+        <result column="plan_id" property="planId" />
+        <result column="fin_date" property="finDate" />
+        <result column="fin_detail" property="finDetail" />
+        <result column="create_user" property="createUser" />
+        <result column="create_date" property="createDate" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_date" property="updateDate" />
+        <result column="dr" property="dr" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       id, plan_id, fin_date, fin_detail, create_user, create_date, update_user, update_date, dr
+    </sql>
+
+    <select id="selectMattersDetailList" resultType="com.kalvin.kvf.modules.zg.entity.MattersDetail">
+        select <include refid="Base_Column_List" /> from zg_matters_detail
+        <trim prefix="where" prefixOverrides="and">
+            <if test="mattersDetail.planId != null">
+                and plan_id = #{mattersDetail.planId}
+            </if>
+            <if test="mattersDetail.finDate != null">
+                and fin_date = #{mattersDetail.finDate}
+            </if>
+            <if test="mattersDetail.finDetail != null and mattersDetail.finDetail != ''">
+                and fin_detail like concat(#{mattersDetail.finDetail}, "%")
+            </if>
+
+        </trim>
+    </select>
+
+</mapper>

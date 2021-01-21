@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="common/base::pagetitle"></title>
+    <link th:replace="common/base::static"/>
+</head>
+<body>
+<div class="layui-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">项目名称<span style="color: red">*</span></label>
+        <div class="layui-input-block">
+            <input type="text" name="proName" th:value="${editInfo.proName}" lay-verify="required" placeholder="请输入项目名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">项目类别<span style="color: red">*</span></label>
+            <div class="layui-input-inline">
+                <select name="proType">
+                    <option value="1" th:selected="${editInfo.proType == 1}">研发类</option>
+                    <option value="2" th:selected="${editInfo.proType == 2}">运维类</option>
+                    <option value="3" th:selected="${editInfo.proType == 3}">咨询类</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">项目负责人<span style="color: red">*</span></label>
+            <div class="layui-input-inline">
+                <input type="text" id="headName" th:value="${editInfo.headName}" lay-verify="required" placeholder="请选择项目负责人" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item" style="display: none">
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" id="headId" name="headId" th:value="${editInfo.headId==null?'':editInfo.headId}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">是否重大项目<span style="color: red">*</span></label>
+            <div class="layui-input-inline">
+                <select name="proImp">
+                    <option value="0" th:selected="${editInfo.proImp == 0}">是</option>
+                    <option value="1" th:selected="${editInfo.proImp == 1}">否</option>
+                 </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">是否驻场外包<span style="color: red">*</span></label>
+            <div class="layui-input-inline">
+                <select name="isOtcPack">
+                    <option value="0" th:selected="${editInfo.isOtcPack == 0}">是</option>
+                    <option value="1" th:selected="${editInfo.isOtcPack == 1}">否</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">是否跨境外包<span style="color: red">*</span></label>
+            <div class="layui-input-inline">
+                <select name="isCrossPack">
+                    <option value="0" th:selected="${editInfo.isCrossPack == 0}">是</option>
+                    <option value="1" th:selected="${editInfo.isCrossPack == 1}">否</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">是否关联外包<span style="color: red">*</span></label>
+            <div class="layui-input-inline">
+                <select name="isAssPack">
+                    <option value="0" th:selected="${editInfo.isAssPack == 0}">是</option>
+                    <option value="1" th:selected="${editInfo.isAssPack == 1}">否</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">外包公司<span style="color: red">*</span></label>
+        <div class="layui-input-inline">
+            <input type="text" id="companyName" th:value="${editInfo.companyName}" lay-verify="required" placeholder="请选择外包公司" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" style="display: none">
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" id="companyId" name="companyId" th:value="${editInfo.companyId==null?'':editInfo.companyId}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">开始日期</label>
+            <div class="layui-input-inline">
+                <input type="text" name="startDate" id="startDate" th:value="${#strings.replace(editInfo.startDate,'T',' ')}" lay-verify="required" placeholder="请输入开始日期" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">截止日期</label>
+            <div class="layui-input-inline">
+                <input type="text" name="endDate" id="endDate" th:value="${#strings.replace(editInfo.endDate,'T',' ')}" placeholder="请输入截止日期" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">机构自有人力投入(人月)</label>
+            <div class="layui-input-inline">
+                <input type="text" name="orgHumanImput" th:value="${editInfo.orgHumanImput}" placeholder="请输入机构自有人力投入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">外包人力投入(人月)</label>
+            <div class="layui-input-inline">
+                <input type="text" name="outHumanImput" th:value="${editInfo.outHumanImput}" placeholder="请输入外包人力投入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">外包服务内容<span style="color: red">*</span></label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入外包服务内容"  name="content" th:text="${editInfo.content}"   class="layui-textarea"></textarea>
+         </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit="" lay-filter="kFormSubmit" id="kFormSubmit">
+        <input type="text" name="id" th:value="${editInfo.id}" autocomplete="off" class="layui-input">
+    </div>
+</div>
+
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+<script>
+    layui.use(['form', 'laydate','tableSelect'], function () {
+        var $ = layui.$, form = layui.form, laydate = layui.laydate,tableSelect=layui.tableSelect;
+
+
+        laydate.render({
+            elem: '#startDate' // 指定元素
+            ,trigger: 'click' //采用click弹出
+        });
+        laydate.render({
+            elem: '#endDate' // 指定元素
+            ,trigger: 'click' //采用click弹出
+        });
+        tableSelect.render({
+            elem: '#headName',
+            checkedKey: 'id',
+            table: {
+                url: api.sys.userListData ,
+                cols: [
+                    [
+                        { type: 'radio' }
+                        ,{field: 'id', title: 'id', hide:true}
+                        ,{field: 'realname', title: '姓名', width:100}
+                        ,{field: 'sex', title: '性别', width:80, sort: true, templet: '#sexTpl'}
+                        ,{field: 'deptId', title: '所属部门', sort: true, templet: '#deptTpl'}
+                        ,{field: 'status', title: '用户状态', align: 'center', sort: true, templet: '#statusTpl', width: 100}
+                    ]
+                ]
+            },
+            done: function (elem, data) {
+                layui.each(data.data, function (index, item) {
+                    elem.val(item.realname);
+                    $('#headId').val(item.id);
+                })
+            }
+        });
+        tableSelect.render({
+            elem: '#companyName',
+            checkedKey: 'id',
+            table: {
+                url: BASE_WEB + 'zg/outCompany/list/data' ,
+                method:'get',
+                cols: [
+                    [
+                        { type: 'radio' }
+                        ,{field: 'id', title: 'id', hide:true}
+                        ,{field: 'companyName', title: '姓名', width:100}
+                        ,{field: 'companyCode', title: '社会统一征信代码'}
+                    ]
+                ]
+            },
+            done: function (elem, data) {
+                layui.each(data.data, function (index, item) {
+                    elem.val(item.companyName);
+                    $('#companyId').val(item.id);
+                })
+            }
+        });
+
+        //监听提交
+        form.on('submit(kFormSubmit)', function(data){
+            var field = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+            var url = field.id ? 'zg/outsourceProject/edit' : 'zg/outsourceProject/add';
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            $.ajax({
+                type: req.type.post,
+                url: BASE_WEB + url,
+                data: field,
+                async: false,
+                success: function (r) {
+                    if (r.code === req.status.ok) {
+                        // 重载表格
+                        parent.layui.table.reload('kContentTable');
+                        parent.layer.close(index); //再执行关闭
+                    } else {
+                        kvfKit.errorMsg(r.msg);
+                    }
+                }
+            });
+
+        });
+    })
+</script>
+</body>
+</html>
