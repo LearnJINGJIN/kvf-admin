@@ -6,10 +6,11 @@
     <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.OutOtc">
         <id column="id" property="id" />
         <result column="person_id" property="personId" />
-        <result column="contract_id" property="contractId" />
+        <result column="contract_no" property="contractNo" />
+        <result column="outsource_type" property="outsourceType" />
         <result column="person_month" property="personMonth" />
-        <result column="start_time" property="startTime" />
-        <result column="plan_time" property="planTime" />
+        <result column="start_date" property="startDate" />
+        <result column="plan_date" property="planDate" />
         <result column="unit_price" property="unitPrice" />
         <result column="have_pay" property="havePay" />
         <result column="pend_pay" property="pendPay" />
@@ -25,11 +26,12 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-       t.id, t.person_id, t.contract_id, t.person_month, t.start_time, t.plan_time, t.unit_price, t.have_pay, t.pend_pay, t.status, t.remarks, t.create_user, t.create_date, t.update_user, t.update_date, t.dr, a.person_name
+       t.id, t.person_id, t.contract_no,t.outsource_type,t.person_month, t.start_date, t.plan_date, t.unit_price, t.have_pay, t.pend_pay, t.status, t.remarks, t.create_user, t.create_date, t.update_user, t.update_date, t.dr, a.name as person_name
     </sql>
 
     <select id="selectOutOtcList" resultType="com.kalvin.kvf.modules.zg.entity.OutOtc">
-        select <include refid="Base_Column_List" /> from zg_out_otc
+        select <include refid="Base_Column_List" /> from zg_out_otc t
+        left join zg_out_person a on a.id=t.person_id
         <trim prefix="where" prefixOverrides="and">
             <if test="outOtc.personId != null">
                 and person_id = #{outOtc.personId}
@@ -38,8 +40,8 @@
     </select>
 
     <select id="selectInfoById" resultType="com.kalvin.kvf.modules.zg.entity.OutOtc">
-        select <include refid="Base_Column_List" /> from zg_out_person t
-        left join zg_out_otc a on a.id=t.person_id
+        select <include refid="Base_Column_List" /> from zg_out_otc t
+        left join zg_out_person a on a.id=t.person_id
         where t.id=#{id}
     </select>
 </mapper>

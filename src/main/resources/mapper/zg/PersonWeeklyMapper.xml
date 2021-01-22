@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalvin.kvf.modules.zg.mapper.PersonWeeklyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.PersonWeekly">
+        <id column="id" property="id" />
+        <result column="person_id" property="personId" />
+        <result column="report_date" property="reportDate" />
+        <result column="week_work" property="weekWork" />
+        <result column="week_focus" property="weekFocus" />
+        <result column="type" property="type" />
+        <result column="paper" property="paper" />
+        <result column="involve_system" property="involveSystem" />
+        <result column="put_date" property="putDate" />
+        <result column="end_date" property="endDate" />
+        <result column="plan_end_date" property="planEndDate" />
+        <result column="status" property="status" />
+        <result column="progress" property="progress" />
+        <result column="risk" property="risk" />
+        <result column="remarks" property="remarks" />
+        <result column="create_user" property="createUser" />
+        <result column="create_date" property="createDate" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_date" property="updateDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       id, person_id, report_date, week_work, week_focus, type, paper, involve_system, put_date, end_date, plan_end_date, status, progress, risk, remarks, create_user, create_date, update_user, update_date
+    </sql>
+
+    <select id="selectPersonWeeklyList" resultType="com.kalvin.kvf.modules.zg.entity.PersonWeekly">
+        select <include refid="Base_Column_List" /> from zg_person_weekly
+        <trim prefix="where" prefixOverrides="and">
+            <if test="personWeekly.personId != null">
+                and person_id = #{personWeekly.personId}
+            </if>
+            <if test="personWeekly.reportDate != null">
+                and report_date = #{personWeekly.reportDate}
+            </if>
+            <if test="personWeekly.weekWork != null and personWeekly.weekWork != ''">
+                and week_work like concat(#{personWeekly.weekWork}, "%")
+            </if>
+            <if test="personWeekly.weekFocus != null and personWeekly.weekFocus != ''">
+                and week_focus like concat(#{personWeekly.weekFocus}, "%")
+            </if>
+            <if test="personWeekly.type != null">
+                and type = #{personWeekly.type}
+            </if>
+            <if test="personWeekly.paper != null and personWeekly.paper != ''">
+                and paper like concat(#{personWeekly.paper}, "%")
+            </if>
+            <if test="personWeekly.involveSystem != null and personWeekly.involveSystem != ''">
+                and involve_system like concat(#{personWeekly.involveSystem}, "%")
+            </if>
+            <if test="personWeekly.putDate != null">
+                and put_date = #{personWeekly.putDate}
+            </if>
+            <if test="personWeekly.endDate != null">
+                and end_date = #{personWeekly.endDate}
+            </if>
+            <if test="personWeekly.planEndDate != null">
+                and plan_end_date = #{personWeekly.planEndDate}
+            </if>
+            <if test="personWeekly.status != null">
+                and status = #{personWeekly.status}
+            </if>
+            <if test="personWeekly.progress != null and personWeekly.progress != ''">
+                and progress like concat(#{personWeekly.progress}, "%")
+            </if>
+            <if test="personWeekly.risk != null and personWeekly.risk != ''">
+                and risk like concat(#{personWeekly.risk}, "%")
+            </if>
+            <if test="personWeekly.remarks != null and personWeekly.remarks != ''">
+                and remarks like concat(#{personWeekly.remarks}, "%")
+            </if>
+            <if test="personWeekly.createUser != null">
+                and create_user = #{personWeekly.createUser}
+            </if>
+            <if test="personWeekly.createDate != null">
+                and create_date = #{personWeekly.createDate}
+            </if>
+            <if test="personWeekly.updateUser != null">
+                and update_user = #{personWeekly.updateUser}
+            </if>
+            <if test="personWeekly.updateDate != null">
+                and update_date = #{personWeekly.updateDate}
+            </if>
+        </trim>
+    </select>
+
+</mapper>

@@ -6,47 +6,27 @@
     <title th:replace="common/base::pagetitle"></title>
     <link th:replace="common/base::static"/>
 </head>
+<style>
+    .nameCss{
+        text-align: center;
+    }
+</style>
 <body style="background-color: #f2f2f2;">
-
-<div id="kPage" class="layui-fluid" style="padding: 0">
-    <div class="layui-row">
-        <div class="layui-col-md12" id="kMainContentCol">
-            <div class="layui-fluid kvf-fluid-padding15">
-                <div class="layui-card">
-                    <form>
-                        <div class="layui-form layui-card-header kvf-card-header-auto">
-                            <div class="layui-form-item">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">外包人员</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="personName" placeholder="请输入外包人员" autocomplete="off" class="layui-input">
-                                    </div>
-                                </div>
-
-                                <div class="layui-inline">
-                                    <button class="layui-btn " lay-submit="" lay-filter="kTableSearchFilter">
-                                        <i class="layui-icon layui-icon-search"></i>
-                                    </button>
-                                    <button class="layui-btn " type="reset" data-event="refresh">
-                                        <i class="layui-icon layui-icon-refresh-1"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-
-                    <div class="layui-card-body">
-                        <table id="kContentTable" lay-filter="kContentTable"></table>
-                    </div>
-                </div>
-
-            </div>
+<div class="layui-card-body">
+    <div class="layui-form-item" style="display: none">
+        <div class="layui-input-inline">
+            <input type="text"  id="personId" th:value="${personId}">
         </div>
     </div>
+    <div class="nameCss"><span class="layui-icon layui-icon-friends" style="font-size: 30px; color: #1E9FFF;"></span>
+        [[${#strings.defaultString(personName,'暂无名称信息')}]]的周报
+    </div>
+    <table id="kContentTable" lay-filter="kContentTable"></table>
 </div>
 
 <script th:replace="common/base::context"></script>
 <script th:replace="common/base::mainjs"></script>
+
 
 <!--头部工具栏模板-->
 <script type="text/html" id="headToolbarTpl">
@@ -57,76 +37,35 @@
 <script type="text/html" id="rowToolbarTpl">
     <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit" th:title="编辑"><i class="layui-icon layui-icon-edit"></i></a>
     <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del" th:title="删除"><i class="layui-icon layui-icon-delete"></i></a>
-    <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="weekly" th:title="周报"><i class="layui-icon layui-icon-template-1"></i></a>
+    <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="show" th:title="查看详情"><i class="layui-icon layui-icon-snowflake"></i></a>
 </script>
 
-<!--表格列格式化模板 start-->
-<script type="text/html" id="statusTpl">
-  {{#  if(d.status == 0){ }}
- <span class="layui-badge layui-bg-blue">正常</span>
- {{#  } else if(d.status == 1) { }}
- <span class="layui-badge layui-bg-red">离场</span>
- {{#  } else { }}
- <span class="layui-badge layui-bg-gray">未知</span>
- {{# } }}
-</script>
-<script type="text/html" id="outsourceTypeTp1">
-  {{#  if(d.outsourceType == 1){ }}
- <span class="layui-badge layui-bg-blue">开发</span>
- {{#  } else if(d.outsourceType == 2) { }}
- <span class="layui-badge layui-bg-green">运维</span>
- {{#  } else { }}
- <span class="layui-badge layui-bg-gray">未知</span>
- {{# } }}
-</script>
+
+
 <!--表格列格式化模板 end-->
 
 <script type="text/javascript" th:inline="javascript">
     layui.use(['element', 'form', 'layer', 'table', 'laydate','soulTable'], function () {
         var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, laydate = layui.laydate,soulTable=layui.soulTable;
         var tableId = 'kContentTable';
-        var area = ['66%', '95%'];
+        var area = ['75%', '95%'];
+        var personId=document.getElementById("personId").value;
 
         // 实例化table
         var tableIns = table.render($.extend(config.layui.table, {
             elem: '#' + tableId
-            ,url: BASE_WEB + 'zg/outOtc/list/data' // 数据接口
+            ,url: BASE_WEB + 'zg/personWeekly/list/data' // 数据接口
             ,toolbar: '#headToolbarTpl'
-            ,method: 'post' //这里可以写post请求,默认get
+            ,where:{personId:personId}
             ,cols: [[ //表头
                 {type:'checkbox', fixed: 'left'}
-                ,{field: 'personName', title: '外包人员',filter: true}
-                ,{field: 'personId', hide:true}
-                ,{field: 'outsourceType', title: '外包类型', templet: '#outsourceTypeTp1'}
-                ,{field: 'contractNo', title: '合同编号'}
-                ,{field: 'personMonth', title: '采购人月(月)'}
-                ,{field: 'startDate', title: '入场时间'}
-                ,{field: 'planDate', title: '计划工作时间'}
-                ,{field: 'unitPrice', title: '单价(万/月)', sort: true}
-                ,{field: 'havePay', title: '已支付(万)'}
-                ,{field: 'pendPay', title: '剩余待支付(万)'}
-                ,{field: 'status', title: '状态',  templet: '#statusTpl'}
-                ,{field: 'remarks', title: '备注',  autoWidth: false}
-                ,{field: '', title: '操作', fixed: 'right', templet: '#rowToolbarTpl'}
+                ,{field: 'reportDate', title: '报告日期'}
+                ,{field: 'weekWork', title: '本周工作内容',width: 200, autoWidth: false}
+                ,{field: 'weekFocus', title: '下周工作重点',width: 200, autoWidth: false}
+                ,{field: 'risk', title: '存在风险',width: 200, autoWidth: false}
+                ,{field: 'remarks', title: '备注', width: 200,autoWidth: false}
+                ,{field: '', title: '操作',width: 150,fixed: 'right', templet: '#rowToolbarTpl'}
             ]]
-            ,filter: {
-                clearFilter: true,
-                items:['column','data','excel'] // 只显示表格列和导出excel两个菜单项
-            }
-            ,excel: { // 导出excel配置, （以下值均为默认值）
-                on: true, //是否启用, 默认开启
-                filename: '驻场外包人员.xlsx', // 文件名
-                head: { // 表头样式
-                    family: 'Calibri', // 字体
-                    size: 12, // 字号
-                    color: 'FFFFFF', // 字体颜色
-                    bgColor: '01AAED' //背景颜色
-                 },
-                font: { // 正文样式
-                    family: 'Calibri', // 字体
-                    size: 12, // 字号
-                }
-            }
             ,autoColumnWidth: {
                 init: true
             }
@@ -144,7 +83,7 @@
                     layer.open({
                         type: 2
                         ,title: '添加'
-                        ,content: BASE_WEB + 'zg/outOtc/edit'
+                        ,content: BASE_WEB + 'zg/personWeekly/editWeekly2?personId='+personId
                         ,maxmin: true
                         ,area: area   // 宽高
                         ,btn: ['确定', '取消']
@@ -168,7 +107,7 @@
                 layer.open({
                     type: 2
                     ,title: '编辑'
-                    ,content: BASE_WEB + 'zg/outOtc/edit?id=' + data.id
+                    ,content: BASE_WEB + 'zg/personWeekly/editWeekly2?id=' + data.id
                     ,maxmin: true
                     ,area: area   // 宽高
                     ,btn: ['确定', '取消']
@@ -184,7 +123,7 @@
                     //执行 Ajax 后重载
                     $.ajax({
                         type: req.type.post,
-                        url: BASE_WEB + 'zg/outOtc/del/' + data.id,
+                        url: BASE_WEB + 'zg/personWeekly/del/' + data.id,
                         async: false,
                         success: function (r) {
                             if (r.code === req.status.ok) {
@@ -197,13 +136,13 @@
                     });
                 });
             }
-            if (layEvent === 'weekly') {
-                ; layer.open({
+            if (layEvent === 'show') {
+                layer.open({
                     type: 2
-                    ,title: '周报管理'
-                    ,content: BASE_WEB + 'zg/personWeekly/index?personId=' + data.personId+"&outsourceType="+data.outsourceType
+                    ,title: '查看详情'
+                    ,content: BASE_WEB + 'zg/personWeekly/editWeekly2?id=' + data.id
                     ,maxmin: true
-                    ,area: ['100%', '100%']   // 宽高
+                    ,area: area  // 宽高
                     ,btn: false
                     ,yes: function(){
                         layer.closeAll();

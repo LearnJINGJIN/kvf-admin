@@ -40,13 +40,13 @@ public class OutOtcController extends BaseController {
         if (id == null) {
             outOtc = new OutOtc();
         } else {
-            outOtc = outOtcService.getById(id);
+            outOtc = outOtcService.getInfoById(id);
         }
         mv.addObject("editInfo", outOtc);
         return mv;
     }
 
-    @GetMapping(value = "list/data")
+    @PostMapping(value = "list/data")
     public R listData(OutOtc outOtc) {
         Page<OutOtc> page = outOtcService.listOutOtcPage(outOtc);
         return R.ok(page);

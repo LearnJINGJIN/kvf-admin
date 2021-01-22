@@ -3,32 +3,30 @@ package com.kalvin.kvf.modules.zg.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.kalvin.kvf.common.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import com.kalvin.kvf.common.entity.BaseEntity;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ * 驻场外包人员周报管理
  * </p>
- * @since 2021-01-14 15:13:47
+ * @since 2021-01-21 17:22:57
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("zg_out_otc")
-public class OutOtc extends BaseEntity {
+@TableName("zg_person_weekly")
+public class PersonWeekly extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键
+     * 
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
@@ -39,50 +37,68 @@ public class OutOtc extends BaseEntity {
     private Long personId;
 
     /**
-     * 合同编号
-     */
-    private String contractNo;
-    /**
-     * 外包类型
-     */
-    private Integer outsourceType;
-
-    /**
-     * 采购人月
-     */
-    private Integer personMonth;
-
-    /**
-     * 入场时间
+     * 报告日期
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate startDate;
+    private LocalDate reportDate;
 
     /**
-     * 计划工作时间
+     * 本周工作内容
+     */
+    private String weekWork;
+
+    /**
+     * 下周工作重点
+     */
+    private String weekFocus;
+
+    /**
+     * 类型(1-需求 2-维护 3-培训)
+     */
+    private Integer type;
+
+    /**
+     * 简述
+     */
+    private String paper;
+
+    /**
+     * 涉及系统
+     */
+    private String involveSystem;
+
+    /**
+     * 提出时间
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate planDate;
+    private LocalDate putDate;
 
     /**
-     * 单价
+     * 需求结束时间
      */
-    private BigDecimal unitPrice;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate endDate;
 
     /**
-     * 已支付
+     * 计划完成日期
      */
-    private BigDecimal havePay;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate planEndDate;
 
     /**
-     * 剩余待支付
-     */
-    private BigDecimal pendPay;
-
-    /**
-     * 状态
+     * 目前状态(1-需求讨论 2-开发中 3-sit测试 4-uat测试 5-已上线)
      */
     private Integer status;
+
+    /**
+     * 目前进度
+     */
+    private String progress;
+
+    /**
+     * 存在风险
+     */
+    private String risk;
 
     /**
      * 备注
@@ -90,34 +106,25 @@ public class OutOtc extends BaseEntity {
     private String remarks;
 
     /**
-     * 创建人
+     * 
      */
     private Long createUser;
 
     /**
-     * 创建时间
+     * 
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createDate;
 
     /**
-     * 更新人
+     * 
      */
     private Long updateUser;
 
     /**
-     * 更新日期
+     * 
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateDate;
 
-    /**
-     * 删除标志位
-     */
-    private Integer dr;
-
-    /**
-     * 外包人员名称
-     */
-    private String personName;
 }

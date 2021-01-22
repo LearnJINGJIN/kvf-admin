@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="common/base::pagetitle"></title>
+    <link th:replace="common/base::static"/>
+</head>
+<body>
+<div class="layui-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item layui-hide">
+         <div class="layui-input-inline">
+            <input type="text" name="personId" th:value="${editInfo.personId}" lay-verify="required"   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red">*</span>报告日期</label>
+        <div class="layui-input-inline">
+            <input type="text" name="reportDate" id="reportDate" th:value="${#strings.replace(editInfo.reportDate,'T',' ')}" lay-verify="required" placeholder="请输入报告日期" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red">*</span>本周工作内容</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入本周工作内容"  name="weekWork" th:text="${editInfo.weekWork}"  lay-verify="required"  class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red">*</span>下周工作重点</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入下周工作重点"  name="weekFocus" th:text="${editInfo.weekFocus}"  lay-verify="required"  class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型</label>
+        <div class="layui-input-block">
+            <input type="radio" name="type" value="1" title="需求" autocomplete="off" class="layui-input" th:checked="${editInfo.type==1}">
+            <input type="radio" name="type" value="2" title="维护" autocomplete="off" class="layui-input" th:checked="${editInfo.type==2}">
+            <input type="radio" name="type" value="3" title="培训" autocomplete="off" class="layui-input" th:checked="${editInfo.type==3}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">简述</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入简述"  name="paper" th:text="${editInfo.paper}"  class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">涉及系统</label>
+        <div class="layui-input-inline">
+            <input type="text" name="involveSystem" th:value="${editInfo.involveSystem}" placeholder="请输入涉及系统" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">提出时间</label>
+            <div class="layui-input-inline">
+                <input type="text" name="putDate" id="putDate" th:value="${#strings.replace(editInfo.putDate,'T',' ')}" placeholder="请输入提出时间" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">结束时间</label>
+            <div class="layui-input-inline">
+                <input type="text" name="endDate" id="endDate" th:value="${#strings.replace(editInfo.endDate,'T',' ')}" placeholder="请输入需求结束时间" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">计划完成日期</label>
+            <div class="layui-input-inline">
+                <input type="text" name="planEndDate" id="planEndDate" th:value="${#strings.replace(editInfo.planEndDate,'T',' ')}" placeholder="请输入计划完成日期" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">目前状态</label>
+            <div class="layui-input-inline">
+                <select name="status">
+                    <option value="1" th:selected="${editInfo.status == 1}">需求讨论</option>
+                    <option value="2" th:selected="${editInfo.status == 2}">开发中</option>
+                    <option value="3" th:selected="${editInfo.status == 3}">sit测试</option>
+                    <option value="4" th:selected="${editInfo.status == 4}">uat测试</option>
+                    <option value="5" th:selected="${editInfo.status == 5}">已上线</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">目前进度</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入目前进度"  name="progress" th:text="${editInfo.progress}"  class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit="" lay-filter="kFormSubmit" id="kFormSubmit">
+        <input type="text" name="id" th:value="${editInfo.id}" autocomplete="off" class="layui-input">
+    </div>
+</div>
+
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+<script>
+    layui.use(['form', 'laydate'], function () {
+        var $ = layui.$, form = layui.form, laydate = layui.laydate;
+
+
+        laydate.render({
+            elem: '#reportDate' // 指定元素
+            ,trigger: 'click' //采用click弹出
+        });
+        laydate.render({
+            elem: '#putDate' // 指定元素
+            ,trigger: 'click' //采用click弹出
+        });
+        laydate.render({
+            elem: '#endDate' // 指定元素
+            ,trigger: 'click' //采用click弹出
+        });
+        laydate.render({
+            elem: '#planEndDate' // 指定元素
+            ,trigger: 'click' //采用click弹出
+        });
+
+
+        //监听提交
+        form.on('submit(kFormSubmit)', function(data){
+            var field = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+            var url = field.id ? 'zg/personWeekly/edit' : 'zg/personWeekly/add';
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            $.ajax({
+                type: req.type.post,
+                url: BASE_WEB + url,
+                data: field,
+                async: false,
+                success: function (r) {
+                    if (r.code === req.status.ok) {
+                        // 重载表格
+                        parent.layui.table.reload('kContentTable');
+                        parent.layer.close(index); //再执行关闭
+                    } else {
+                        kvfKit.errorMsg(r.msg);
+                    }
+                }
+            });
+
+        });
+    })
+</script>
+</body>
+</html>
