@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="common/base::pagetitle"></title>
+    <link th:replace="common/base::static"/>
+</head>
+<body>
+<div class="layui-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item layui-hide">
+         <div class="layui-input-inline">
+            <input type="text" name="contractNo" th:value="${editInfo.contractNo}"   autocomplete="off" class="layui-input" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red">*</span>付款编号</label>
+        <div class="layui-input-inline">
+            <input type="text" id="payNo" name="payNo" th:value="${editInfo.payNo}"   autocomplete="off" class="layui-input" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">付款条件</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入付款条件" name="condPay" th:text="${editInfo.condPay}"  class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red">*</span>付款日期</label>
+        <div class="layui-input-inline">
+            <input type="text" name="payDate" id="payDate" th:value="${#strings.replace(editInfo.payDate,'T',' ')}" lay-verify="required" placeholder="请输入付款日期" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red">*</span>付款金额(万)</label>
+        <div class="layui-input-inline">
+            <input type="text" name="payAmount" th:value="${editInfo.payAmount}" lay-verify="required" placeholder="请输入付款金额" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">付款比例(%)</label>
+        <div class="layui-input-inline">
+            <input type="text" name="payProport" th:value="${editInfo.payProport}" placeholder="请输入付款比例 %" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">付款说明</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入付款说明" name="payExplain" th:text="${editInfo.payExplain}"  class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-card-body">
+        <button class="layui-btn  layui-btn-sm " id="kfileUpload">
+            <i class="layui-icon layui-icon-upload"></i>
+        </button>
+        <table id="kContentTable" lay-filter="kContentTable"></table>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit="" lay-filter="kFormSubmit" id="kFormSubmit">
+        <input type="text" name="id" th:value="${editInfo.id}" autocomplete="off" class="layui-input">
+    </div>
+</div>
+
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+<script>
+    layui.use(['form', 'laydate','soulTable','upload','table'], function () {
+        var $ = layui.$, form = layui.form, laydate = layui.laydate,soulTable=layui.soulTable,upload=layui.upload,table=layui.table;
+        var tableId = 'kContentTable';
+        var payNo=document.getElementById("payNo").value;
+         laydate.render({
+            elem: '#payDate' // 指定元素
+            ,trigger: 'click' //采用click弹出
+        });
+// 实例化table
+        // 实例化table
+        var tableIns = table.render($.extend(config.layui.table, {
+            elem: '#' + tableId
+            ,url: BASE_WEB + 'zg/file/list/data' // 数据接口
+            ,where:{relevanceCode:payNo,type:'pay'}
+            ,page:false
+            ,height: 200
+            ,cols: [
+                [ //表头
+                    {field: 'fileName', title: '文件名'}
+                    ,{field: 'fileSize', title: '文件大小'}
+                    ,{field: 'userName', title: '上传人'}
+                    ,{field: 'fileAddrs', hide:true}
+                    ,{field: 'uploadTime', title: '上传时间'}
+                    ,{field: '', title: '操作', templet: '#rowToolbarTpl'}
+                ]
+            ]
+            ,autoColumnWidth: {
+                init: true
+            }
+            ,done: function () {
+                soulTable.render(this)
+            }
+        }));
+
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#kfileUpload' //绑定元素
+            ,url: BASE_WEB + 'zg/file/fileUpload'  //上传多文件接口
+            ,data: {type: 'pay',relevanceCode:payNo}
+            ,accept: 'file'
+            ,done: function(r) {
+                //上传完毕回调
+                if (r.code === req.status.ok) {
+                    table.reload(tableId);
+                } else {
+                    kvfKit.errorMsg('上传失败：' + r.msg);
+                }
+            }
+            ,error: function(index, upload) {
+                //请求异常回调
+                kvfKit.errorMsg('上传失败');
+            }
+        });
+        // 表格行按钮 监听事件
+        table.on('tool(' + tableId + ')', function (obj) {
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+            if (layEvent === 'del') {
+                layer.confirm('确定删除吗？', function(index) {
+                    //执行 Ajax 后重载
+                    $.ajax({
+                        type: req.type.post,
+                        url: BASE_WEB + 'zg/file/del',
+                        data:{id:data.id,fileAddrs:data.fileAddrs},
+                        async: false,
+                        success: function (r) {
+                            if (r.code === req.status.ok) {
+                                table.reload(tableId);
+                                kvfKit.sucessMsg('已删除');
+                            } else {
+                                kvfKit.errorMsg(r.msg);
+                            }
+                        }
+                    });
+                });
+            }
+            if (layEvent === 'download') {
+                window.location.href = api.comm.download+"?filePath="+data.fileAddrs+"&fileName="+data.fileName;
+            }
+
+        });
+        //监听提交
+        form.on('submit(kFormSubmit)', function(data){
+            var field = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+            var url = field.id ? 'zg/payContract/edit' : 'zg/payContract/add';
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            $.ajax({
+                type: req.type.post,
+                url: BASE_WEB + url,
+                data: field,
+                async: false,
+                success: function (r) {
+                    if (r.code === req.status.ok) {
+                        // 重载表格
+                        parent.layui.table.reload('kContentTable');
+                        parent.layer.close(index); //再执行关闭
+                    } else {
+                        kvfKit.errorMsg(r.msg);
+                    }
+                }
+            });
+
+        });
+    })
+</script>
+</body>
+</html>

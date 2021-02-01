@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="common/base::pagetitle"></title>
+    <link th:replace="common/base::static"/>
+</head>
+<body>
+<div class="layui-form" style="padding: 20px 30px 0 0;">
+    <!--<div class="layui-form-item layui-hide">-->
+         <!--<div class="layui-input-inline">-->
+            <!--<input type="text" id="proId" name="proId" th:value="${editInfo.proId}" lay-verify="required"  class="layui-input">-->
+        <!--</div>-->
+    <!--</div>-->
+    <div class="layui-form-item">
+             <label class="layui-form-label"><span style="color: red">*</span>合同编号</label>
+            <div class="layui-input-block">
+                <input type="text" id="contractNo" name="contractNo" th:value="${editInfo.contractNo}" lay-verify="required"  autocomplete="off" class="layui-input" readonly>
+            </div>
+         <!--<div class="layui-inline">-->
+            <!--<label class="layui-form-label"><span style="color: red">*</span>项目</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" id="proName" th:value="${editInfo.proName}" lay-verify="required" placeholder="请选择项目" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+        <!--</div>-->
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red">*</span>合同名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="contractName" th:value="${editInfo.contractName}" placeholder="请输入合同名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label"><span style="color: red">*</span>合同类型</label>
+            <div class="layui-input-inline">
+                <select name="contractType" lay-verify="required">
+                    <option value="1" th:selected="${editInfo.contractType == 1}">软硬件采购</option>
+                    <option value="2" th:selected="${editInfo.contractType == 2}">集成服务</option>
+                    <option value="3" th:selected="${editInfo.contractType == 3}">等保服务</option>
+                    <option value="4" th:selected="${editInfo.contractType == 4}">软件开发</option>
+                    <option value="5" th:selected="${editInfo.contractType == 5}">软件采购</option>
+                    <option value="6" th:selected="${editInfo.contractType == 6}">硬件采购</option>
+                    <option value="7" th:selected="${editInfo.contractType == 7}">维保服务</option>
+                    <option value="8" th:selected="${editInfo.contractType == 8}">外包人员采购</option>
+                    <option value="9" th:selected="${editInfo.contractType == 9}">其它</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label"><span style="color: red">*</span>合同付款方式</label>
+            <div class="layui-input-inline">
+                <select name="payTerms" lay-verify="required">
+                    <option value="1" th:selected="${editInfo.payTerms == 1}">按月结算</option>
+                    <option value="2" th:selected="${editInfo.payTerms == 2}">分段结算</option>
+                    <option value="3" th:selected="${editInfo.payTerms == 3}">完工后一次结算</option>
+                    <option value="4" th:selected="${editInfo.payTerms == 4}">按季度结算</option>
+                    <option value="5" th:selected="${editInfo.payTerms == 5}">其它</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red">*</span>外包公司</label>
+        <div class="layui-input-block">
+            <input type="text" id="companyName" th:value="${editInfo.companyName}" lay-verify="required" placeholder="请选择外包公司" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+         <div class="layui-input-inline">
+            <input type="text" id="companyId" name="companyId" th:value="${editInfo.companyId}" lay-verify="required"    class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label"><span style="color: red">*</span>合同签订日期</label>
+            <div class="layui-input-inline">
+                <input type="text" name="signDate" id="signDate" th:value="${#strings.replace(editInfo.signDate,'T',' ')}" lay-verify="required" placeholder="请输入合同签订日期" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">合同截止日期</label>
+            <div class="layui-input-inline">
+                <input type="text" name="endDate" id="endDate" th:value="${#strings.replace(editInfo.endDate,'T',' ')}" placeholder="请输入合同截止日期" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red">*</span>合同金额(万元)</label>
+        <div class="layui-input-inline">
+            <input type="text" name="amount" th:value="${editInfo.amount}" lay-verify="required" placeholder="请输入合同金额" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label"><span style="color: red">*</span>甲方联系人</label>
+            <div class="layui-input-inline">
+                <input type="text" id="personName" th:value="${editInfo.personName}" lay-verify="required" placeholder="请输入甲方联系人" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline layui-hide">
+             <div class="layui-input-inline">
+                <input type="text" id="aPerson" name="aPerson" th:value="${editInfo.aPerson}" lay-verify="required" placeholder="请输入甲方联系人" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label"><span style="color: red">*</span>甲方联系电话</label>
+            <div class="layui-input-inline">
+                <input type="text" id="aPhone" name="aPhone" th:value="${editInfo.aPhone}" lay-verify="required" placeholder="请输入甲方联系电话" autocomplete="off" class="layui-input" readonly >
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label"><span style="color: red">*</span>乙方联系人</label>
+            <div class="layui-input-inline">
+                <input type="text" name="bPerson" th:value="${editInfo.bPerson}" lay-verify="required" placeholder="请输入乙方联系人" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label"><span style="color: red">*</span>乙方联系人电话</label>
+            <div class="layui-input-inline">
+                <input type="text" name="bPhone" th:value="${editInfo.bPhone}" lay-verify="required" placeholder="请输入乙方联系人电话" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">已付款金额(万元)</label>
+            <div class="layui-input-inline">
+                <input type="text" name="amountPaid" th:value="${editInfo.amountPaid}" placeholder="请输入已付款金额" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">未付款金额(万元)</label>
+            <div class="layui-input-inline">
+                <input type="text" name="outAmount" th:value="${editInfo.outAmount}" placeholder="请输入未付款金额" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">合同是否履行完成</label>
+        <input type="radio" name="isFullContract" value="0" title="否" th:checked="${editInfo.isFullContract==0}">
+        <input type="radio" name="isFullContract" value="1" title="是" th:checked="${editInfo.isFullContract==1}">
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入备注" name="remarks" th:text="${editInfo.remarks}"  class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-card-body">
+        <button class="layui-btn  layui-btn-sm " id="kfileUpload">
+            <i class="layui-icon layui-icon-upload"></i>
+        </button>
+        <table id="kContentTable" lay-filter="kContentTable"></table>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit="" lay-filter="kFormSubmit" id="kFormSubmit">
+        <input type="text" name="id" th:value="${editInfo.id}" autocomplete="off" class="layui-input">
+    </div>
+</div>
+<script type="text/html" id="proTypeTpl">
+    {{#  if(d.proType == 1){ }}
+    <span class="layui-badge layui-bg-blue">研发类</span>
+    {{#  } else if(d.proType == 2) { }}
+    <span class="layui-badge layui-bg-black">运维类</span>
+    {{#  } else if(d.proType == 3) { }}
+    <span class="layui-badge layui-bg-green">咨询类</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
+</script>
+<script type="text/html" id="proImpTpl">
+    {{#  if(d.proImp == 0){ }}
+    <span class="layui-badge layui-bg-blue">是</span>
+    {{#  } else if(d.proImp == 1) { }}
+    <span class="layui-badge layui-bg-black">否</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
+</script>
+<script type="text/html" id="companyStatusTpl">
+    {{#  if(d.companyStatus == 0){ }}
+    <span class="layui-badge layui-bg-blue">正常经营</span>
+    {{#  } else if(d.companyStatus == 1) { }}
+    <span class="layui-badge layui-bg-red">经营异常</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
+</script>
+<!--表格列格式化模板 start-->
+<script type="text/html" id="imOutsourceTpl">
+    {{#  if(d.imOutsource == 0){ }}
+    <span class="layui-badge layui-bg-blue">是</span>
+    {{#  } else if(d.imOutsource == 1) { }}
+    <span class="layui-badge layui-bg-red">否</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
+</script>
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+<script>
+    layui.use(['form', 'laydate','tableSelect','upload','soulTable','table'], function () {
+        var $ = layui.$, form = layui.form, laydate = layui.laydate, upload=layui.upload,tableSelect=layui.tableSelect,soulTable=layui.soulTable,table=layui.table;
+        var tableId = 'kContentTable';
+        var contractNo=document.getElementById("contractNo").value;
+        laydate.render({
+            elem: '#signDate' // 指定元素
+            ,trigger: 'click' //采用click弹出
+        });
+        laydate.render({
+            elem: '#endDate' // 指定元素
+            ,trigger: 'click' //采用click弹出
+        });
+        tableSelect.render({
+            elem: '#personName',
+            checkedKey: 'id',
+            table: {
+                url: api.sys.userListData ,
+                cols: [
+                    [
+                        { type: 'radio' }
+                        ,{field: 'id', title: 'id', hide:true}
+                        ,{field: 'realname', title: '姓名'}
+                         ,{field: 'phone', title: '电话' }
+                        ,{field: 'deptId', title: '所属部门', sort: true, templet: '#deptTpl'}
+                        ,{field: 'status', title: '用户状态', align: 'center', sort: true, templet: '#statusTpl'}
+                    ]
+                ]
+            },
+            done: function (elem, data) {
+                layui.each(data.data, function (index, item) {
+                    elem.val(item.realname);
+                    $('#aPerson').val(item.id);
+                    $('#aPhone').val(item.phone);
+                })
+                //alert(JSON.stringify(data.data.realname))
+            }
+        });
+        tableSelect.render({
+            elem: '#companyName',
+            checkedKey: 'id',
+            table: {
+                url: BASE_WEB + 'zg/outCompany/list/data',
+                height:300,
+                cols: [
+                    [
+                        { type: 'radio' }
+                        ,{field: 'id', title: 'id', hide:true}
+                        ,{field: 'companyName', title: '公司名称'}
+                        ,{field: 'companyStatus', title: '公司经营状态',  templet: '#companyStatusTpl'}
+                        ,{field: 'imOutsource', title: '是否重要外包商', templet: '#imOutsourceTpl'}
+                    ]
+                ]
+            },
+            done: function (elem, data) {
+                layui.each(data.data, function (index, item) {
+                    elem.val(item.companyName);
+                    $('#companyId').val(item.id);
+                })
+                //alert(JSON.stringify(data.data.realname))
+            }
+        });
+// 实例化table
+        var tableIns = table.render($.extend(config.layui.table, {
+            elem: '#' + tableId
+            ,url: BASE_WEB + 'zg/file/list/data' // 数据接口
+            ,where:{relevanceCode:contractNo,type:'contract'}
+            ,page:false
+            ,height: 200
+            ,cols: [
+                [ //表头
+                    {field: 'fileName', title: '文件名'}
+                    ,{field: 'fileSize', title: '文件大小'}
+                    ,{field: 'userName', title: '上传人'}
+                    ,{field: 'fileAddrs', hide:true}
+                    ,{field: 'uploadTime', title: '上传时间'}
+                    ,{field: '', title: '操作', templet: '#rowToolbarTpl'}
+                ]
+            ]
+            ,autoColumnWidth: {
+                init: true
+            }
+            ,done: function () {
+                soulTable.render(this)
+            }
+        }));
+
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#kfileUpload' //绑定元素
+            ,url: BASE_WEB + 'zg/file/fileUpload'  //上传多文件接口
+            ,data: {type: 'contract',relevanceCode:contractNo}
+            ,accept: 'file'
+            ,done: function(r) {
+                //上传完毕回调
+                if (r.code === req.status.ok) {
+                    table.reload(tableId);
+                } else {
+                    kvfKit.errorMsg('上传失败：' + r.msg);
+                }
+            }
+            ,error: function(index, upload) {
+                //请求异常回调
+                kvfKit.errorMsg('上传失败');
+            }
+        });
+        // 表格行按钮 监听事件
+        table.on('tool(' + tableId + ')', function (obj) {
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+            if (layEvent === 'del') {
+                layer.confirm('确定删除吗？', function(index) {
+                    //执行 Ajax 后重载
+                    $.ajax({
+                        type: req.type.post,
+                        url: BASE_WEB + 'zg/file/del',
+                        data:{id:data.id,fileAddrs:data.fileAddrs},
+                        async: false,
+                        success: function (r) {
+                            if (r.code === req.status.ok) {
+                                table.reload(tableId);
+                                kvfKit.sucessMsg('已删除');
+                            } else {
+                                kvfKit.errorMsg(r.msg);
+                            }
+                        }
+                    });
+                });
+            }
+            if (layEvent === 'download') {
+                window.location.href = api.comm.download+"?filePath="+data.fileAddrs+"&fileName="+data.fileName;
+            }
+
+        });
+        //监听提交
+        form.on('submit(kFormSubmit)', function(data){
+            var field = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+            var url = field.id ? 'zg/outsourceContract/edit' : 'zg/outsourceContract/add';
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            $.ajax({
+                type: req.type.post,
+                url: BASE_WEB + url,
+                data: field,
+                async: false,
+                success: function (r) {
+                    if (r.code === req.status.ok) {
+                        // 重载表格
+                        parent.layui.table.reload('kContentTable');
+                        parent.layer.close(index); //再执行关闭
+                    } else {
+                        kvfKit.errorMsg(r.msg);
+                    }
+                }
+            });
+
+        });
+    })
+</script>
+</body>
+</html>

@@ -8,6 +8,7 @@
         <result column="pro_id" property="proId" />
         <result column="pro_name" property="proName" />
         <result column="job_name" property="jobName" />
+        <result column="job_code" property="jobCode" />
         <result column="priority" property="priority" />
         <result column="head_id" property="headId" />
         <result column="head_name" property="headName" />
@@ -24,7 +25,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-       t.id, t.pro_id,t.job_name, t.priority, t.head_id,a.realname as head_name, t.start_date, t.end_date,
+       t.id, t.pro_id,t.job_name,t.job_code, t.priority, t.head_id,a.realname as head_name, t.start_date, t.end_date,
        t.job_status, t.remarks, t.dr,b.pro_name, t.create_user, t.create_date, t.update_user, t.update_date
     </sql>
 

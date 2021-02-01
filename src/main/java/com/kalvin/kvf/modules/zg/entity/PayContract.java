@@ -7,20 +7,21 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.kalvin.kvf.common.entity.BaseEntity;
+import java.math.BigDecimal;
 import org.springframework.format.annotation.DateTimeFormat;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 /**
  * <p>
- * 附件管理
+ * 合同-付款对应表
  * </p>
- * @since 2021-01-20 14:57:31
+ * @since 2021-01-27 14:44:04
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("zg_file")
-public class File extends BaseEntity {
+@TableName("zg_pay_contract")
+public class PayContract extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,46 +32,38 @@ public class File extends BaseEntity {
     private Long id;
 
     /**
-     * 附件类别
+     * 合同编号
      */
-    private String fileType;
+    private String contractNo;
     /**
-     * 类别（job_任务附件 contract-合同附件 pay-付款附件）
+     * 付款编号
      */
-    private String type;
+    private String payNo;
 
     /**
-     * 附件名称
+     * 付款条件
      */
-    private String fileName;
+    private String condPay;
 
     /**
-     * 附件地址
+     * 付款日期
      */
-    private String fileAddrs;
-    /**
-     * 附件大小
-     */
-    private String fileSize;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate payDate;
 
     /**
-     * 
+     * 付款金额，单位万
      */
-    private String relevanceCode;
+    private BigDecimal payAmount;
 
     /**
-     * 上传时间
+     * 付款比例 %
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime uploadTime;
+    private BigDecimal payProport;
 
     /**
-     * 上传人
+     * 付款说明
      */
-    private Long userId;
-    /**
-     * 上传人名称
-     */
-    private String userName;
+    private String payExplain;
 
 }

@@ -68,10 +68,7 @@ public class OutPerson extends BaseEntity {
      */
     private Integer rating;
 
-    /**
-     * 是否驻场 1-在 2-不在
-     */
-    private Integer isStatus;
+
 
     /**
      * 创建人

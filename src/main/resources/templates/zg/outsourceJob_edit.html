@@ -15,6 +15,11 @@
         </div>
         <div class="layui-form-item" style="display: none">
              <div class="layui-input-inline">
+                <input type="text" id=" " name="jobCode" th:value="${editInfo.jobCode}"   class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item" style="display: none">
+             <div class="layui-input-inline">
                 <input type="text" id="id" name="id" th:value="${editInfo.id}"   class="layui-input">
             </div>
         </div>
@@ -110,7 +115,7 @@
         var $ = layui.$, form = layui.form, laydate = layui.laydate,tableSelect=layui.tableSelect,
             upload=layui.upload,table=layui.table,soulTable=layui.soulTable;
         var tableId = 'kContentTable';
-        var jobId=document.getElementById("id").value;
+        var jobCode=document.getElementById("jobCode").value;
         laydate.render({
             elem: '#startDate' // 指定元素
             ,trigger: 'click' //采用click弹出
@@ -146,7 +151,7 @@
         var tableIns = table.render($.extend(config.layui.table, {
             elem: '#' + tableId
             ,url: BASE_WEB + 'zg/file/list/data' // 数据接口
-            ,where:{relevanceId:jobId,type:'job'}
+            ,where:{relevanceCode:jobCode,type:'job'}
             ,page:false
             ,height: 200
             ,cols: [
@@ -171,7 +176,7 @@
         var uploadInst = upload.render({
             elem: '#kfileUpload' //绑定元素
             ,url: BASE_WEB + 'zg/file/fileUpload'  //上传多文件接口
-            ,data: {type: 'job',relevanceId:jobId}
+            ,data: {type: 'job',relevanceCode:jobCode}
             ,accept: 'file'
             ,done: function(r) {
                 //上传完毕回调

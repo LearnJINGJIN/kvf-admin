@@ -13,28 +13,6 @@
         <div class="layui-col-md12" id="kMainContentCol">
             <div class="layui-fluid kvf-fluid-padding15">
                 <div class="layui-card">
-                    <form>
-                        <div class="layui-form layui-card-header kvf-card-header-auto">
-                            <div class="layui-form-item">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">公司名称</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="companyName" placeholder="请输入公司名称" autocomplete="off" class="layui-input">
-                                    </div>
-                                </div>
-
-                                <div class="layui-inline">
-                                    <button class="layui-btn " lay-submit="" lay-filter="kTableSearchFilter">
-                                        <i class="layui-icon layui-icon-search"></i>
-                                    </button>
-                                    <button class="layui-btn " type="reset" data-event="refresh">
-                                        <i class="layui-icon layui-icon-refresh-1"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-
                     <div class="layui-card-body">
                         <table id="kContentTable" lay-filter="kContentTable"></table>
                     </div>
@@ -55,52 +33,32 @@
 
 <!--表格行工具栏模板-->
 <script type="text/html" id="rowToolbarTpl">
-    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit" th:title="编辑"><i class="layui-icon layui-icon-edit"></i></a>
-    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del" th:title="删除"><i class="layui-icon layui-icon-delete"></i></a>
-    <a class="layui-btn layui-btn-xs layui-bg-green" lay-event="show" th:title="查看"><i class="layui-icon layui-icon-form"></i></a>
+    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
 </script>
 
 <!--表格列格式化模板 start-->
-<script type="text/html" id="companyStatusTpl">
-{{#  if(d.companyStatus == 0){ }}
-<span class="layui-badge layui-bg-blue">正常经营</span>
-{{#  } else if(d.companyStatus == 1) { }}
-<span class="layui-badge layui-bg-black">经营异常</span>
-{{#  } else { }}
-<span class="layui-badge layui-bg-gray">未知</span>
-{{# } }}
-</script>
-
-<script type="text/html" id="imOutsourceTpl">
-    {{#  if(d.imOutsource == 0){ }}
-    <span class="layui-badge layui-bg-blue">是</span>
-    {{#  } else if(d.imOutsource == 1) { }}
-    <span class="layui-badge layui-bg-black">否</span>
-    {{#  } else { }}
-    <span class="layui-badge layui-bg-gray">未知</span>
-    {{# } }}
-</script>
 <!--表格列格式化模板 end-->
 
 <script type="text/javascript" th:inline="javascript">
     layui.use(['element', 'form', 'layer', 'table', 'laydate'], function () {
         var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, laydate = layui.laydate;
         var tableId = 'kContentTable';
-        var area = ['66%', '95%'];
+        var area = ['65%', '95%'];
 
         // 实例化table
         var tableIns = table.render($.extend(config.layui.table, {
             elem: '#' + tableId
-            ,url: BASE_WEB + 'zg/outCompany/list/data' // 数据接口
+            ,url: BASE_WEB + 'zg/payContract/list/data' // 数据接口
             ,toolbar: '#headToolbarTpl'
             ,cols: [[ //表头
                 {type:'checkbox', fixed: 'left'}
-                ,{field: 'companyName', title: '公司名称', width: 130}
-                ,{field: 'legalPerson', title: '法人代表', width: 130}
-                ,{field: 'imOutsource', title: '是否重要外包商', width: 130, templet: '#imOutsourceTpl'}
-                ,{field: 'companyCode', title: '社会统一征信代码'}
-                ,{field: 'companyStatus', title: '公司经营状态', width: 130, templet: '#companyStatusTpl'}
-                ,{field: 'companySize', title: '公司规模', width: 130}
+                ,{field: 'contractNo', title: '合同编号', width: 130}
+                ,{field: 'condPay', title: '付款条件'}
+                ,{field: 'payDate', title: '付款日期', width: 130}
+                ,{field: 'payAmount', title: '付款金额，单位万', width: 130}
+                ,{field: 'payProport', title: '付款比例 %', width: 130}
+                ,{field: 'payExplain', title: '付款说明', width: 130}
                 ,{field: '', title: '操作', width: 235, fixed: 'right', templet: '#rowToolbarTpl'}
             ]]
         }));
@@ -114,7 +72,7 @@
                     layer.open({
                         type: 2
                         ,title: '添加'
-                        ,content: BASE_WEB + 'zg/outCompany/edit'
+                        ,content: BASE_WEB + 'zg/payContract/edit'
                         ,maxmin: true
                         ,area: area   // 宽高
                         ,btn: ['确定', '取消']
@@ -138,7 +96,7 @@
                 layer.open({
                     type: 2
                     ,title: '编辑'
-                    ,content: BASE_WEB + 'zg/outCompany/edit?id=' + data.id
+                    ,content: BASE_WEB + 'zg/payContract/edit?id=' + data.id
                     ,maxmin: true
                     ,area: area   // 宽高
                     ,btn: ['确定', '取消']
@@ -154,7 +112,7 @@
                     //执行 Ajax 后重载
                     $.ajax({
                         type: req.type.post,
-                        url: BASE_WEB + 'zg/outCompany/del/' + data.id,
+                        url: BASE_WEB + 'zg/payContract/del/' + data.id,
                         async: false,
                         success: function (r) {
                             if (r.code === req.status.ok) {
@@ -165,19 +123,6 @@
                             }
                         }
                     });
-                });
-            }
-            if (layEvent === 'show') {
-                layer.open({
-                    type: 2
-                    ,title: '详情'
-                    ,content: BASE_WEB + 'zg/outCompany/edit?id=' + data.id
-                    ,maxmin: true
-                    ,area: area     // 宽高
-                    ,btn: false
-                    ,yes: function(){
-                        layer.closeAll();
-                    }
                 });
             }
         });

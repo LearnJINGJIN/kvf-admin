@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalvin.kvf.modules.zg.mapper.OutsourceContractMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.OutsourceContract">
+        <id column="id" property="id" />
+        <result column="pro_id" property="proId" />
+        <result column="contract_no" property="contractNo" />
+        <result column="contract_name" property="contractName" />
+        <result column="contract_type" property="contractType" />
+        <result column="pay_terms" property="payTerms" />
+        <result column="company_id" property="companyId" />
+        <result column="company_name" property="companyName" />
+        <result column="sign_date" property="signDate" />
+        <result column="end_date" property="endDate" />
+        <result column="amount" property="amount" />
+        <result column="a_person" property="aPerson" />
+        <result column="person_name" property="personName" />
+        <result column="a_phone" property="aPhone" />
+        <result column="b_person" property="bPerson" />
+        <result column="b_phone" property="bPhone" />
+        <result column="amount_paid" property="amountPaid" />
+        <result column="out_amount" property="outAmount" />
+        <result column="is_full_contract" property="isFullContract" />
+        <result column="remarks" property="remarks" />
+        <result column="dr" property="dr" />
+        <result column="create_user" property="createUser" />
+        <result column="create_date" property="createDate" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_date" property="updateDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       t.id, t.pro_id, t.contract_no, t.contract_name, t.contract_type, t.pay_terms, t.company_id,
+       b.company_name,t.sign_date, t.end_date, t.amount, t.a_person,c.realname as person_name, t.a_phone, t.b_person, t.b_phone,
+       t.amount_paid, t.out_amount, t.is_full_contract,t.remarks, t.dr, t.create_user, t.create_date, t.update_user,
+       t.update_date
+    </sql>
+
+    <select id="selectOutsourceContractList" resultType="com.kalvin.kvf.modules.zg.entity.OutsourceContract">
+        select <include refid="Base_Column_List" /> from zg_outsource_contract t
+         left join zg_out_company b on b.id=t.company_id
+        left join sys_user c on c.id=t.a_person
+        <trim prefix="where" prefixOverrides="and">
+            <if test="outsourceContract.proId != null">
+                and pro_id = #{outsourceContract.proId}
+            </if>
+            <if test="outsourceContract.contractNo != null">
+                and contract_no = #{outsourceContract.contractNo}
+            </if>
+            <if test="outsourceContract.contractName != null and outsourceContract.contractName != ''">
+                and contract_name like concat(#{outsourceContract.contractName}, "%")
+            </if>
+            <if test="outsourceContract.contractType != null">
+                and contract_type = #{outsourceContract.contractType}
+            </if>
+            <if test="outsourceContract.payTerms != null">
+                and pay_terms = #{outsourceContract.payTerms}
+            </if>
+            <if test="outsourceContract.signDate != null">
+                and sign_date = #{outsourceContract.signDate}
+            </if>
+            <if test="outsourceContract.endDate != null">
+                and end_date = #{outsourceContract.endDate}
+            </if>
+            <if test="outsourceContract.amount != null">
+                and amount = #{outsourceContract.amount}
+            </if>
+
+        </trim>
+    </select>
+    <select id="selectOutsourceContractByid" resultType="com.kalvin.kvf.modules.zg.entity.OutsourceContract">
+        select <include refid="Base_Column_List" /> from zg_outsource_contract t
+         left join zg_out_company b on b.id=t.company_id
+        left join sys_user c on c.id=t.a_person
+        where t.id=#{id}
+    </select>
+
+</mapper>

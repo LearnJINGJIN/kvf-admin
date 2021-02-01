@@ -8,7 +8,7 @@
 <body>
 <form class="layui-form layui-form-pane" action="" style="padding:20px">
     <div class="layui-form-item">
-        <label class="layui-form-label">姓名</label>
+        <label class="layui-form-label"><span style="color: red">*</span>姓名</label>
         <div class="layui-input-block">
             <input type="text" name="name" th:value="${editInfo.name}" lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input">
         </div>
@@ -25,19 +25,19 @@
         <input type="radio" name="sex" value="0" title="女" th:checked="${editInfo.sex==0}">
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">联系电话</label>
+        <label class="layui-form-label"><span style="color: red">*</span>联系电话</label>
         <div class="layui-input-block">
             <input type="text" name="phone" th:value="${editInfo.phone}" lay-verify="required" placeholder="请输入联系电话" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">邮箱</label>
+        <label class="layui-form-label"><span style="color: red">*</span>邮箱</label>
         <div class="layui-input-block">
             <input type="text" name="email" th:value="${editInfo.email}" lay-verify="required" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">所属公司</label>
+        <label class="layui-form-label"><span style="color: red">*</span>所属公司</label>
         <div class="layui-input-block">
             <input type="text" id="companyName" th:value="${editInfo.companyName==null?'':editInfo.companyName}" lay-verify="required" placeholder="请输入关联所属公司" autocomplete="off" class="layui-input">
         </div>
@@ -46,35 +46,6 @@
         <label class="layui-form-label">职务类型</label>
         <input type="radio" name="rating" value="1" title="商务" th:checked="${editInfo.rating==1}">
         <input type="radio" name="rating" value="2" title="技术" th:checked="${editInfo.rating==2}">
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">是否驻场</label>
-        <input type="radio" name="isStatus" value="1" title="是" th:checked="${editInfo.isStatus==1}">
-        <input type="radio" name="isStatus" value="2" title="否" th:checked="${editInfo.isStatus==2}">
-    </div>
-    <div class="layui-form-item layui-hide">
-        <label class="layui-form-label">创建人</label>
-        <div class="layui-input-inline">
-            <input type="text" name="createUser" th:value="${editInfo.createUser}" placeholder="请输入创建人" autocomplete="off" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item layui-hide">
-        <label class="layui-form-label">创建时间</label>
-        <div class="layui-input-inline">
-            <input type="text" name="createDate" id="createDate" th:value="${#strings.replace(editInfo.createDate,'T',' ')}" placeholder="请输入创建时间" autocomplete="off" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item layui-hide">
-        <label class="layui-form-label">修改人</label>
-        <div class="layui-input-inline">
-            <input type="text" name="updateUser" th:value="${editInfo.updateUser}" placeholder="请输入修改人" autocomplete="off" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item layui-hide">
-        <label class="layui-form-label">修改时间</label>
-        <div class="layui-input-inline">
-            <input type="text" name="updateDate" id="updateDate" th:value="${#strings.replace(editInfo.updateDate,'T',' ')}" placeholder="请输入修改时间" autocomplete="off" class="layui-input">
-        </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">备注</label>
@@ -89,46 +60,49 @@
         </div>
     </div>
     <div class="layui-form-item layui-hide">
-        <label class="layui-form-label">删除标志位0-在公司 1-离职</label>
-        <div class="layui-input-block">
-        </div>
-    </div>
-
-    <div class="layui-form-item layui-hide">
         <input type="button" lay-submit="" lay-filter="kFormSubmit" id="kFormSubmit">
         <input type="text" name="id" th:value="${editInfo.id}" autocomplete="off" class="layui-input">
     </div>
 </form>
-
+<!--表格列格式化模板 start-->
+<script type="text/html" id="companyStatusTpl">
+    {{#  if(d.companyStatus == 0){ }}
+    <span class="layui-badge layui-bg-blue">正常经营</span>
+    {{#  } else if(d.companyStatus == 1) { }}
+    <span class="layui-badge layui-bg-red">经营异常</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
+</script>
+<!--表格列格式化模板 start-->
+<script type="text/html" id="imOutsourceTpl">
+    {{#  if(d.imOutsource == 0){ }}
+    <span class="layui-badge layui-bg-blue">是</span>
+    {{#  } else if(d.imOutsource == 1) { }}
+    <span class="layui-badge layui-bg-red">否</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
+</script>
 <script th:replace="common/base::context"></script>
 <script th:replace="common/base::mainjs"></script>
 <script>
     layui.use(['form', 'laydate','tableSelect'], function () {
         var $ = layui.$, form = layui.form, laydate = layui.laydate, tableSelect = layui.tableSelect;
 
-
-        laydate.render({
-            elem: '#createDate' // 指定元素
-            ,type: 'datetime'
-        });
-        laydate.render({
-            elem: '#updateDate' // 指定元素
-            ,type: 'datetime'
-        });
-
         tableSelect.render({
             elem: '#companyName',
             checkedKey: 'id',
             table: {
                 url: BASE_WEB + 'zg/outCompany/list/data',
+                height:300,
                 cols: [
                     [
                         { type: 'radio' }
                         ,{field: 'id', title: 'id', hide:true}
-                        ,{field: 'companyName', title: '公司名称', width: 200}
-                        ,{field: 'companyStatus', title: '公司经营状态', width: 130, templet: '#companyStatusTpl'}
-                        ,{field: 'companySize', title: '公司规模', width: 130}
-                        ,{field: 'companyCode', title: '社会统一征信代码'}
+                        ,{field: 'companyName', title: '公司名称'}
+                        ,{field: 'companyStatus', title: '公司经营状态',  templet: '#companyStatusTpl'}
+                        ,{field: 'imOutsource', title: '是否重要外包商', templet: '#imOutsourceTpl'}
                     ]
                 ]
             },

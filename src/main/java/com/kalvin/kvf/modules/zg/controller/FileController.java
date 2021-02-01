@@ -52,7 +52,7 @@ public class FileController extends BaseController {
         return R.ok();
     }
     @PostMapping(value = "fileUpload")
-    public R fileUpload(@RequestParam(value = "file") MultipartFile file, String type, Long relevanceId) {
+    public R fileUpload(@RequestParam(value = "file") MultipartFile file, String type, String relevanceCode) {
         if (file == null) {
             return R.fail("没有可上传的文件");
         }
@@ -66,7 +66,7 @@ public class FileController extends BaseController {
             int begin = file.getOriginalFilename().indexOf(".");
             int last = file.getOriginalFilename().length();
             com.kalvin.kvf.modules.zg.entity.File fileInfo=new com.kalvin.kvf.modules.zg.entity.File();
-            fileInfo.setRelevanceId(relevanceId);
+            fileInfo.setRelevanceCode(relevanceCode);
             fileInfo.setFileName(upload.getName());
             fileInfo.setType(type);
             fileInfo.setFileType(file.getOriginalFilename().substring(begin, last));

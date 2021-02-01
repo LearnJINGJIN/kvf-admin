@@ -78,15 +78,7 @@
     <span class="layui-badge layui-bg-gray">未知</span>
     {{# } }}
 </script>
-<script type="text/html" id="isStatusTpl">
-    {{#  if(d.isStatus == 1){ }}
-    <span class="layui-badge layui-bg-red">是</span>
-    {{#  } else if(d.isStatus == 2) { }}
-    <span class="layui-badge layui-bg-blue">否</span>
-    {{#  } else { }}
-    <span class="layui-badge layui-bg-gray">未知</span>
-    {{# } }}
-</script>
+
 <script type="text/html" id="companyTpl">
     {{# var data = kvfKit.get(api.sys.getCompany + d.companyId).data; }}
     {{# return data ? data.companyName : '<span class="layui-badge-rim">未分配</span>'; }}
@@ -98,7 +90,7 @@
     layui.use(['element', 'form', 'layer', 'table', 'laydate'], function () {
         var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, laydate = layui.laydate;
         var tableId = 'kContentTable';
-        var area = ['66%', '95%'];
+        var area = ['60%', '95%'];
 
         // 实例化table
         var tableIns = table.render($.extend(config.layui.table, {
@@ -107,13 +99,14 @@
             ,toolbar: '#headToolbarTpl'
             ,cols: [[ //表头
                 {type:'checkbox', fixed: 'left'}
-                ,{field: 'name', title: '姓名', width: 130}
+                ,{field: 'name', title: '姓名'}
                 ,{field: 'age', title: '年龄'}
-                ,{field: 'sex', title: '性别', width: 130, templet: '#sexTpl'}
-                ,{field: 'companyId', title: '所属公司', width: 130, templet: '#companyTpl',filter: true}
-                ,{field: 'rating', title: '职务类型', width: 130, templet: '#ratingTpl'}
-                ,{field: 'isStatus', title: '是否驻场', width: 130, templet: '#isStatusTpl'}
-                ,{field: '', title: '操作', width: 235, fixed: 'right', templet: '#rowToolbarTpl'}
+                ,{field: 'sex', title: '性别', templet: '#sexTpl'}
+                ,{field: 'phone', title: '联系电话'}
+                ,{field: 'email', title: '邮件'}
+                ,{field: 'companyId', title: '所属公司', templet: '#companyTpl',filter: true}
+                ,{field: 'rating', title: '职务类型', templet: '#ratingTpl'}
+                 ,{field: '', title: '操作', width: 235, fixed: 'right', templet: '#rowToolbarTpl'}
             ]]
         }));
 

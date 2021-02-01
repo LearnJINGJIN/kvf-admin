@@ -44,6 +44,10 @@ public class OutsourceJob extends BaseEntity {
      * 任务名称
      */
     private String jobName;
+    /**
+     * 任务名称
+     */
+    private String jobCode;
 
     /**
      * 优先级(0-较低 1-最低 2-普通 3-较高 4-最高)

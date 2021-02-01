@@ -33,7 +33,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
             var t = elem.offset().top + elem.outerHeight()+"px";
             var l = elem.offset().left +"px";
             var tableName = "tableSelect_table_" + new Date().getTime();
-            var tableBox = '<div class="tableSelect layui-anim layui-anim-upbit" style="left:'+l+';top:'+t+';border: 1px solid #d2d2d2;background-color: #fff;box-shadow: 0 2px 4px rgba(0,0,0,.12);padding:10px 10px 0 10px;position: absolute;z-index:66666666;margin: 5px 0;border-radius: 2px;min-width:530px;">';
+            var tableBox = '<div class="tableSelect layui-anim layui-anim-upbit" style="left:'+l+';top:'+t+';border: 1px solid #d2d2d2;background-color: #fff;box-shadow: 0 2px 4px rgba(0,0,0,.12);padding:10px 10px 0 10px;position: absolute;z-index:66666666;margin: 5px 0;border-radius: 2px;min-width:400px;">';
             tableBox += '<div class="tableSelectBar">';
             tableBox += '<form class="layui-form" action="" style="display:inline-block;">';
             tableBox += '<input style="display:inline-block;width:190px;height:30px;vertical-align:middle;margin-right:-1px;border: 1px solid #C9C9C9;" type="text" name="'+opt.searchKey+'" placeholder="'+opt.searchPlaceholder+'" autocomplete="off" class="layui-input"><button class="layui-btn layui-btn-sm layui-btn-primary tableSelect_btn_search" lay-submit lay-filter="tableSelect_btn_search"><i class="layui-icon layui-icon-search"></i></button>';
@@ -82,15 +82,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                             }
                         }else{
                             //因为LAYUI问题，操作到变化全选状态时获取到的obj为空，这里用函数获取未选中的项。
-                            function nu (){
-                                var noCheckedKey = '';
-                                for (var i=0;i<table.cache[tableName].length;i++){
-                                    if(!table.cache[tableName][i].LAY_CHECKED){
-                                        noCheckedKey = table.cache[tableName][i][opt.checkedKey];
-                                    }
-                                }
-                                return noCheckedKey
-                            }
+
                             var noCheckedKey = obj.data[opt.checkedKey] || nu();
                             for (var i=0;i<checkedData.length;i++){
                                 if(checkedData[i][opt.checkedKey] == noCheckedKey){
@@ -105,7 +97,15 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                     updataButton(table.checkStatus(tableName).data.length)
                 }
             });
-
+            function nu(){
+                var noCheckedKey = '';
+                for (var i=0;i<table.cache[tableName].length;i++){
+                    if(!table.cache[tableName][i].LAY_CHECKED){
+                        noCheckedKey = table.cache[tableName][i][opt.checkedKey];
+                    }
+                }
+                return noCheckedKey;
+            }
             //渲染表格后选中
             function setChecked (res, curr, count) {
                 for(var i=0;i<res.data.length;i++){

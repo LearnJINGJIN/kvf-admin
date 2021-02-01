@@ -17,12 +17,18 @@
                         <div class="layui-form layui-card-header kvf-card-header-auto">
                             <div class="layui-form-item">
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">外包人员</label>
+                                    <label class="layui-form-label">合同编号</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="personName" placeholder="请输入外包人员" autocomplete="off" class="layui-input">
+                                        <input type="text" name="contractNo"  placeholder="请输入合同编号" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
 
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">合同名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="contractName"  placeholder="请输入合同名称" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
                                 <div class="layui-inline">
                                     <button class="layui-btn " lay-submit="" lay-filter="kTableSearchFilter">
                                         <i class="layui-icon layui-icon-search"></i>
@@ -51,88 +57,92 @@
 <!--头部工具栏模板-->
 <script type="text/html" id="headToolbarTpl">
     <button class="layui-btn layui-btn-sm " lay-event="add">添加</button>
+    <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="pay">添加付款</button>
 </script>
 
 <!--表格行工具栏模板-->
 <script type="text/html" id="rowToolbarTpl">
-    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit" th:title="编辑"><i class="layui-icon layui-icon-edit"></i></a>
-    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del" th:title="删除"><i class="layui-icon layui-icon-delete"></i></a>
-    <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="weekly" th:title="周报"><i class="layui-icon layui-icon-template-1"></i></a>
+    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="showPay"><i class="layui-icon layui-icon-blue"></i>付款详情</a>
 </script>
 
 <!--表格列格式化模板 start-->
-<script type="text/html" id="statusTpl">
-  {{#  if(d.status == 0){ }}
- <span class="layui-badge layui-bg-blue">正常</span>
- {{#  } else if(d.status == 1) { }}
- <span class="layui-badge layui-bg-red">离场</span>
- {{#  } else { }}
- <span class="layui-badge layui-bg-gray">未知</span>
- {{# } }}
+<script type="text/html" id="contractTypeTpl">
+<!--todo由于注释不统一规范，无法为你生成格式化代码，请自行处理-->
+ {{#  if(d.contractType == 1){ }}
+<span class="layui-badge ">软硬件采购</span>
+{{#  } else if(d.contractType == 2) { }}
+<span class="layui-badge">集成服务</span>
+{{#  } else if(d.contractType == 3) { }}
+<span class="layui-badge">等保服务</span>
+{{#  } else if(d.contractType == 4) { }}
+<span class="layui-badge">软件开发</span>
+{{#  } else if(d.contractType == 5) { }}
+<span class="layui-badge">软件采购</span>
+{{#  } else if(d.contractType == 6) { }}
+<span class="layui-badge">硬件采购</span>
+{{#  } else if(d.contractType == 7) { }}
+<span class="layui-badge">维保服务</span>
+{{#  } else if(d.contractType == 8) { }}
+<span class="layui-badge">外包人员采购</span>
+{{#  } else if(d.contractType == 9) { }}
+<span class="layui-badge">其它</span>
+{{#  } else { }}
+<span class="layui-badge layui-bg-gray">未知</span>
+{{# } }}
 </script>
-<script type="text/html" id="outsourceTypeTp1">
-  {{#  if(d.outsourceType == 1){ }}
- <span class="layui-badge layui-bg-blue">开发</span>
- {{#  } else if(d.outsourceType == 2) { }}
- <span class="layui-badge layui-bg-green">运维</span>
+<script type="text/html" id="payTermsTpl">
+  {{#  if(d.payTerms == 1){ }}
+<span class="layui-badge ">按月结算</span>
+{{#  } else if(d.payTerms == 2) { }}
+<span class="layui-badge">分段结算</span>
+{{#  } else if(d.payTerms == 3) { }}
+<span class="layui-badge">完工后一次结算</span>
+{{#  } else if(d.payTerms == 4) { }}
+<span class="layui-badge">按季度结算</span>
+{{#  } else if(d.contractType == 5) { }}
+<span class="layui-badge">其它</span>
  {{#  } else { }}
- <span class="layui-badge layui-bg-gray">未知</span>
- {{# } }}
+<span class="layui-badge layui-bg-gray">未知</span>
+{{# } }}
+</script>
+<script type="text/html" id="isFullContractTpl">
+  {{#  if(d.isFullContract == 0){ }}
+<span class="layui-badge ">否</span>
+{{#  } else if(d.isFullContract == 1) { }}
+<span class="layui-badge">是</span>
+{{#  } else { }}
+<span class="layui-badge layui-bg-gray">未知</span>
+{{# } }}
 </script>
 <!--表格列格式化模板 end-->
 
 <script type="text/javascript" th:inline="javascript">
-    layui.use(['element', 'form', 'layer', 'table', 'laydate','soulTable'], function () {
-        var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, laydate = layui.laydate,soulTable=layui.soulTable;
+    layui.use(['element', 'form', 'layer', 'table', 'laydate'], function () {
+        var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, laydate = layui.laydate;
         var tableId = 'kContentTable';
-        var area = ['66%', '95%'];
+        var area = ['65%', '95%'];
 
         // 实例化table
         var tableIns = table.render($.extend(config.layui.table, {
             elem: '#' + tableId
-            ,url: BASE_WEB + 'zg/outOtc/list/data' // 数据接口
+            ,url: BASE_WEB + 'zg/outsourceContract/list/data' // 数据接口
             ,toolbar: '#headToolbarTpl'
-            ,method: 'post' //这里可以写post请求,默认get
             ,cols: [[ //表头
                 {type:'checkbox', fixed: 'left'}
-                ,{field: 'personName', title: '外包人员',filter: true}
-                ,{field: 'personId', hide:true}
-                ,{field: 'outsourceType', title: '外包类型', templet: '#outsourceTypeTp1'}
-                ,{field: 'contractNo', title: '合同编号'}
-                ,{field: 'personMonth', title: '采购人月(月)'}
-                ,{field: 'startDate', title: '入场时间'}
-                ,{field: 'planDate', title: '计划工作时间'}
-                ,{field: 'unitPrice', title: '单价(万/月)', sort: true}
-                ,{field: 'havePay', title: '已支付(万)'}
-                ,{field: 'pendPay', title: '剩余待支付(万)'}
-                ,{field: 'status', title: '状态',  templet: '#statusTpl'}
-                ,{field: 'remarks', title: '备注',  autoWidth: false}
-                ,{field: '', title: '操作', fixed: 'right', templet: '#rowToolbarTpl'}
+                ,{field: 'contractNo', title: '合同编号', width: 130}
+                ,{field: 'contractName', title: '合同名称',width: 130}
+                ,{field: 'contractType', title: '合同类型', width: 130, templet: '#contractTypeTpl'}
+                ,{field: 'payTerms', title: '合同付款方式', width: 130, templet: '#payTermsTpl'}
+                ,{field: 'companyName', title: '外包公司', width: 130}
+                ,{field: 'signDate', title: '合同签订日期', width: 130}
+                ,{field: 'endDate', title: '合同截止日期', width: 130}
+                ,{field: 'amount', title: '合同金额', width: 130}
+                ,{field: 'isFullContract', title: '合同是否履行完成', width: 130, templet: '#isFullContractTpl'}
+                ,{field: 'remarks', title: '描述', width: 130}
+                ,{field: '', title: '操作', width: 235, fixed: 'right', templet: '#rowToolbarTpl'}
             ]]
-            ,filter: {
-                clearFilter: true,
-                items:['column','data','excel'] // 只显示表格列和导出excel两个菜单项
-            }
-            ,excel: { // 导出excel配置, （以下值均为默认值）
-                on: true, //是否启用, 默认开启
-                filename: '驻场外包人员.xlsx', // 文件名
-                head: { // 表头样式
-                    family: 'Calibri', // 字体
-                    size: 12, // 字号
-                    color: 'FFFFFF', // 字体颜色
-                    bgColor: '01AAED' //背景颜色
-                 },
-                font: { // 正文样式
-                    family: 'Calibri', // 字体
-                    size: 12, // 字号
-                }
-            }
-            ,autoColumnWidth: {
-                init: true
-            }
-            ,done: function () {
-                soulTable.render(this)
-            }
         }));
 
         // 监听表格头部事件
@@ -144,7 +154,29 @@
                     layer.open({
                         type: 2
                         ,title: '添加'
-                        ,content: BASE_WEB + 'zg/outOtc/edit'
+                        ,content: BASE_WEB + 'zg/outsourceContract/edit'
+                        ,maxmin: true
+                        ,area: area   // 宽高
+                        ,btn: ['确定', '取消']
+                        ,yes: function(index, layero){
+                            //点击确认触发 iframe 内容中的按钮提交
+                            var submit = layero.find('iframe').contents().find("#kFormSubmit");
+                            submit.click();
+                        }
+                    });
+                    break;
+                case 'pay':
+                    if(checkData.length === 0){
+                        return kvfKit.warningMsg('请选择数据');
+                    }
+                    var contractNo=null;
+                     $.each(checkData, function(i, n){
+                          contractNo = n.contractNo;
+                    });
+                    layer.open({
+                        type: 2
+                        ,title: '添加'
+                        ,content: BASE_WEB + 'zg/payContract/edit?contractNo='+contractNo
                         ,maxmin: true
                         ,area: area   // 宽高
                         ,btn: ['确定', '取消']
@@ -168,7 +200,7 @@
                 layer.open({
                     type: 2
                     ,title: '编辑'
-                    ,content: BASE_WEB + 'zg/outOtc/edit?id=' + data.id
+                    ,content: BASE_WEB + 'zg/outsourceContract/edit?id=' + data.id
                     ,maxmin: true
                     ,area: area   // 宽高
                     ,btn: ['确定', '取消']
@@ -184,7 +216,7 @@
                     //执行 Ajax 后重载
                     $.ajax({
                         type: req.type.post,
-                        url: BASE_WEB + 'zg/outOtc/del/' + data.id,
+                        url: BASE_WEB + 'zg/outsourceContract/del/' + data.id,
                         async: false,
                         success: function (r) {
                             if (r.code === req.status.ok) {
@@ -197,11 +229,11 @@
                     });
                 });
             }
-            if (layEvent === 'weekly') {
-                 layer.open({
+            if (layEvent === 'showPay') {
+                layer.open({
                     type: 2
-                    ,title: '周报管理'
-                    ,content: BASE_WEB + 'zg/personWeekly/index?personId=' + data.personId+"&outsourceType="+data.outsourceType
+                    ,title: '付款管理'
+                    ,content: BASE_WEB + 'zg/payContract/index?contractNo=' + data.contractNo
                     ,maxmin: true
                     ,area: ['100%', '100%']   // 宽高
                     ,btn: false

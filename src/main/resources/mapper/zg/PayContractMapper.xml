@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalvin.kvf.modules.zg.mapper.PayContractMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.PayContract">
+        <id column="id" property="id" />
+        <result column="contract_no" property="contractNo" />
+        <result column="pay_no" property="payNo" />
+        <result column="cond_pay" property="condPay" />
+        <result column="pay_date" property="payDate" />
+        <result column="pay_amount" property="payAmount" />
+        <result column="pay_proport" property="payProport" />
+        <result column="pay_explain" property="payExplain" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       id, contract_no,pay_no,cond_pay, pay_date, pay_amount, pay_proport, pay_explain
+    </sql>
+
+    <select id="selectPayContractList" resultType="com.kalvin.kvf.modules.zg.entity.PayContract">
+        select <include refid="Base_Column_List" /> from zg_pay_contract
+        <trim prefix="where" prefixOverrides="and">
+            <if test="payContract.contractNo != null">
+                and contract_no = #{payContract.contractNo}
+            </if>
+            <if test="payContract.condPay != null and payContract.condPay != ''">
+                and cond_pay like concat(#{payContract.condPay}, "%")
+            </if>
+            <if test="payContract.payDate != null">
+                and pay_date = #{payContract.payDate}
+            </if>
+            <if test="payContract.payAmount != null">
+                and pay_amount = #{payContract.payAmount}
+            </if>
+            <if test="payContract.payProport != null">
+                and pay_proport = #{payContract.payProport}
+            </if>
+            <if test="payContract.payExplain != null and payContract.payExplain != ''">
+                and pay_explain like concat(#{payContract.payExplain}, "%")
+            </if>
+        </trim>
+    </select>
+
+</mapper>

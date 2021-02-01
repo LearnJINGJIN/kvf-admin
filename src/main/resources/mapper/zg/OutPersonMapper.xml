@@ -13,8 +13,7 @@
         <result column="company_name" property="companyName" />
         <result column="company_id" property="companyId" />
         <result column="rating" property="rating" />
-        <result column="is_status" property="isStatus" />
-        <result column="create_user" property="createUser" />
+         <result column="create_user" property="createUser" />
         <result column="create_date" property="createDate" />
         <result column="update_user" property="updateUser" />
         <result column="update_date" property="updateDate" />
@@ -24,7 +23,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-       t.id, t.name, t.age, t.sex, t.phone, t.email, t.company_id, t.rating, t.is_status, t.create_user, t.create_date, t.update_user, t.update_date, t.remarks, t.dr, a.company_name
+       t.id, t.name, t.age, t.sex, t.phone, t.email, t.company_id, t.rating, t.create_user, t.create_date, t.update_user, t.update_date, t.remarks, t.dr, a.company_name
     </sql>
 
     <select id="selectOutPersonList" resultType="com.kalvin.kvf.modules.zg.entity.OutPerson">
