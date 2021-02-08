@@ -8,104 +8,103 @@
 </head>
 <body style="background-color: #f2f2f2;">
 
-<div class="layui-card">
-    <div class="layui-form-item" style="display: none">
-        <div class="layui-input-inline">
-            <input type="text"  id="planId" th:value="${planId}">
+<div id="kPage" class="layui-fluid" style="padding: 0">
+    <div class="layui-row">
+        <div class="layui-col-md12" id="kMainContentCol">
+            <div class="layui-fluid kvf-fluid-padding15">
+                <div class="layui-card">
+                    <form>
+                        <div class="layui-form layui-card-header kvf-card-header-auto">
+                            <div class="layui-form-item">
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="layui-card-body">
+                        <table id="kContentTable" lay-filter="kContentTable"></table>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
-    <div class="layui-card-body">
-        <table id="kContentTable" lay-filter="kContentTable"></table>
-    </div>
 </div>
-<script type="text/html" id="headToolbarTpl">
-    <button class="layui-btn layui-btn-sm " lay-event="add">添加</button>
-</script>
 
 <script th:replace="common/base::context"></script>
 <script th:replace="common/base::mainjs"></script>
 
-
-
-<!--表格行工具栏模板-->
-<script type="text/html" id="rowToolbarTpl">
-    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+<!--头部工具栏模板-->
+<script type="text/html" id="headToolbarTpl">
+    <button class="layui-btn  layui-btn-sm " id="kfileUpload">
+        <i class="layui-icon layui-icon-upload">上传</i>
+    </button>
 </script>
 
+<!--表格行工具栏模板-->
+
+
+<script type="text/html" id="rowToolbarTpl">
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><i class="layui-icon layui-icon-delete"></i></a>
+    <a class="layui-btn layui-btn-xs " lay-event="download"><i class="layui-icon layui-icon-download-circle"></i></a>
+</script>
 <!--表格列格式化模板 start-->
 <!--表格列格式化模板 end-->
 
 <script type="text/javascript" th:inline="javascript">
-    layui.use(['element', 'form', 'layer', 'table'], function () {
-        var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table;
+    layui.use(['element', 'form', 'layer', 'table','upload'], function () {
+        var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, upload = layui.upload;
         var tableId = 'kContentTable';
-        var area = ['65%', '95%'];
-        var planId=document.getElementById("planId").value;
+        var area = ['449px', '95%'];
+
         // 实例化table
         var tableIns = table.render($.extend(config.layui.table, {
             elem: '#' + tableId
-            ,url: BASE_WEB + 'zg/mattersDetail/list/data' // 数据接口
-            ,where:{planId:planId}
+            ,url: BASE_WEB + 'zg/file/list/data' // 数据接口
+            ,where:{relevanceCode:'template',type:'template'}
             ,toolbar: '#headToolbarTpl'
             ,cols: [[ //表头
                 {type:'checkbox', fixed: 'left'}
-                ,{field: 'finDate', title: '明细时间', width: 130}
-                ,{field: 'finDetail', title: '完成明细'}
+                ,{field: 'fileName', title: '模板名称', width: 130}
+                ,{field: 'fileType', title: '模板类型'}
+                ,{field: 'fileSize', title: '模板大小'}
+                ,{field: 'uploadTime', title: '上传时间', width: 130}
+                ,{field: 'userId', title: '上传人', width: 130}
                 ,{field: '', title: '操作', width: 235, fixed: 'right', templet: '#rowToolbarTpl'}
             ]]
         }));
 
-        // 监听表格头部事件
-        table.on('toolbar(' + tableId + ')', function(obj){
-            var checkStatus = table.checkStatus(obj.config.id);
-            var checkData = checkStatus.data; // 得到选中的数据
-            switch(obj.event) {
-                case 'add':
-                    layer.open({
-                        type: 2
-                        ,title: '添加'
-                        ,content: BASE_WEB + 'zg/mattersDetail/edit'
-                        ,maxmin: true
-                        ,area: area   // 宽高
-                        ,btn: ['确定', '取消']
-                        ,yes: function(index, layero){
-                            //点击确认触发 iframe 内容中的按钮提交
-                            var submit = layero.find('iframe').contents().find("#kFormSubmit");
-                            submit.click();
-                        }
-                    });
-                    break;
+
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#kfileUpload' //绑定元素
+            ,url: BASE_WEB + 'zg/file/fileUpload'  //上传多文件接口
+            ,data: {type: 'template',relevanceCode:'template'}
+            ,accept: 'file'
+            ,done: function(r) {
+                //上传完毕回调
+                if (r.code === req.status.ok) {
+                    table.reload(tableId);
+                } else {
+                    kvfKit.errorMsg('上传失败：' + r.msg);
+                }
+            }
+            ,error: function(index, upload) {
+                //请求异常回调
+                kvfKit.errorMsg('上传失败');
             }
         });
-
         // 表格行按钮 监听事件
         table.on('tool(' + tableId + ')', function (obj) {
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
             var tr = obj.tr; //获得当前行 tr 的DOM对象
-
-            if (layEvent === 'edit') {
-                layer.open({
-                    type: 2
-                    ,title: '编辑'
-                    ,content: BASE_WEB + 'zg/mattersDetail/edit?id=' + data.id
-                    ,maxmin: true
-                    ,area: area   // 宽高
-                    ,btn: ['确定', '取消']
-                    ,yes: function(index, layero){
-                        //点击确认触发 iframe 内容中的按钮提交
-                        var submit = layero.find('iframe').contents().find("#kFormSubmit");
-                        submit.click();
-                    }
-                });
-            }
             if (layEvent === 'del') {
                 layer.confirm('确定删除吗？', function(index) {
                     //执行 Ajax 后重载
                     $.ajax({
                         type: req.type.post,
-                        url: BASE_WEB + 'zg/mattersDetail/del/' + data.id,
+                        url: BASE_WEB + 'zg/file/del',
+                        data:{id:data.id,fileAddrs:data.fileAddrs},
                         async: false,
                         success: function (r) {
                             if (r.code === req.status.ok) {
@@ -118,9 +117,11 @@
                     });
                 });
             }
+            if (layEvent === 'download') {
+                window.location.href = api.comm.download+"?filePath="+data.fileAddrs+"&fileName="+data.fileName;
+            }
+
         });
-
-
         // 监听查询
         form.on('submit(kTableSearchFilter)', function (obj) {
             renderTableData(obj.field);

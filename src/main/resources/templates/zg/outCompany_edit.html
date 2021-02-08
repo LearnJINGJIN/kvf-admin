@@ -39,6 +39,11 @@
         <input type="radio" name="imOutsource" value="1" title="否" th:checked="${editInfo.imOutsource==1}">
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red">*</span>是否驻场外包商</label>
+        <input type="radio" name="isOtc" value="0" title="是" th:checked="${editInfo.isOtc==0}">
+        <input type="radio" name="isOtc" value="1" title="否" th:checked="${editInfo.isOtc==1}">
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label"><span style="color: red">*</span>经营状态</label>
         <input type="radio" name="companyStatus" value="0" title="正常经营" th:checked="${editInfo.companyStatus==0}">
         <input type="radio" name="companyStatus" value="1" title="经营异常" th:checked="${editInfo.companyStatus==1}">
@@ -52,7 +57,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><span style="color: red">*</span>前5大股东</label>
         <div class="layui-input-block">
-            <textarea placeholder="请输入前5大股东" name="remarks" th:text="${editInfo.topShareholders}" lay-verify="required" class="layui-textarea"></textarea>
+            <textarea placeholder="请输入前5大股东" name="topShareholders" th:text="${editInfo.topShareholders}" lay-verify="required" class="layui-textarea"></textarea>
         </div>
     </div>
     <div class="layui-form-item">
@@ -81,7 +86,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><span style="color: red">*</span>公司地址</label>
         <div class="layui-input-block">
-            <textarea placeholder="请输入公司地址" name="remarks" th:text="${editInfo.companyAddr}" lay-verify="required" class="layui-textarea"></textarea>
+            <textarea placeholder="请输入公司地址" name="companyAddr" th:text="${editInfo.companyAddr}" lay-verify="required" class="layui-textarea"></textarea>
         </div>
     </div>
     <div class="layui-form-item">

@@ -23,11 +23,12 @@
         <result column="eff_qualification" property="effQualification" />
         <result column="pro_contents" property="proContents" />
         <result column="risk_audit" property="riskAudit" />
+        <result column="is_otc" property="isOtc" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-       id, company_name, company_code, company_addr, legal_person, company_status, company_size, im_outsource, create_id, create_date, update_id, update_date, remarks,reg_capital,top_shareholders,relationship,eff_qualification,pro_contents,risk_audit
+       id, company_name, company_code, company_addr, legal_person, company_status, company_size, im_outsource, create_id, create_date, update_id, update_date, remarks,reg_capital,top_shareholders,relationship,eff_qualification,pro_contents,risk_audit,is_otc
     </sql>
 
     <select id="selectOutCompanyList" resultType="com.kalvin.kvf.modules.zg.entity.OutCompany">

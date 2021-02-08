@@ -80,6 +80,15 @@
     <span class="layui-badge layui-bg-gray">未知</span>
     {{# } }}
 </script>
+<script type="text/html" id="isOtcTpl">
+    {{#  if(d.isOtc == 0){ }}
+    <span class="layui-badge layui-bg-blue">是</span>
+    {{#  } else if(d.isOtc == 1) { }}
+    <span class="layui-badge layui-bg-black">否</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
+</script>
 <!--表格列格式化模板 end-->
 
 <script type="text/javascript" th:inline="javascript">
@@ -97,7 +106,8 @@
                 {type:'checkbox', fixed: 'left'}
                 ,{field: 'companyName', title: '公司名称', width: 130}
                 ,{field: 'legalPerson', title: '法人代表', width: 130}
-                ,{field: 'imOutsource', title: '是否重要外包商', width: 130, templet: '#imOutsourceTpl'}
+                ,{field: 'imOutsource', title: '是否重要外包商',  templet: '#imOutsourceTpl'}
+                ,{field: 'isOtc', title: '是否驻场外包商',  templet: '#isOtcTpl'}
                 ,{field: 'companyCode', title: '社会统一征信代码'}
                 ,{field: 'companyStatus', title: '公司经营状态', width: 130, templet: '#companyStatusTpl'}
                 ,{field: 'companySize', title: '公司规模', width: 130}

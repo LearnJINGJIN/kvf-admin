@@ -47,11 +47,18 @@ public class ReportCompany extends BaseEntity {
      * 所属公司
      */
     private String companyName;
+    /**
+     * 尽职调查编码
+     */
+    private String reportCode;
+
 
     /**
-     * 风险等级
+     * 备注
      */
-    private String riskLevel;
+    private String remarks;
+
+
 
     /**
      * 创建人

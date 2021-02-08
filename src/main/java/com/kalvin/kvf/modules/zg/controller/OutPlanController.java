@@ -90,14 +90,11 @@ public class OutPlanController extends BaseController {
         mv.addObject("editInfo", mattersDetail);
         return mv;
     }
-    @PostMapping(value = "addDetail")
+    @PostMapping(value = "editDetail")
     public R addDetail(MattersDetail mattersDetail) {
-        mattersDetailService.save(mattersDetail);
+        mattersDetail.setUpdateUser(ShiroKit.getUserId());
+        mattersDetailService.updateById(mattersDetail);
         return R.ok();
-    }
-    @GetMapping("detail")
-    public ModelAndView detail() {
-        return new ModelAndView("zg/mattersDetail");
     }
     @GetMapping(value = "list/detailData")
     public R detailData(MattersDetail mattersDetail) {

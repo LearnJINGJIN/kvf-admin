@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kalvin.kvf.common.utils.SnowflakeIdWorker;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import com.kalvin.kvf.common.controller.BaseController;
@@ -29,11 +30,12 @@ public class PayContractController extends BaseController {
 
 
     @GetMapping("index")
-    public ModelAndView index() {
-        return new ModelAndView("zg/payContract");
+    public ModelAndView index(String contractNo) {
+        ModelAndView mv=new ModelAndView("zg/payContract");
+        mv.addObject("contractNo",contractNo);
+        return mv;
     }
-
-    @GetMapping(value = "edit")
+     @GetMapping(value = "edit")
     public ModelAndView edit(Long id,String contractNo) {
         ModelAndView mv = new ModelAndView("zg/payContract_edit");
         PayContract payContract;
@@ -56,6 +58,7 @@ public class PayContractController extends BaseController {
 
     @PostMapping(value = "add")
     public R add(PayContract payContract) {
+        payContract.getContractNo();
         payContractService.save(payContract);
         return R.ok();
     }

@@ -6,69 +6,48 @@
     <link th:replace="common/base::static"/>
 </head>
 <body>
-<form class="layui-form layui-form-pane" action="" style="padding:20px">
-
-    <div class="layui-form-item">
-        <label class="layui-form-label">所属公司</label>
-        <div class="layui-input-block">
-            <input type="text" id="companyName" name="companyName" th:value="${editInfo.companyName==null?'':editInfo.companyName}" lay-verify="required" placeholder="请输入所属公司id" autocomplete="off" class="layui-input">
+<div class="layui-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item layui-hide">
+         <div class="layui-input-block">
+            <input type="text" id="reportCode" name="reportCode" th:value="${editInfo.reportCode}"  class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">调查年度</label>
+        <label class="layui-form-label">公司名称</label>
         <div class="layui-input-block">
+            <input type="text" id="companyName"  th:value="${editInfo.companyName==null?'':editInfo.companyName}"  placeholder="请选择公司"    lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">调查年度</label>
+        <div class="layui-input-inline">
             <input type="text" name="reportYear" id="reportYear" th:value="${#strings.replace(editInfo.reportYear,'T',' ')}" placeholder="请输入创建时间" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">风险等级</label>
+         <label class="layui-form-label">备注</label>
         <div class="layui-input-block">
-            <input type="text" name="riskLevel" th:value="${editInfo.riskLevel}" lay-verify="required" placeholder="请输入风险等级" autocomplete="off" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item layui-hide">
-        <label class="layui-form-label">创建人</label>
-        <div class="layui-input-inline">
-            <input type="text" name="createUser" th:value="${editInfo.createUser}" placeholder="请输入创建人" autocomplete="off" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item layui-hide">
-        <label class="layui-form-label">创建时间</label>
-        <div class="layui-input-inline">
-            <input type="text" name="createDate" id="createDate" th:value="${#strings.replace(editInfo.createDate,'T',' ')}" placeholder="请输入创建时间" autocomplete="off" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item layui-hide">
-        <label class="layui-form-label">修改人</label>
-        <div class="layui-input-inline">
-            <input type="text" name="updateUser" th:value="${editInfo.updateUser}" placeholder="请输入修改人" autocomplete="off" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item layui-hide">
-        <label class="layui-form-label">修改时间</label>
-        <div class="layui-input-inline">
-            <input type="text" name="upateDate" id="upateDate" th:value="${#strings.replace(editInfo.upateDate,'T',' ')}" placeholder="请输入修改时间" autocomplete="off" class="layui-input">
+            <textarea placeholder="请输入备注"  name="remarks" th:text="${editInfo.remarks}"  class="layui-textarea"></textarea>
         </div>
     </div>
     <div class="layui-form-item layui-hide">
         <div class="layui-input-inline">
-            <input type="text" id="companyId" th:value="${editInfo.companyId==null?'':editInfo.companyId}" autocomplete="off" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item layui-hide">
-        <label class="layui-form-label">删除标识位0-正常 1-删除</label>
-        <div class="layui-input-block">
+            <input type="text" id="companyId" name="companyId" th:value="${editInfo.companyId==null?'':editInfo.companyId}" autocomplete="off" class="layui-input">
         </div>
     </div>
 
+    <div class="layui-card-body">
+        <button class="layui-btn  layui-btn-sm " id="kfileUpload">
+            <i class="layui-icon layui-icon-upload"></i>
+        </button>
+        <table id="kContentTable" lay-filter="kContentTable"></table>
+    </div>
     <div class="layui-form-item layui-hide">
         <input type="button" lay-submit="" lay-filter="kFormSubmit" id="kFormSubmit">
         <input type="text" name="id" th:value="${editInfo.id}" autocomplete="off" class="layui-input">
     </div>
-</form>
-
-<script th:replace="common/base::context"></script>
-<script th:replace="common/base::mainjs"></script>
+</div>
 <script type="text/html" id="companyStatusTpl">
     {{#  if(d.companyStatus == 0){ }}
     <span class="layui-badge layui-bg-blue">正常经营</span>
@@ -78,24 +57,24 @@
     <span class="layui-badge layui-bg-gray">未知</span>
     {{# } }}
 </script>
+<script type="text/html" id="rowToolbarTpl">
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><i class="layui-icon layui-icon-delete"></i></a>
+    <a class="layui-btn layui-btn-xs " lay-event="download"><i class="layui-icon layui-icon-download-circle"></i></a>
+</script>
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+
 <script>
-    layui.use(['form', 'laydate','tableSelect'], function () {
-        var $ = layui.$, form = layui.form, laydate = layui.laydate, tableSelect=layui.tableSelect;
-
-
-        laydate.render({
-            elem: '#createDate' // 指定元素
-            ,type: 'datetime'
-        });
-        laydate.render({
-            elem: '#upateDate' // 指定元素
-            ,type: 'datetime'
-        });
+    layui.use(['form','table', 'laydate','tableSelect','upload','soulTable'], function () {
+        var $ = layui.$, form = layui.form, laydate = layui.laydate,tableSelect=layui.tableSelect,
+            upload=layui.upload,table=layui.table,soulTable=layui.soulTable;
+        var tableId = 'kContentTable';
+        var reportCode=document.getElementById("reportCode").value;
         laydate.render({
             elem: '#reportYear' // 指定元素
             ,type: 'year'
+            ,trigger: 'click' //采用click弹出
         });
-
         tableSelect.render({
             elem: '#companyName',
             checkedKey: 'id',
@@ -120,7 +99,79 @@
                 //alert(JSON.stringify(data.data.realname))
             }
         });
+        // 实例化table
+        var tableIns = table.render($.extend(config.layui.table, {
+            elem: '#' + tableId
+            ,url: BASE_WEB + 'zg/file/list/data' // 数据接口
+            ,where:{relevanceCode:reportCode,type:'report'}
+            ,page:false
+            ,height: 200
+            ,cols: [
+                [ //表头
+                    {field: 'fileName', title: '文件名'}
+                    ,{field: 'fileSize', title: '文件大小'}
+                    ,{field: 'userName', title: '上传人'}
+                    ,{field: 'fileAddrs', hide:true}
+                    ,{field: 'uploadTime', title: '上传时间'}
+                    ,{field: '', title: '操作', templet: '#rowToolbarTpl'}
+                ]
+            ]
+            ,autoColumnWidth: {
+                init: true
+            }
+            ,done: function () {
+                soulTable.render(this)
+            }
+        }));
 
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#kfileUpload' //绑定元素
+            ,url: BASE_WEB + 'zg/file/fileUpload'  //上传多文件接口
+            ,data: {type: 'report',relevanceCode:reportCode}
+            ,accept: 'file'
+            ,done: function(r) {
+                //上传完毕回调
+                if (r.code === req.status.ok) {
+                    table.reload(tableId);
+                } else {
+                    kvfKit.errorMsg('上传失败：' + r.msg);
+                }
+            }
+            ,error: function(index, upload) {
+                //请求异常回调
+                kvfKit.errorMsg('上传失败');
+            }
+        });
+        // 表格行按钮 监听事件
+        table.on('tool(' + tableId + ')', function (obj) {
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+            if (layEvent === 'del') {
+                layer.confirm('确定删除吗？', function(index) {
+                    //执行 Ajax 后重载
+                    $.ajax({
+                        type: req.type.post,
+                        url: BASE_WEB + 'zg/file/del',
+                        data:{id:data.id,fileAddrs:data.fileAddrs},
+                        async: false,
+                        success: function (r) {
+                            if (r.code === req.status.ok) {
+                                table.reload(tableId);
+                                kvfKit.sucessMsg('已删除');
+                            } else {
+                                kvfKit.errorMsg(r.msg);
+                            }
+                        }
+                    });
+                });
+            }
+            if (layEvent === 'download') {
+                window.location.href = api.comm.download+"?filePath="+data.fileAddrs+"&fileName="+data.fileName;
+            }
+
+        });
         //监听提交
         form.on('submit(kFormSubmit)', function(data){
             var field = data.field; //获取提交的字段

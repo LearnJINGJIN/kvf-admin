@@ -9,6 +9,8 @@ public enum UploadPathEnum {
     IMAGE_PATH("image", "image"), // 默认图片路径
     JOB_PATH("job", "job"), // 默认任务文件路径
     CONTRACT_PATH("contract", "contract"), // 默认合同文件路径
+    TEMPLATE_PATH("template", "template"), // 模板文件路径
+    REPORT_PATH("report", "report"), // 尽职调查文件路径
     PAY_PATH("pay", "pay"), // 默认付款文件路径
     DOC_PATH("doc", "doc"),     // 默认文档路径
     HEAD_PATH("avatar", "avatar"),  // 默认用户头像路径

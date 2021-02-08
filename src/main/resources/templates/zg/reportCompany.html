@@ -17,12 +17,17 @@
                         <div class="layui-form layui-card-header kvf-card-header-auto">
                             <div class="layui-form-item">
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">所属公司id</label>
+                                    <label class="layui-form-label">所属公司</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="companyId" placeholder="请输入所属公司id" autocomplete="off" class="layui-input">
+                                        <input type="text" name="companyName" placeholder="请输入所属公司" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
-
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">调查年度</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  id="reportYear" name="reportYear"  placeholder="请选择时间" autocomplete="off" class="layui-input">
+                                    </div>
+                                 </div>
                                 <div class="layui-inline">
                                     <button class="layui-btn " lay-submit="" lay-filter="kTableSearchFilter">
                                         <i class="layui-icon layui-icon-search"></i>
@@ -67,7 +72,11 @@
         var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, laydate = layui.laydate;
         var tableId = 'kContentTable';
         var area = ['66%', '95%'];
-
+        laydate.render({
+            elem: '#reportYear' // 指定元素
+            ,type: 'year'     //年选择器
+            ,trigger: 'click' //采用click弹出
+        });
         // 实例化table
         var tableIns = table.render($.extend(config.layui.table, {
             elem: '#' + tableId
@@ -77,9 +86,8 @@
                 {type:'checkbox', fixed: 'left'}
                 ,{field: 'companyName', title: '所属公司', filter: true}
                 ,{field: 'reportYear', title: '调查年度', sort: true, width: 130}
-                ,{field: 'riskLevel', title: '风险等级', width: 130}
-                // ,{field: 'createUser', title: '创建人', width: 130}
-                ,{field: '', title: '操作', width: 235, fixed: 'right', templet: '#rowToolbarTpl'}
+                ,{field: 'remarks', title: '备注', width: 200}
+                  ,{field: '', title: '操作', width: 235, fixed: 'right', templet: '#rowToolbarTpl'}
             ]]
         }));
 

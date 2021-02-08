@@ -27,10 +27,14 @@
     </sql>
 
     <select id="selectOutPersonList" resultType="com.kalvin.kvf.modules.zg.entity.OutPerson">
-        select <include refid="Base_Column_List" /> from zg_out_person t left join zg_out_company a on a.id=t.company_id
+        select <include refid="Base_Column_List" /> from zg_out_person t
+        left join zg_out_company a on a.id=t.company_id
         <trim prefix="where" prefixOverrides="and">
             <if test="outPerson.name != null and outPerson.name != ''">
-                and name like concat(#{outPerson.name}, "%")
+                and t.name like concat(#{outPerson.name}, "%")
+            </if>
+            <if test="outPerson.companyName != null and outPerson.companyName != ''">
+                and a.company_name like concat(#{outPerson.companyName}, "%")
             </if>
         </trim>
     </select>

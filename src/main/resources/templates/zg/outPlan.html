@@ -88,7 +88,7 @@
     layui.use(['element', 'form', 'layer', 'table', 'laydate','soulTable'], function () {
         var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, laydate = layui.laydate,soulTable=layui.soulTable;
         var tableId = 'kContentTable';
-        var area = ['780px', '95%'];
+        var area = ['65%', '95%'];
         laydate.render({
             elem: '#planYear' // 指定元素
             ,type: 'year'     //年选择器
@@ -227,14 +227,12 @@
                 layer.open({
                     type: 2
                     ,title: '推进明细'
-                    ,content: BASE_WEB + 'zg/outPlan/detail?id=' + data.id
+                    ,content:  BASE_WEB + 'zg/mattersDetail/index?planId=' + data.id
                     ,maxmin: true
-                    ,area: area   // 宽高
-                    ,btn: ['取消']
-                    ,yes: function(index, layero){
-                        //点击确认触发 iframe 内容中的按钮提交
-                        var submit = layero.find('iframe').contents().find("#kFormSubmit");
-                        submit.click();
+                    ,area: ['100%', '100%']   // 宽高
+                    ,btn: false
+                    ,yes: function(){
+                        layer.closeAll();
                     }
                 });
             }

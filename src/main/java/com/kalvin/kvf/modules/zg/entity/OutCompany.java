@@ -64,6 +64,10 @@ public class OutCompany extends BaseEntity {
      * 是否重要外包商
      */
     private Integer imOutsource;
+    /**
+     * 是否重要外包商
+     */
+    private Integer isOtc;
 
     /**
      * 创建人

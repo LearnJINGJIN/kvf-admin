@@ -45,28 +45,28 @@
         left join sys_user c on c.id=t.a_person
         <trim prefix="where" prefixOverrides="and">
             <if test="outsourceContract.proId != null">
-                and pro_id = #{outsourceContract.proId}
+                and t.pro_id = #{outsourceContract.proId}
             </if>
-            <if test="outsourceContract.contractNo != null">
-                and contract_no = #{outsourceContract.contractNo}
+            <if test="outsourceContract.contractNo != null and outsourceContract.contractNo != ''">
+                and t.contract_no = #{outsourceContract.contractNo}
             </if>
             <if test="outsourceContract.contractName != null and outsourceContract.contractName != ''">
-                and contract_name like concat(#{outsourceContract.contractName}, "%")
+                and t.contract_name like concat(#{outsourceContract.contractName}, "%")
             </if>
             <if test="outsourceContract.contractType != null">
-                and contract_type = #{outsourceContract.contractType}
+                and t.contract_type = #{outsourceContract.contractType}
             </if>
             <if test="outsourceContract.payTerms != null">
-                and pay_terms = #{outsourceContract.payTerms}
+                and t.pay_terms = #{outsourceContract.payTerms}
             </if>
             <if test="outsourceContract.signDate != null">
-                and sign_date = #{outsourceContract.signDate}
+                and t.sign_date = #{outsourceContract.signDate}
             </if>
             <if test="outsourceContract.endDate != null">
-                and end_date = #{outsourceContract.endDate}
+                and t.end_date = #{outsourceContract.endDate}
             </if>
             <if test="outsourceContract.amount != null">
-                and amount = #{outsourceContract.amount}
+                and t.amount = #{outsourceContract.amount}
             </if>
 
         </trim>

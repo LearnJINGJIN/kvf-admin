@@ -15,6 +15,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 
 /**
@@ -29,7 +30,11 @@ public class FileController extends BaseController {
 
     @Autowired
     private FileService fileService;
-
+    @RequiresPermissions("zg:file:index")
+    @GetMapping("index")
+    public ModelAndView index() {
+        return new ModelAndView("zg/file");
+    }
 
     @GetMapping(value = "list/data")
     public R listData(File file) {

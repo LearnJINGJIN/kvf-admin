@@ -2,6 +2,7 @@ package com.kalvin.kvf.modules.zg.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kalvin.kvf.common.utils.ShiroKit;
+import com.kalvin.kvf.common.utils.SnowflakeIdWorker;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +40,7 @@ public class ReportCompanyController extends BaseController {
         ReportCompany reportCompany;
         if (id == null) {
             reportCompany = new ReportCompany();
+            reportCompany.setReportCode("report"+ SnowflakeIdWorker.generateId());
         } else {
             reportCompany = reportCompanyService.getInfoById(id);
         }
