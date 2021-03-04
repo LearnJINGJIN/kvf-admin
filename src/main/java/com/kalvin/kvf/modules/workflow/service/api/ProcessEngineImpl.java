@@ -7,11 +7,14 @@ import com.kalvin.kvf.common.utils.ShiroKit;
 import com.kalvin.kvf.modules.workflow.dto.FlowData;
 import com.kalvin.kvf.modules.workflow.dto.NodeAssignee;
 import com.kalvin.kvf.modules.workflow.dto.ProcessNode;
+import com.kalvin.kvf.modules.workflow.entity.Form;
 import com.kalvin.kvf.modules.workflow.entity.ProcessForm;
 import com.kalvin.kvf.modules.workflow.service.FormService;
 import com.kalvin.kvf.modules.workflow.service.ProcessFormService;
 import com.kalvin.kvf.modules.workflow.utils.ProcessKit;
 import com.kalvin.kvf.modules.workflow.vo.FormConfigVO;
+import com.kalvin.kvf.modules.zg.entity.OutOtc;
+import com.kalvin.kvf.modules.zg.service.OutOtcService;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.bpmn.model.FlowElement;
 import org.activiti.bpmn.model.UserTask;
@@ -25,8 +28,10 @@ import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -58,7 +63,8 @@ public class ProcessEngineImpl implements IProcessEngine {
 
     @Resource
     private ProcessFormService processFormService;
-
+    @Autowired
+    private IAutoProcessForm autoProcessForm;
     @Override
     public String start(String deploymentId) {
         return this.start(deploymentId, null, null);
@@ -87,13 +93,89 @@ public class ProcessEngineImpl implements IProcessEngine {
         if (processForm == null) {
             throw new KvfException("该流程未关联绑定流程表单，无法使用");
         }
-
+        if("FA".equals(processForm.getFormCode().substring(0,2))){
+            throw new KvfException("自定义表单流程，请前往对应功能发起!");
+        }
         flowData.setMainFormKey(processForm.getFormCode());
         flowData.setStartUser(startUser);
         flowData.setCurrentUser(startUser);
         flowData.setFirstNode(true);
         flowData.setFirstSubmit(true);
         flowData.setNextUser(startUser);
+        taskVariables.put(ProcessKit.FLOW_DATA_KEY, flowData);
+
+        // 设置当前任务的办理人  // TODO: 2020/4/22 不知是否有用？
+        Authentication.setAuthenticatedUserId(startUser);
+         ProcessDefinition processDefinition = ProcessKit.getProcessDefinition(deploymentId);
+        if (processDefinition.isSuspended()) {
+            throw new KvfException("该流程已被挂起，无法使用，请激活后使用");
+        }
+        String processDefinitionId = processDefinition.getId();
+
+        ProcessInstance processInstance;
+        if (StrUtil.isBlank(businessId)) {
+            processInstance =  runtimeService.startProcessInstanceById(processDefinitionId, taskVariables);
+        } else {
+            // TODO: 2020/4/22 使用业务表启动流程
+            processInstance =  runtimeService.startProcessInstanceById(processDefinitionId, businessId, taskVariables);
+        }
+
+        // 设置流程启动后的相关核心变量
+        String processName = processDefinition.getName();
+        String processInstanceId = processInstance.getProcessInstanceId();
+        Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
+        String taskId = task.getId();
+
+        // 设置流程实例名称
+        runtimeService.setProcessInstanceName(processInstanceId, processName);
+
+        flowData.setProcessName(processName);
+        flowData.setProcessDefinitionId(processDefinitionId);
+        flowData.setProcessInstanceId(processInstanceId);
+        flowData.setFirstNodeId(task.getTaskDefinitionKey());
+        flowData.setCurrentNodeId(task.getTaskDefinitionKey());
+        flowData.setCurrentNodeName(task.getName());
+        flowData.setTaskId(taskId);
+        flowData.setExecutionId(task.getExecutionId());
+        // 储存流程核心流转变量
+        taskVariables.put(ProcessKit.FLOW_DATA_KEY, flowData);
+        // 储存流程表单流转数据
+        taskVariables.put(ProcessKit.FLOW_VARIABLES_KEY, new HashMap<>());
+        taskService.setVariables(taskId, taskVariables);
+        log.debug("用户【{}】启动流程【{}】实例【{}】", startUser, processName, processInstance.getId());
+        return taskId;
+    }
+    @Override
+    public String businessStart(String formCode, String businessId, String startUser) {
+        // 流程流转任务变量集合
+        final HashMap<String, Object> taskVariables = new HashMap<>();
+        final FlowData flowData = new FlowData();
+        Form form=formService.getByCode(formCode);
+        String deploymentId=form.getDeploymentId();
+        if (StrUtil.isBlank(deploymentId)) {
+            throw new KvfException("流程发布ID不允许为空");
+        }
+        if (StrUtil.isBlank(form.getFormAddrs())) {
+            throw new KvfException("关联表单不能为空");
+        }
+        if (StrUtil.isBlank(startUser)) {
+            // 获取当前登录用户
+            startUser = ShiroKit.getUser().getUsername();
+        }
+
+        ProcessForm processForm = processFormService.getByModelId(ProcessKit.getModel(deploymentId).getId());
+        if (processForm == null) {
+            throw new KvfException("该流程未关联绑定流程表单，无法使用");
+        }
+
+        flowData.setMainFormKey(processForm.getFormCode());
+        flowData.setFormKey(processForm.getFormAddrs());//设置自定义表单
+        flowData.setStartUser(startUser);
+        flowData.setCurrentUser(startUser);
+        flowData.setFirstNode(true);
+        flowData.setFirstSubmit(true);
+        flowData.setNextUser(startUser);
+        flowData.setFormKey(form.getFormAddrs());
         taskVariables.put(ProcessKit.FLOW_DATA_KEY, flowData);
 
         // 设置当前任务的办理人  // TODO: 2020/4/22 不知是否有用？
@@ -136,6 +218,14 @@ public class ProcessEngineImpl implements IProcessEngine {
         taskVariables.put(ProcessKit.FLOW_VARIABLES_KEY, new HashMap<>());
         taskService.setVariables(taskId, taskVariables);
         log.debug("用户【{}】启动流程【{}】实例【{}】", startUser, processName, processInstance.getId());
+        switch(form.getFormAddrs()){
+            case "zg/workflow/personApplyFlow":
+                OutOtc outOtc=new OutOtc();
+                outOtc.setId(Long.parseLong(businessId));
+                outOtc.setProcessInstanceId(processInstanceId);
+                autoProcessForm.updateOtcById(outOtc);
+                break;
+        }
         return taskId;
     }
 
@@ -145,7 +235,7 @@ public class ProcessEngineImpl implements IProcessEngine {
         final String currentUser = ShiroKit.getUser().getUsername();
         final FlowData flowData = new FlowData();
         BeanUtil.copyProperties(flowVariables, flowData);
-
+        //nextNodeNum
         // 下一节点审批人
         final String nextUser = flowData.getNextUser();
         final String comment = StrUtil.isBlank(flowData.getComment()) ? ProcessKit.DEFAULT_AGREE_COMMENT : flowData.getComment();
@@ -201,6 +291,28 @@ public class ProcessEngineImpl implements IProcessEngine {
 
             // 正式提交任务
             taskService.complete(taskId, variables);
+            if(StrUtil.isNotBlank(nextUser)&&flowData.getFormKey()!=null){
+                String formAddrs=flowData.getFormKey();
+                switch(formAddrs){
+                    case "zg/workflow/personApplyFlow":
+                        OutOtc outOtc=new OutOtc();
+                        outOtc.setId(Long.parseLong(flowVariables.get("id").toString()));
+                        outOtc.setProcessStatus(1);
+                        autoProcessForm.updateOtcById(outOtc);
+                        break;
+                }
+            }
+            if(StrUtil.isBlank(nextUser)&&flowData.getFormKey()!=null){
+                String formAddrs=flowData.getFormKey();
+                switch(formAddrs){
+                    case "zg/workflow/personApplyFlow":
+                        OutOtc outOtc=new OutOtc();
+                        outOtc.setId(Long.parseLong(flowVariables.get("id").toString()));
+                        outOtc.setProcessStatus(2);
+                        autoProcessForm.updateOtcById(outOtc);
+                        break;
+                }
+            }
         } else if (nextNodeNum > 1) {
             ProcessKit.nodeJumpTo(taskId, flowData.getTargetNodeId(), currentUser, variables, comment);
         } else {
@@ -308,19 +420,39 @@ public class ProcessEngineImpl implements IProcessEngine {
          */
         final String formKey = flowData.getMainFormKey();
         final String processDefinitionId = flowData.getProcessDefinitionId();
+        final String processInstanceId = flowData.getProcessInstanceId();
         final String currentNodeId = currentTask.getTaskDefinitionKey();
         final String currentExecutionId = currentTask.getExecutionId();
         final String currentNodeName = currentTask.getName();
-
-        // 获取当前流程表单的配置数据
-        FormConfigVO formConfig;
-        try {
-            formConfig = formService.getFormConfig(formKey, flowVariables);
-        } catch (Exception e) {
-            // TODO: 获取表单出错，表单配置数据被删除等
-            return null;
+        Form form=formService.getByCode(formKey);
+        if (form == null) {
+            throw new KvfException("异常：form为空");
         }
-
+        //如果是自定义表单，则读取自定义表单数据
+         if (form.getType()==2){
+            if(StringUtils.isEmpty(form.getFormAddrs())){
+                throw new KvfException("异常：未配置对应表单!");
+            }
+            String formAddrs=form.getFormAddrs();
+            flowData.setFormKey(formAddrs);
+            hashMap.put(ProcessKit.FORM_FORM_KEY, formAddrs);
+            //流程配置
+            switch(formAddrs){
+                case "zg/workflow/personApplyFlow":
+                    hashMap.put(ProcessKit.FORM_CONFIG_KEY, autoProcessForm.getOutOtcFormConfig(processInstanceId));
+                    break;
+             }
+         }else{
+            // 获取当前流程表单的配置数据
+            FormConfigVO formConfig;
+            try {
+                formConfig = formService.getFormConfig(formKey, flowVariables);
+            } catch (Exception e) {
+                // TODO: 获取表单出错，表单配置数据被删除等
+                return null;
+            }
+            hashMap.put(ProcessKit.FORM_CONFIG_KEY, formConfig);
+        }
         /*
          * 更新任务流转核心数据变量【FlowData】
          */
@@ -335,7 +467,7 @@ public class ProcessEngineImpl implements IProcessEngine {
         flowData.setExecutionId(currentExecutionId);
 
         hashMap.put(ProcessKit.FLOW_DATA_KEY, flowData);
-        hashMap.put(ProcessKit.FORM_CONFIG_KEY, formConfig);
+
 
         // 设置下一步路由出口用户任务节点集
         List<UserTask> nextUserTask = ProcessKit.getNextNode(processDefinitionId, currentNodeId, flowVariables);
@@ -366,19 +498,31 @@ public class ProcessEngineImpl implements IProcessEngine {
          * 如果在流转过程中把流程绑定的表单移除掉或者更换了表单，它不会使当前流程实例生效。依旧使用的是启动时绑定的表单
          */
         final String formKey = flowData.getMainFormKey();
-
-        // 获取当前流程表单的配置数据
-        FormConfigVO formConfig;
-        try {
-            formConfig = formService.getFormConfig(formKey, flowVariables);
-        } catch (Exception e) {
-            // TODO: 获取表单出错，表单配置数据被删除等
-            return null;
+        if("FA".equals(flowData.getMainFormKey().substring(0,2))){
+            if(StringUtils.isEmpty(flowData.getFormKey())){
+                throw new KvfException("异常：流程配置表单被删除!");
+            }
+            String formAddrs=flowData.getFormKey();
+            flowData.setFormKey(formAddrs);
+            hashMap.put(ProcessKit.FORM_FORM_KEY, formAddrs);
+            //流程配置
+            switch(formAddrs){
+                case "zg/workflow/personApplyFlow":
+                    hashMap.put(ProcessKit.FORM_CONFIG_KEY, autoProcessForm.getOutOtcFormConfig(processInstanceId));
+                    break;
+            }
+        }else{
+            // 获取当前流程表单的配置数据
+            FormConfigVO formConfig;
+            try {
+                formConfig = formService.getFormConfig(formKey, flowVariables);
+            } catch (Exception e) {
+                // TODO: 获取表单出错，表单配置数据被删除等
+                return null;
+            }
+            hashMap.put(ProcessKit.FORM_CONFIG_KEY, formConfig);
         }
-
         hashMap.put(ProcessKit.FLOW_DATA_KEY, flowData);
-        hashMap.put(ProcessKit.FORM_CONFIG_KEY, formConfig);
-
         log.debug("his hashMap={}", hashMap);
         return hashMap;
     }

@@ -6,6 +6,8 @@
     <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.OutOtc">
         <id column="id" property="id" />
         <result column="person_id" property="personId" />
+        <result column="process_instance_id" property="processInstanceId" />
+        <result column="process_status" property="processStatus" />
         <result column="contract_no" property="contractNo" />
         <result column="outsource_type" property="outsourceType" />
         <result column="person_month" property="personMonth" />
@@ -16,6 +18,13 @@
         <result column="pend_pay" property="pendPay" />
         <result column="status" property="status" />
         <result column="remarks" property="remarks" />
+        <result column="out_role" property="outRole" />
+        <result column="bank_person" property="bankPerson" />
+        <result column="bank_name" property="bankName" />
+        <result column="birth_date" property="birthDate" />
+        <result column="document_type" property="documentType" />
+        <result column="id_number" property="idNumber" />
+        <result column="company_name" property="companyName" />
         <result column="person_name" property="personName" />
         <result column="create_user" property="createUser" />
         <result column="create_date" property="createDate" />
@@ -26,12 +35,13 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-       t.id, t.person_id, t.contract_no,t.outsource_type,t.person_month, t.start_date, t.plan_date, t.unit_price, t.have_pay, t.pend_pay, t.status, t.remarks, t.create_user, t.create_date, t.update_user, t.update_date, t.dr, a.name as person_name
+       t.id, t.person_id, t.process_instance_id,t.process_status,t.bank_person,t.contract_no,t.outsource_type,t.person_month, t.start_date, t.plan_date, t.unit_price, t.have_pay, t.pend_pay, t.status, t.out_role,t.remarks, t.create_user, t.create_date, t.update_user, t.update_date, t.dr, a.name as person_name,b.realname as bank_name
     </sql>
 
     <select id="selectOutOtcList" resultType="com.kalvin.kvf.modules.zg.entity.OutOtc">
         select <include refid="Base_Column_List" /> from zg_out_otc t
         left join zg_out_person a on a.id=t.person_id
+        left join sys_user b on b.id=t.bank_person
         <trim prefix="where" prefixOverrides="and">
             <if test="outOtc.personId != null">
                 and person_id = #{outOtc.personId}
@@ -42,6 +52,47 @@
     <select id="selectInfoById" resultType="com.kalvin.kvf.modules.zg.entity.OutOtc">
         select <include refid="Base_Column_List" /> from zg_out_otc t
         left join zg_out_person a on a.id=t.person_id
+        left join sys_user b on b.id=t.bank_person
         where t.id=#{id}
+    </select>
+    <select id="selectInfoByProcess" resultType="com.kalvin.kvf.modules.zg.entity.OutOtc">
+       SELECT
+        t.id,
+        t.person_id,
+        t.process_instance_id,
+        t.process_status,
+        t.contract_no,
+        t.outsource_type,
+        t.person_month,
+        t.start_date,
+        t.plan_date,
+        t.unit_price,
+        t.have_pay,
+        t.pend_pay,
+        t. STATUS,
+        t.out_role,
+        t.bank_person,
+        t.remarks,
+        t.create_user,
+        t.create_date,
+        t.update_user,
+        t.update_date,
+        t.dr,
+        a. NAME AS person_name,
+        a.sex,
+        a.birth_date,
+        a.phone,
+        a.email,
+        a.document_type,
+        a.id_number,
+        c.company_name,
+        b.realname as bank_name
+    FROM
+        zg_out_otc t
+    LEFT JOIN zg_out_person a ON a.id = t.person_id
+    left join sys_user b on b.id=t.bank_person
+    left join zg_out_company c on c.id=a.company_id
+    WHERE
+        t.process_instance_id = #{processInstanceId}
     </select>
 </mapper>

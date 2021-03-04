@@ -7,6 +7,7 @@
         <id column="id" property="id" />
         <result column="model_id" property="modelId" />
         <result column="form_code" property="formCode" />
+        <result column="form_addrs" property="formAddrs" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -24,6 +25,11 @@
                 and form_code like concat(#{processForm.formCode}, "%")
             </if>
         </trim>
+    </select>
+    <select id="selectFormKeybyModelId" resultType="com.kalvin.kvf.modules.workflow.entity.ProcessForm">
+        select t.id, t.model_id, t.form_code,a.form_addrs from wf_process_form t
+        left join wf_form a on a.code=t.form_code
+        where t.model_id=#{modelId}
     </select>
 
 </mapper>

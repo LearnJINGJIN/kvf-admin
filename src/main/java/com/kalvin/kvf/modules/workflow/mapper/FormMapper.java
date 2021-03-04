@@ -23,4 +23,10 @@ public interface FormMapper extends BaseMapper<Form> {
      */
     List<Form> selectFormList(@Param("form") Form form, IPage page);
 
+    /**
+     * 根据表单查询对应form
+     * @param code
+     * @return
+     */
+    Form  selectFormByCode(@Param("code")String code);
 }

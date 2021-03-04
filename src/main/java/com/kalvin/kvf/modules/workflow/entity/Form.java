@@ -54,6 +54,10 @@ public class Form extends BaseEntity {
      * 表单设计数据。
      */
     private String designData;
+    /**
+     * 自定义表单地址。
+     */
+    private String formAddrs;
 
     /**
      * 表单js代码。仅当复杂表单才有
@@ -71,5 +75,8 @@ public class Form extends BaseEntity {
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
-
+    /**
+     * 流程发布id
+     */
+    private String deploymentId;
 }

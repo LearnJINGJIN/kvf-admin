@@ -9,15 +9,16 @@
         <result column="name" property="name" />
         <result column="type" property="type" />
         <result column="theme" property="theme" />
+        <result column="form_addrs" property="formAddrs" />
         <result column="design_data" property="designData" />
         <result column="js_code" property="jsCode" />
-        <result column="create_time" property="createTime" />
+         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-       id, code, name, type, theme, design_data, js_code, create_time, update_time
+       id, code, name, type, theme,form_addrs, design_data, js_code, create_time, update_time
     </sql>
 
     <select id="selectFormList" resultType="com.kalvin.kvf.modules.workflow.entity.Form">
@@ -31,6 +32,25 @@
             </if>
         </trim>
         order by create_time desc
+    </select>
+    <select id="selectFormByCode" resultType="com.kalvin.kvf.modules.workflow.entity.Form">
+        SELECT
+        t.id,
+        t. CODE,
+        t. NAME,
+        t.type,
+        t.theme,
+        t.form_addrs,
+        t.design_data,
+        t.js_code,
+        t.create_time,
+        t.update_time,
+        c.DEPLOYMENT_ID_ as deployment_id
+        FROM
+        wf_form t
+        LEFT JOIN (select a.form_code,b.DEPLOYMENT_ID_ from wf_process_form a left join act_re_model b on b.id_=a.model_id)  c ON c.form_code = t.CODE
+        WHERE
+        t. CODE = #{code}
     </select>
 
 </mapper>

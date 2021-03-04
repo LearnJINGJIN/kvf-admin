@@ -82,7 +82,23 @@
             <input type="radio" name="status" value="1" title="离场" th:checked="${editInfo.status==1}">
         </div>
     </div>
-
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red">*</span>行方对接人员</label>
+        <div class="layui-input-inline">
+            <input type="text" id="bankName" th:value="${editInfo.bankName==null?'':editInfo.bankName}" lay-verify="required" placeholder="请选择行方对接人员" autocomplete="off" class="layui-input">
+        </div>
+     </div>
+    <div class="layui-form-item layui-hide">
+         <div class="layui-input-inline">
+            <input type="text" id="bankPerson" name="bankPerson" th:value="${editInfo.bankPerson==null?'':editInfo.bankPerson}"   autocomplete="off" class="layui-input">
+        </div>
+     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">本次外包任务中担任角色</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入角色" name="outRole" th:text="${editInfo.outRole}"  class="layui-textarea"></textarea>
+        </div>
+    </div>
     <div class="layui-form-item">
         <label class="layui-form-label">备注</label>
         <div class="layui-input-block">
@@ -94,6 +110,11 @@
     <div class="layui-form-item layui-hide">
         <div class="layui-input-inline">
             <input type="text" id="personId" name="personId" th:value="${editInfo.personId==null?'':editInfo.personId}" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <div class="layui-input-inline">
+            <input type="text"  name="processStatus" th:value="${editInfo.processStatus==null?'':editInfo.processStatus}" autocomplete="off" class="layui-input">
         </div>
     </div>
 
@@ -133,7 +154,17 @@
     <span class="layui-badge layui-bg-gray">未知</span>
     {{# } }}
 </script>
-
+<script type="text/html" id="deptTpl">
+    {{# var data = kvfKit.get(api.sys.getDept + d.deptId).data; }}
+    {{# return data ? data.name : '<span class="layui-badge-rim">未分配</span>'; }}
+</script>
+<script type="text/html" id="statusTpl">
+    {{#  if(d.status == 0){ }}
+    <span class="layui-badge layui-bg-green">正常</span>
+    {{#  } else { }}
+    <span class="layui-badge">禁用</span>
+    {{# } }}
+</script>
 <script>
     layui.use(['form', 'laydate', 'tableSelect'], function () {
         var $ = layui.$, form = layui.form, laydate = layui.laydate, tableSelect = layui.tableSelect;
@@ -156,7 +187,6 @@
                         { type: 'radio' }
                         ,{field: 'id', title: 'id', hide:true}
                         ,{field: 'name', title: '姓名', width: 130}
-                        ,{field: 'age', title: '年龄'}
                         ,{field: 'sex', title: '性别', width: 130, templet: '#sexTpl'}
                         ,{field: 'rating', title: '职务类型', width: 130, templet: '#ratingTpl'}
                         ,{field: 'isStatus', title: '是否驻场', width: 130, templet: '#isStatusTpl'}
@@ -171,13 +201,36 @@
                 //alert(JSON.stringify(data.data.realname))
             }
         });
-
+        tableSelect.render({
+            elem: '#bankName',
+            checkedKey: 'id',
+            table: {
+                url: api.sys.userListData ,
+                cols: [
+                    [
+                        { type: 'radio' }
+                        ,{field: 'id', title: 'id', hide:true}
+                        ,{field: 'realname', title: '姓名', width:100}
+                        ,{field: 'deptId', title: '所属部门', sort: true, templet: '#deptTpl'}
+                        ,{field: 'status', title: '用户状态', align: 'center', sort: true, templet: '#statusTpl', width: 100}
+                    ]
+                ]
+            },
+            done: function (elem, data) {
+                layui.each(data.data, function (index, item) {
+                    elem.val(item.realname);
+                    $('#bankPerson').val(item.id);
+                })
+             }
+        });
 
         //监听提交
         form.on('submit(kFormSubmit)', function(data){
             var field = data.field; //获取提交的字段
             var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-
+            if(field.processStatus!=0){
+                return  kvfKit.errorMsg("只能修改未提交的数据!");
+            }
             var url = field.id ? 'zg/outOtc/edit' : 'zg/outOtc/add';
             //提交 Ajax 成功后，关闭当前弹层并重载表格
             $.ajax({

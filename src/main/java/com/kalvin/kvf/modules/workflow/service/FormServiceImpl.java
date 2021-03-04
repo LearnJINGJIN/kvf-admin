@@ -2,9 +2,6 @@ package com.kalvin.kvf.modules.workflow.service;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kalvin.kvf.common.exception.KvfException;
@@ -17,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +41,8 @@ public class FormServiceImpl extends ServiceImpl<FormMapper, Form> implements Fo
             code = KeyGenKit.getKey("FS_");
         } else if (Constant.FORM_TYPE_COMPLEX == form.getType()) {
             code = KeyGenKit.getKey("FC_");
+        } else if (Constant.FORM_TYPE_AUTO == form.getType()) {
+            code = KeyGenKit.getKey("FA_");
         } else {
             throw new KvfException("无效的表单类型：" + form.getType());
         }
@@ -128,7 +126,7 @@ public class FormServiceImpl extends ServiceImpl<FormMapper, Form> implements Fo
 
     @Override
     public Form getByCode(String code) {
-        return super.getOne(new LambdaQueryWrapper<Form>().eq(Form::getCode, code));
+        return baseMapper.selectFormByCode(code);
     }
 
 }

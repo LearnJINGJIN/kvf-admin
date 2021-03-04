@@ -7,6 +7,7 @@ import com.kalvin.kvf.common.exception.KvfException;
 import com.kalvin.kvf.common.utils.HttpServletContextKit;
 import com.kalvin.kvf.common.utils.ShiroKit;
 import com.kalvin.kvf.modules.workflow.dto.ProcessQuery;
+import com.kalvin.kvf.modules.workflow.entity.Form;
 import com.kalvin.kvf.modules.workflow.entity.ProcessForm;
 import com.kalvin.kvf.modules.workflow.service.FormService;
 import com.kalvin.kvf.modules.workflow.service.IWorkFlowService;
@@ -103,8 +104,12 @@ public class WorkflowController {
         ModelAndView mv = new ModelAndView("workflow/approve");
         Map<String, Object> currentUserTaskVariables = processEngine.getCurrentUserTaskVariables(taskId);
         if (currentUserTaskVariables != null) {
-            mv.addObject("formConfig", ProcessKit.getFormConfig(currentUserTaskVariables));
-            mv.addObject("flowData", ProcessKit.getFlowData(currentUserTaskVariables));
+            if(currentUserTaskVariables.get(ProcessKit.FORM_FORM_KEY)!=null){
+                 mv.addObject("formConfig", currentUserTaskVariables.get(ProcessKit.FORM_CONFIG_KEY));
+            }else{
+                 mv.addObject("formConfig", ProcessKit.getFormConfig(currentUserTaskVariables));
+            }
+             mv.addObject("flowData", ProcessKit.getFlowData(currentUserTaskVariables));
         } else {
             // TODO: 跳转其它页面
         }
@@ -127,10 +132,16 @@ public class WorkflowController {
      */
     @GetMapping(value = "task/{taskId}/form")
     public ModelAndView taskForm(@PathVariable String taskId) {
-        ModelAndView mv = new ModelAndView("workflow/common/base_wfform");
         Map<String, Object> currentUserTaskVariables = processEngine.getCurrentUserTaskVariables(taskId);
+        ModelAndView mv = new ModelAndView();
         if (currentUserTaskVariables != null) {
-            mv.addObject("formConfig", ProcessKit.getFormConfig(currentUserTaskVariables));
+            if(currentUserTaskVariables.get(ProcessKit.FORM_FORM_KEY)!=null){
+                mv.setViewName(currentUserTaskVariables.get(ProcessKit.FORM_FORM_KEY).toString());
+                mv.addObject("formConfig", currentUserTaskVariables.get(ProcessKit.FORM_CONFIG_KEY));
+            }else{
+                mv.setViewName("workflow/common/base_wfform");
+                mv.addObject("formConfig", ProcessKit.getFormConfig(currentUserTaskVariables));
+            }
             mv.addObject("flowData", ProcessKit.getFlowData(currentUserTaskVariables));
         } else {
             // TODO: 跳转其它页面
@@ -145,11 +156,17 @@ public class WorkflowController {
      */
     @GetMapping(value = "process/{processInstanceId}/form")
     public ModelAndView processForm(@PathVariable String processInstanceId) {
-        ModelAndView mv = new ModelAndView("workflow/common/base_wfform");
-        Map<String, Object> hisUserTaskVariables = processEngine.getHisUserTaskVariables(processInstanceId);
-        if (hisUserTaskVariables != null) {
-            mv.addObject("formConfig", ProcessKit.getFormConfig(hisUserTaskVariables));
-            mv.addObject("flowData", ProcessKit.getFlowData(hisUserTaskVariables));
+        Map<String, Object> currentUserTaskVariables = processEngine.getHisUserTaskVariables(processInstanceId);
+        ModelAndView mv = new ModelAndView();
+        if (currentUserTaskVariables != null) {
+            if(currentUserTaskVariables.get(ProcessKit.FORM_FORM_KEY)!=null){
+                mv.setViewName(currentUserTaskVariables.get(ProcessKit.FORM_FORM_KEY).toString());
+                mv.addObject("formConfig", currentUserTaskVariables.get(ProcessKit.FORM_CONFIG_KEY));
+            }else{
+                mv.setViewName("workflow/common/base_wfform");
+                mv.addObject("formConfig", ProcessKit.getFormConfig(currentUserTaskVariables));
+            }
+            mv.addObject("flowData", ProcessKit.getFlowData(currentUserTaskVariables));
         } else {
             // TODO: 跳转其它页面
         }
@@ -164,7 +181,7 @@ public class WorkflowController {
             processForm = new ProcessForm();
         }
         mv.addObject("processForm", processForm);
-        mv.addObject("forms", formService.list());
+        mv.addObject("forms", formService.listFormPage(new Form()).getRecords());
         return mv;
     }
 
@@ -198,7 +215,10 @@ public class WorkflowController {
     @RequiresPermissions("workflow:process:push")
     @PostMapping(value = "deploy/{modelId}")
     public R deploy(@PathVariable String modelId) {
-        return R.ok(workFlowService.deploy(modelId));
+         if(processFormService.getByModelId(modelId)!=null){
+            return R.ok(workFlowService.deploy(modelId));
+        }
+        return R.fail("该流程未配置表单，无法发布");
     }
 
     /**
@@ -208,6 +228,16 @@ public class WorkflowController {
     @GetMapping(value = "process/{deploymentId}/start")
     public R start(@PathVariable String deploymentId) {
         final String taskId = processEngine.start(deploymentId);
+        return R.ok(taskId);
+    }
+    /**
+     * 当前用户启动自定义流程流程
+     * @param formCode 流程对应表单code
+     */
+    @RequiresPermissions("workflow:autoForm:start")
+    @GetMapping(value = "process/autoForm/start")
+    public R start(Long id,String formCode) {
+        final String taskId = processEngine.businessStart(formCode,id.toString(),ShiroKit.getUser().getUsername());
         return R.ok(taskId);
     }
 

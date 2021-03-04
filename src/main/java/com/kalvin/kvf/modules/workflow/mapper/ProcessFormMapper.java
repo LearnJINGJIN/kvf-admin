@@ -23,4 +23,6 @@ public interface ProcessFormMapper extends BaseMapper<ProcessForm> {
      */
     List<ProcessForm> selectProcessFormList(@Param("processForm") ProcessForm processForm, IPage page);
 
+    ProcessForm selectFormKeybyModelId(String modelId);
+
 }

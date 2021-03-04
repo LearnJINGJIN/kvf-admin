@@ -17,17 +17,12 @@
                         <div class="layui-form layui-card-header kvf-card-header-auto">
                             <div class="layui-form-item">
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">姓名</label>
+                                    <label class="layui-form-label">外包人员id</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="name" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+                                        <input type="text" name="personId" placeholder="请输入外包人员id" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">公司</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="companyName" placeholder="请输入公司名称" autocomplete="off" class="layui-input">
-                                    </div>
-                                </div>
+
                                 <div class="layui-inline">
                                     <button class="layui-btn " lay-submit="" lay-filter="kTableSearchFilter">
                                         <i class="layui-icon layui-icon-search"></i>
@@ -65,86 +60,65 @@
 </script>
 
 <!--表格列格式化模板 start-->
-<script type="text/html" id="sexTpl">
-    {{#  if(d.sex == 0){ }}
-    <span class="layui-badge layui-bg-red">女</span>
-    {{#  } else if(d.sex == 1) { }}
-    <span class="layui-badge layui-bg-blue">男</span>
-    {{#  } else { }}
-    <span class="layui-badge layui-bg-gray">未知</span>
-    {{# } }}
+<script type="text/html" id="leaveTypeTpl">
+ {{#  if(d.leaveType == 1){ }}
+<span class="layui-badge">病假</span>
+{{#  } else if(d.leaveType == 2) { }}
+<span class="layui-badge">事假</span>
+{{#  } else if(d.leaveType == 3) { }}
+<span class="layui-badge">年假</span>
+{{#  } else if(d.leaveType == 4) { }}
+<span class="layui-badge">婚假</span>
+{{#  } else if(d.leaveType == 5) { }}
+<span class="layui-badge">产假</span>
+{{#  } else if(d.leaveType == 6) { }}
+<span class="layui-badge">丧假</span>
+{{#  } else if(d.leaveType == 7) { }}
+<span class="layui-badge">探亲假</span>
+{{#  } else if(d.leaveType == 8) { }}
+<span class="layui-badge">护理假</span>
+{{#  } else if(d.leaveType == 9) { }}
+<span class="layui-badge">其它</span>
+{{#  } else { }}
+<span class="layui-badge layui-bg-gray">未知</span>
+{{# } }}
 </script>
-<script type="text/html" id="ratingTpl">
-    {{#  if(d.rating == 1){ }}
-    <span class="layui-badge layui-bg-red">商务</span>
-    {{#  } else if(d.rating == 2) { }}
-    <span class="layui-badge layui-bg-blue">技术</span>
-    {{#  } else { }}
-    <span class="layui-badge layui-bg-gray">未知</span>
-    {{# } }}
+<script type="text/html" id="processStatusTpl">
+  {{#  if(d.processStatus == 0){ }}
+<span class="layui-badge layui-bg-blue">未提交</span>
+{{#  } else if(d.processStatus == 1) { }}
+<span class="layui-badge layui-bg-green">审批中</span>
+{{#  } else if(d.processStatus == 2) { }}
+<span class="layui-badge layui-bg-green">已完成</span>
+{{#  } else { }}
+<span class="layui-badge layui-bg-gray">未知</span>
+{{# } }}
 </script>
-<script type="text/html" id="documentTypeTpl">
-    {{#  if(d.documentType == 1){ }}
-    <span class="layui-badge layui-bg-red">身份证</span>
-    {{#  } else if(d.documentType == 2) { }}
-    <span class="layui-badge layui-bg-blue">居住证</span>
-    {{#  } else if(d.documentType == 3) { }}
-    <span class="layui-badge layui-bg-blue">签证</span>
-    {{#  } else if(d.documentType == 4) { }}
-    <span class="layui-badge layui-bg-blue">护照</span>
-    {{#  } else if(d.documentType == 5) { }}
-    <span class="layui-badge layui-bg-blue">户口本</span>
-    {{#  } else if(d.documentType == 6) { }}
-    <span class="layui-badge layui-bg-blue">军人证</span>
-    {{#  } else if(d.documentType == 7) { }}
-    <span class="layui-badge layui-bg-blue">团员证</span>
-    {{#  } else if(d.documentType == 8) { }}
-    <span class="layui-badge layui-bg-blue">党员证</span>
-    {{#  } else if(d.documentType == 9) { }}
-    <span class="layui-badge layui-bg-blue">港澳通行证</span>
-    {{#  } else { }}
-    <span class="layui-badge layui-bg-gray">未知</span>
-    {{# } }}
-</script>
-
-
-
 <!--表格列格式化模板 end-->
 
 <script type="text/javascript" th:inline="javascript">
-    layui.use(['element', 'form', 'layer', 'table','soulTable'], function () {
-        var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, soulTable = layui.soulTable;
+    layui.use(['element', 'form', 'layer', 'table', 'laydate'], function () {
+        var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, laydate = layui.laydate;
         var tableId = 'kContentTable';
-        var area = ['60%', '95%'];
+        var area = ['80%', '95%'];
 
         // 实例化table
         var tableIns = table.render($.extend(config.layui.table, {
             elem: '#' + tableId
-            ,url: BASE_WEB + 'zg/outPerson/list/data' // 数据接口
+            ,url: BASE_WEB + 'zg/outApplyleave/list/data' // 数据接口
             ,toolbar: '#headToolbarTpl'
-            ,method: 'get' //这里可以写post请求,默认get
             ,cols: [[ //表头
                 {type:'checkbox', fixed: 'left'}
-                ,{field: 'name', title: '姓名'}
-                ,{field: 'birthDate', title: '出生年月'}
-                ,{field: 'sex', title: '性别', templet: '#sexTpl'}
-                ,{field: 'documentType', title: '证件类型', templet: '#documentTypeTpl'}
-                ,{field: 'idNumber', title: '证件号码'}
-                ,{field: 'phone', title: '联系电话'}
-                ,{field: 'email', title: '邮件'}
-                ,{field: 'companyName', title: '所属公司'}
-                ,{field: 'rating', title: '职务类型', templet: '#ratingTpl'}
-                 ,{field: '', title: '操作', width: 235, fixed: 'right', templet: '#rowToolbarTpl'}
+                ,{field: 'personName', title: '外包人员', width: 130}
+                ,{field: 'leaveType', title: '请假类型', templet: '#leaveTypeTpl'}
+                ,{field: 'leaveReason', title: '请假事由', width: 130}
+                ,{field: 'startTime', title: '请假开始时间', width: 130}
+                ,{field: 'endTime', title: '请假结束时间', width: 130}
+                ,{field: 'days', title: '请假总天数', width: 130}
+                ,{field: 'emergencyContact', title: '应急委托人', width: 130}
+                ,{field: 'processStatus', title: '流程状态', width: 130, templet: '#processStatusTpl'}
+                ,{field: '', title: '操作', width: 235, fixed: 'right', templet: '#rowToolbarTpl'}
             ]]
-            ,filter: {
-                bottom: false
-            }
-            ,autoColumnWidth: {
-                init: true
-            }
-            ,done: function () {
-                soulTable.render(this)
-            }
         }));
 
         // 监听表格头部事件
@@ -156,7 +130,7 @@
                     layer.open({
                         type: 2
                         ,title: '添加'
-                        ,content: BASE_WEB + 'zg/outPerson/edit'
+                        ,content: BASE_WEB + 'zg/outApplyleave/edit'
                         ,maxmin: true
                         ,area: area   // 宽高
                         ,btn: ['确定', '取消']
@@ -180,7 +154,7 @@
                 layer.open({
                     type: 2
                     ,title: '编辑'
-                    ,content: BASE_WEB + 'zg/outPerson/edit?id=' + data.id
+                    ,content: BASE_WEB + 'zg/outApplyleave/edit?id=' + data.id
                     ,maxmin: true
                     ,area: area   // 宽高
                     ,btn: ['确定', '取消']
@@ -196,7 +170,7 @@
                     //执行 Ajax 后重载
                     $.ajax({
                         type: req.type.post,
-                        url: BASE_WEB + 'zg/outPerson/del/' + data.id,
+                        url: BASE_WEB + 'zg/outApplyleave/del/' + data.id,
                         async: false,
                         success: function (r) {
                             if (r.code === req.status.ok) {

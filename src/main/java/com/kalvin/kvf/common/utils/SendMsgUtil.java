@@ -23,7 +23,7 @@ import java.net.URL;
 @Slf4j
 @PropertySource("classpath:application.yml")//读取application.yml文件
 public class SendMsgUtil {
-    private static final String Map = null;
+    private static final String MAP = null;
     @Value("${msg.massURL}")
     private String massURL;
     @Value("${msg.groupURL}")

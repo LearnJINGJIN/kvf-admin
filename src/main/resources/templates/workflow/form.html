@@ -53,8 +53,9 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">表单类型</label>
                             <div class="layui-input-block">
-                                <input type="radio" name="formType" value="0" title="简单表单" autocomplete="off" class="layui-input" checked>
+                                <input type="radio" name="formType" value="0" title="简单表单" autocomplete="off" class="layui-input" >
                                 <input type="radio" name="formType" value="1" title="复杂表单" autocomplete="off" class="layui-input">
+                                <input type="radio" name="formType" value="2" title="自定义表单" autocomplete="off" class="layui-input" checked>
                             </div>
                         </div>
                         <div class="layui-form-item layui-hide">
@@ -90,6 +91,8 @@
     <span class="layui-badge layui-bg-blue">简单表单</span>
     {{# } else if(d.type == 1) { }}
     <span class="layui-badge layui-bg-blue">复杂表单</span>
+    {{# } else if(d.type == 2) { }}
+    <span class="layui-badge layui-bg-blue">自定义表单</span>
     {{# } }}
 </script>
 <!--表格列格式化模板 end-->
@@ -111,6 +114,7 @@
                 ,{field: 'code', title: '表单代号'}
                 ,{field: 'type', title: '表单类型', width: 110, align: 'center', templet: '#typeTpl'}
                 ,{field: 'theme', title: '表单主题', width: 130}
+                ,{field: 'formAddrs', title: '表单地址', width: 130}
                 ,{field: 'createTime', title: '创建时间', width: 180}
                 ,{field: 'updateTime', title: '更新时间', width: 180}
                 ,{field: '', title: '操作', width: 250, fixed: 'right', templet: '#rowToolbarTpl'}
@@ -129,7 +133,7 @@
                         , title: '选择表单类型'
                         , content: $('#formTypeTpl')
                         , maxmin: false
-                        , area: ['397px', '176px']   // 宽高
+                        , area: ['500px', '176px']   // 宽高
                         , btn: ['创建', '取消']
                         , yes: function (index, layero) {
                             $('#kFormTypeFormSubmit').click();
@@ -173,24 +177,27 @@
             var tr = obj.tr; //获得当前行 tr 的DOM对象
 
             if (layEvent === 'prev') {
-                var prevId = layer.open({
-                    type: 2
-                    ,title: '表单预览'
-                    ,content: BASE_WEB + 'workflow/form/{id}/prev'.replace('{id}', data.id)
-                    ,maxmin: false
-                    ,area: area   // 宽高
-                    /*,btn: ['确定', '取消']
-                    ,yes: function(index, layero){
-                    }*/
-                });
-                layer.full(prevId);
+                if(data.type==0){
+                    var prevId = layer.open({
+                        type: 2
+                        ,title: '表单预览'
+                        ,content: BASE_WEB + 'workflow/form/{id}/prev'.replace('{id}', data.id)
+                        ,maxmin: false
+                        ,area: area   // 宽高
+                        /*,btn: ['确定', '取消']
+                        ,yes: function(index, layero){
+                        }*/
+                    });
+                    layer.full(prevId);
+                }else{
+                    kvfKit.unhappyMsg('TODO: 不能查看非简单表单类型');
+                }
             }
             if (layEvent === 'edit') {
-                if (data.type === 0) {
-                    var idx = layer.open({
+                     var idx = layer.open({
                         type: 2
                         ,title: '更新表单设计'
-                        ,content: BASE_WEB + 'workflow/form/edit?id=' + data.id
+                        ,content: BASE_WEB + 'workflow/form/edit?id=' + data.id+'&formType='+data.type
                         ,maxmin: false
                         ,area: area   // 宽高
                         ,btn: ['确定', '取消']
@@ -201,8 +208,7 @@
                         }
                     });
                     layer.full(idx);
-                }
-            }
+             }
             if (layEvent === 'del') {
                 layer.confirm('确定删除吗？', function(index) {
                     //执行 Ajax 后重载
@@ -242,9 +248,25 @@
                 var idx = layer.open({
                     type: 2
                     ,title: '快速表单设计器'
-                    ,content: BASE_WEB + 'workflow/form/edit'
+                    ,content: BASE_WEB + 'workflow/form/edit?formType='+formType
                     ,maxmin: false
                     ,area: area   // 宽高
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        //点击确认触发 iframe 内容中的按钮提交
+                        var submit = layero.find('iframe').contents().find("#kFormSubmit");
+                        submit.click();
+                    }
+                });
+                layer.full(idx);
+            } else if(formType === '2'){
+                // TODO: 创建自定义表单
+                 var idx = layer.open({
+                    type: 2
+                    ,title: '自定义表单设计器'
+                    ,content: BASE_WEB + 'workflow/form/edit?formType='+formType
+                    ,maxmin: true
+                    ,area: ['500px', '30%']    // 宽高
                     ,btn: ['确定', '取消']
                     ,yes: function(index, layero){
                         //点击确认触发 iframe 内容中的按钮提交

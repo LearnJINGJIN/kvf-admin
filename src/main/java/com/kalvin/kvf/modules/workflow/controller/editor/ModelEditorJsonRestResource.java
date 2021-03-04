@@ -43,6 +43,7 @@ public class ModelEditorJsonRestResource implements ModelDataJsonConstants {
     public ObjectNode getEditorJson(@PathVariable String modelId) {
         ObjectNode modelNode = null;
         Model model = repositoryService.getModel(modelId);
+        LOGGER.info("model:"+modelId);
         if (model != null) {
             try {
                 if (StringUtils.isNotEmpty(model.getMetaInfo())) {
@@ -52,14 +53,17 @@ public class ModelEditorJsonRestResource implements ModelDataJsonConstants {
                     modelNode.put(MODEL_NAME, model.getName());
                 }
                 modelNode.put(MODEL_ID, model.getId());
+                LOGGER.info("modelNode1:"+modelNode);
                 ObjectNode editorJsonNode = (ObjectNode) objectMapper.readTree(
                         new String(repositoryService.getModelEditorSource(model.getId()), StandardCharsets.UTF_8));
+                LOGGER.info("editorJsonNode:"+editorJsonNode);
                 modelNode.put("model", editorJsonNode);
             } catch (Exception e) {
                 LOGGER.error("Error creating model JSON", e);
                 throw new ActivitiException("Error creating model JSON", e);
             }
         }
+        LOGGER.info("modelNode2:"+modelNode);
         return modelNode;
     }
 }

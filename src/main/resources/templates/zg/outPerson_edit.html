@@ -14,16 +14,39 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">年龄</label>
-        <div class="layui-input-block">
-            <input type="text" name="age" th:value="${editInfo.age}" placeholder="请输入年龄" autocomplete="off" class="layui-input">
+        <label class="layui-form-label"><span style="color: red">*</span>出生年月</label>
+        <div class="layui-input-inline">
+            <input type="text" id="birthDate" name="birthDate" th:value="${editInfo.birthDate}" placeholder="请选择出生年月" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">性别</label>
+        <label class="layui-form-label"><span style="color: red">*</span>性别</label>
         <input type="radio" name="sex" value="1" title="男" th:checked="${editInfo.sex==1}">
         <input type="radio" name="sex" value="0" title="女" th:checked="${editInfo.sex==0}">
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red">*</span>证件类型</label>
+        <div class="layui-input-inline">
+                <select name="documentType" id="documentType">
+                    <option value="0" th:selected="${editInfo.documentType == 0}">请选择</option>
+                    <option value="1" th:selected="${editInfo.documentType == 1}">身份证</option>
+                    <option value="2" th:selected="${editInfo.documentType == 2}">居住证</option>
+                    <option value="3" th:selected="${editInfo.documentType == 3}">签证</option>
+                    <option value="4" th:selected="${editInfo.documentType == 4}">护照</option>
+                    <option value="5" th:selected="${editInfo.documentType == 5}">户口本</option>
+                    <option value="6" th:selected="${editInfo.documentType == 6}">军人证</option>
+                    <option value="7" th:selected="${editInfo.documentType == 7}">团员证</option>
+                    <option value="8" th:selected="${editInfo.documentType == 8}">党员证</option>
+                    <option value="9" th:selected="${editInfo.documentType == 9}">港澳通行证</option>
+                </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red">*</span>证件号码</label>
+            <div class="layui-input-block">
+                <input type="text"  name="idNumber" th:value="${editInfo.idNumber}" lay-verify="required" placeholder="请输入证件号码" autocomplete="off" class="layui-input">
+            </div>
+     </div>
     <div class="layui-form-item">
         <label class="layui-form-label"><span style="color: red">*</span>联系电话</label>
         <div class="layui-input-block">
@@ -89,7 +112,10 @@
 <script>
     layui.use(['form', 'laydate','tableSelect'], function () {
         var $ = layui.$, form = layui.form, laydate = layui.laydate, tableSelect = layui.tableSelect;
-
+        laydate.render({
+            elem: '#birthDate' // 指定元素
+            ,trigger: 'click' //采用click弹出
+        });
         tableSelect.render({
             elem: '#companyName',
             checkedKey: 'id',

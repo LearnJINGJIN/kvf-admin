@@ -3,11 +3,13 @@ package com.kalvin.kvf.modules.zg.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.kalvin.kvf.common.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import com.kalvin.kvf.common.entity.BaseEntity;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -38,11 +40,12 @@ public class OutPerson extends BaseEntity {
      * 所属公司
      */
     private String companyName;
-    /**
-     * 年龄
-     */
-    private Integer age;
 
+    /**
+     * 出生年月
+     */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthDate;
     /**
      * 性别
      */
@@ -67,7 +70,14 @@ public class OutPerson extends BaseEntity {
      * 职务类型 1-商务 2-技术
      */
     private Integer rating;
-
+    /**
+     * 证件类型
+     */
+    private Integer documentType;
+    /**
+     * 证件号码
+     */
+    private String idNumber;
 
 
     /**

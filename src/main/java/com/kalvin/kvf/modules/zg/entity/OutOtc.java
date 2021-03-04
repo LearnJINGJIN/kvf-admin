@@ -51,7 +51,7 @@ public class OutOtc extends BaseEntity {
      * 采购人月
      */
     private Integer personMonth;
-
+    private OutPerson outPerson;
     /**
      * 入场时间
      */
@@ -88,6 +88,10 @@ public class OutOtc extends BaseEntity {
      * 备注
      */
     private String remarks;
+    /**
+     * 角色
+     */
+    private String outRole;
 
     /**
      * 创建人
@@ -105,6 +109,7 @@ public class OutOtc extends BaseEntity {
      */
     private Long updateUser;
 
+
     /**
      * 更新日期
      */
@@ -115,9 +120,68 @@ public class OutOtc extends BaseEntity {
      * 删除标志位
      */
     private Integer dr;
-
+    /**
+     * 流程状态 0-未提交 1-审批中 2-已完成
+     */
+    private Integer processStatus;
+    /**
+     * 流程id
+     */
+    private String processInstanceId;
     /**
      * 外包人员名称
      */
     private String personName;
+    /**
+     * 行方工作对接人员
+     */
+    private Long bankPerson;
+    /**
+     * 行方工作对接人员
+     */
+    private String bankName;
+
+    /**
+     * 所属公司
+     */
+    private String companyName;
+
+    /**
+     * 出生年月
+     */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthDate;
+    /**
+     * 性别
+     */
+    private Integer sex;
+
+    /**
+     * 联系电话
+     */
+    private String phone;
+
+    /**
+     * 邮箱
+     */
+    private String email;
+
+    /**
+     * 关联所属公司
+     */
+    private Long companyId;
+
+    /**
+     * 证件类型
+     */
+    private Integer documentType;
+    /**
+     * 证件号码
+     */
+    private String idNumber;
+    /**
+     * 表单主题
+     */
+    private String theme;
+
 }

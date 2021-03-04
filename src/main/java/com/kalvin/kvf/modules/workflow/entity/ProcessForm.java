@@ -37,5 +37,9 @@ public class ProcessForm extends BaseEntity {
      * 表单代号
      */
     private String formCode;
+    /**
+     * 表单地址
+     */
+    private String formAddrs;
 
 }

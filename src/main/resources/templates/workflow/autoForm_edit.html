@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="common/base::pagetitle"></title>
+    <link th:replace="common/base::static"/>
+</head>
+<body>
+<form class="layui-form layui-form-pane" action="" style="padding:20px">
+    <div class="layui-card-header">表单基础信息配置</div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">表单类型</label>
+        <div class="layui-input-block">
+            <input type="radio" name="type" value="2" title="自定义表单" autocomplete="off" class="layui-input" checked>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red">*</span>表单名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" th:value="${editInfo.name}" lay-verify="required" placeholder="请输入表单名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">表单主题</label>
+        <div class="layui-input-inline">
+            <input type="text" name="theme" th:value="${editInfo.theme}" placeholder="请输入表单主题" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red">*</span>表单地址</label>
+        <div class="layui-input-block">
+            <input type="text" name="formAddrs" th:value="${editInfo.formAddrs}" lay-verify="required" placeholder="请输入表单主题" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit="" lay-filter="kFormSubmit" id="kFormSubmit">
+        <input type="text" name="id" th:value="${editInfo.id}" autocomplete="off" class="layui-input">
+    </div>
+</form>
+
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+<script>
+    layui.use(['form', 'laydate'], function () {
+        var $ = layui.$, form = layui.form, laydate = layui.laydate;
+
+
+        //监听提交
+        form.on('submit(kFormSubmit)', function(data){
+            var fields = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+            var formConfigData = {id: fields.id, type: fields.type, name: fields.name, theme: fields.theme, formAddrs: fields.formAddrs};
+            var url = fields.id ? 'workflow/form/edit' : 'workflow/form/add';
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            $.ajax({
+                type: req.type.post,
+                url: BASE_WEB + url,
+                data: formConfigData,
+                async: false,
+                success: function (r) {
+                    if (r.code === req.status.ok) {
+                        // 重载表格
+                        parent.layui.table.reload('kContentTable');
+                        parent.layer.close(index); //再执行关闭
+                    } else {
+                        kvfKit.errorMsg(r.msg);
+                    }
+                }
+            });
+
+        });
+    })
+</script>
+</body>
+</html>

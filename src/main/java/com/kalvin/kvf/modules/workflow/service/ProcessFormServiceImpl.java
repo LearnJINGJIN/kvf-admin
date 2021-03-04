@@ -27,7 +27,7 @@ public class ProcessFormServiceImpl extends ServiceImpl<ProcessFormMapper, Proce
 
     @Override
     public ProcessForm getByModelId(String modelId) {
-        return super.getOne(new LambdaQueryWrapper<ProcessForm>().eq(ProcessForm::getModelId, modelId));
+        return baseMapper.selectFormKeybyModelId(modelId);
     }
 
 }

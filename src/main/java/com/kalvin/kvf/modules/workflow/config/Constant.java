@@ -7,4 +7,5 @@ public class Constant {
 
     public final static int FORM_TYPE_SIMPLE = 0;
     public final static int FORM_TYPE_COMPLEX = 1;
+    public final static int FORM_TYPE_AUTO = 2;
 }

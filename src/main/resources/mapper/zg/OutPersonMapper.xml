@@ -6,13 +6,15 @@
     <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.OutPerson">
         <id column="id" property="id" />
         <result column="name" property="name" />
-        <result column="age" property="age" />
+        <result column="birth_date" property="birthDate" />
         <result column="sex" property="sex" />
         <result column="phone" property="phone" />
         <result column="email" property="email" />
         <result column="company_name" property="companyName" />
         <result column="company_id" property="companyId" />
         <result column="rating" property="rating" />
+        <result column="document_type" property="documentType" />
+        <result column="id_number" property="idNumber" />
          <result column="create_user" property="createUser" />
         <result column="create_date" property="createDate" />
         <result column="update_user" property="updateUser" />
@@ -23,7 +25,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-       t.id, t.name, t.age, t.sex, t.phone, t.email, t.company_id, t.rating, t.create_user, t.create_date, t.update_user, t.update_date, t.remarks, t.dr, a.company_name
+       t.id, t.name, t.birth_date, t.sex, t.phone, t.email, t.company_id, t.rating,t.document_type,t.id_number, t.create_user, t.create_date, t.update_user, t.update_date, t.remarks, t.dr, a.company_name
     </sql>
 
     <select id="selectOutPersonList" resultType="com.kalvin.kvf.modules.zg.entity.OutPerson">

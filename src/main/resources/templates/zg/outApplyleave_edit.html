@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="common/base::pagetitle"></title>
+    <link th:replace="common/base::static"/>
+</head>
+<body>
+<div class="layui-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item layui-hide">
+        <div class="layui-input-inline">
+            <input type="text" id="personId" name="personId" th:value="${editInfo.personId==null?'':editInfo.personId}" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label"><span style="color: red">*</span>姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" id="personName" th:value="${editInfo.personName==null?'':editInfo.personName}" lay-verify="required" placeholder="请选择外包人员" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">所属公司</label>
+            <div class="layui-input-inline">
+                <input type="text" id="companyName"  th:value="${editInfo.companyName==null?'':editInfo.companyName}"    autocomplete="off" class="layui-input" readonly>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red">*</span>请假类型</label>
+        <div class="layui-input-block">
+            <input type="radio" name="leaveType" value="1" title="病假" autocomplete="off" class="layui-input" th:checked="${editInfo.leaveType==1}">
+            <input type="radio" name="leaveType" value="2" title="事假" autocomplete="off" class="layui-input" th:checked="${editInfo.leaveType==2}">
+            <input type="radio" name="leaveType" value="3" title="年假" autocomplete="off" class="layui-input" th:checked="${editInfo.leaveType==3}">
+            <input type="radio" name="leaveType" value="4" title="婚假" autocomplete="off" class="layui-input" th:checked="${editInfo.leaveType==4}">
+            <input type="radio" name="leaveType" value="5" title="产假" autocomplete="off" class="layui-input" th:checked="${editInfo.leaveType==5}">
+            <input type="radio" name="leaveType" value="6" title="丧假" autocomplete="off" class="layui-input" th:checked="${editInfo.leaveType==6}">
+            <input type="radio" name="leaveType" value="7" title="探亲假" autocomplete="off" class="layui-input" th:checked="${editInfo.leaveType==7}">
+            <input type="radio" name="leaveType" value="8" title="护理假" autocomplete="off" class="layui-input" th:checked="${editInfo.leaveType==8}">
+            <input type="radio" name="leaveType" value="9" title="其它" autocomplete="off" class="layui-input" th:checked="${editInfo.leaveType==9}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">请假事由</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入请假原因" name="leaveReason" th:text="${editInfo.leaveReason}"  class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color: red">*</span>请假时间</label>
+        <div class="layui-input-inline">
+            <input type="text"  id="startTime" name="startTime" th:value="${editInfo.startTime}" lay-verify="required"   autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-form-mid layui-word-aux">至</div>
+        <div class="layui-input-inline">
+            <input type="text"  id="endTime" name="endTime" th:value="${editInfo.endTime}" lay-verify="required"   autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-form-mid layui-word-aux">总共请</div>
+        <div class="layui-input-inline">
+            <input type="text"   name="days" th:value="${editInfo.days}" lay-verify="required"   autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-form-mid layui-word-aux">天假</div>
+    </div>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="layui-form-mid layui-word-aux"><span style="color: red">1.请假半天可以写0.5不能写0.1,0.2等小数。2.全天假以00:00:00开始以23:59:59结束，下午请假以12:00:00开始</span></div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">休息期间联系方式</label>
+            <div class="layui-input-inline">
+                <input type="text" id="phone"  th:value="${editInfo.phone==null?'':editInfo.phone}"   autocomplete="off" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label"><span style="color: red">*</span>应急工作委托人</label>
+            <div class="layui-input-inline">
+                <input type="text" name="emergencyContact"  th:value="${editInfo.emergencyContact==null?'':editInfo.emergencyContact}"  lay-verify="required"   autocomplete="off" class="layui-input" >
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit="" lay-filter="kFormSubmit" id="kFormSubmit">
+        <input type="text" name="id" th:value="${editInfo.id}" autocomplete="off" class="layui-input">
+    </div>
+</div>
+<script type="text/html" id="sexTpl">
+    {{#  if(d.sex == 0){ }}
+    <span class="layui-badge layui-bg-red">女</span>
+    {{#  } else if(d.sex == 1) { }}
+    <span class="layui-badge layui-bg-blue">男</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
+</script>
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+<script>
+    layui.use(['form', 'laydate', 'tableSelect'], function () {
+        var $ = layui.$, form = layui.form, laydate = layui.laydate,tableSelect=layui.tableSelect;
+
+
+        laydate.render({
+            elem: '#startTime' // 指定元素
+            ,type: 'datetime'
+            ,trigger: 'click' //采用click弹出
+        });
+        laydate.render({
+            elem: '#endTime' // 指定元素
+            ,type: 'datetime'
+            ,trigger: 'click' //采用click弹出
+        });
+        tableSelect.render({
+            elem: '#personName',
+            checkedKey: 'id',
+            table: {
+                url: BASE_WEB + 'zg/outPerson/list/data',
+                cols: [
+                    [
+                        { type: 'radio' }
+                        ,{field: 'id', title: 'id', hide:true}
+                        ,{field: 'name', title: '姓名', width: 130}
+                        ,{field: 'sex', title: '性别', width: 130, templet: '#sexTpl'}
+                        ,{field: 'companyName', title: '所属公司', width: 130}
+                      ]
+                ]
+            },
+            done: function (elem, data) {
+                layui.each(data.data, function (index, item) {
+                    elem.val(item.name);
+                    $('#personId').val(item.id);
+                    $('#phone').val(item.phone);
+                    $('#companyName').val(item.companyName);
+                })
+                //alert(JSON.stringify(data.data.realname))
+            }
+        });
+        //监听提交
+        form.on('submit(kFormSubmit)', function(data){
+            var field = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+            var url = field.id ? 'zg/outApplyleave/edit' : 'zg/outApplyleave/add';
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            $.ajax({
+                type: req.type.post,
+                url: BASE_WEB + url,
+                data: field,
+                async: false,
+                success: function (r) {
+                    if (r.code === req.status.ok) {
+                        // 重载表格
+                        parent.layui.table.reload('kContentTable');
+                        parent.layer.close(index); //再执行关闭
+                    } else {
+                        kvfKit.errorMsg(r.msg);
+                    }
+                }
+            });
+
+        });
+    })
+</script>
+</body>
+</html>

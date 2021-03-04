@@ -19,6 +19,7 @@ import com.kalvin.kvf.modules.workflow.entity.Form;
 import com.kalvin.kvf.modules.workflow.mapper.ActivityMapper;
 import com.kalvin.kvf.modules.workflow.utils.ProcessKit;
 import com.kalvin.kvf.modules.workflow.vo.*;
+import jdk.nashorn.internal.ir.ContinueNode;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
@@ -394,7 +395,8 @@ public class WorkFlowServiceImpl implements IWorkFlowService {
                         .unfinished().list();
                 // 未提交
                 if (flowData.isFirstNode()) {
-                    myApplyVO.setProcessStatus(ProcessKit.FLOW_STATUS_NOT_SUBMIT);
+                    return;
+                    //myApplyVO.setProcessStatus(ProcessKit.FLOW_STATUS_NOT_SUBMIT);
                 }
                 // 获取当前处理任务节点名称
                 list.forEach(taskInstance -> {

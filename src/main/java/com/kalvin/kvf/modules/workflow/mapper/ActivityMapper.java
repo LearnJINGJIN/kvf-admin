@@ -9,8 +9,6 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import java.util.List;
-
 /**
  * 自定义activiti mapper接口
  * Create by Kalvin on 2020/4/22.

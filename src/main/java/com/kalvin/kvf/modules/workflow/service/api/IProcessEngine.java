@@ -31,6 +31,13 @@ public interface IProcessEngine {
      * @return 活动任务ID
      */
     String start(String deploymentId, String businessId, String startUser);
+    /**
+     * 启动流程（带业务ID）自定义表单
+     * @param deploymentId 流程发布ID
+     * @param businessId 业务ID
+      * @return 返回taskId
+     */
+    String businessStart(String deploymentId, String businessId, String startUser);
 
     /**
      * 提交任务

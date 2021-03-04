@@ -23,4 +23,5 @@ public interface OutOtcMapper extends BaseMapper<OutOtc> {
     List<OutOtc> selectOutOtcList(OutOtc outOtc, IPage page);
 
     OutOtc selectInfoById(Long id);
+    OutOtc selectInfoByProcess(String processInstanceId);
 }

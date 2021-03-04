@@ -34,9 +34,14 @@ public class FormController extends BaseController {
     }
 
     @GetMapping(value = "edit")
-    public ModelAndView edit(Long id) {
-        ModelAndView mv = new ModelAndView("workflow/form_edit");
-        Form form;
+    public ModelAndView edit(Long id,Integer formType) {
+        ModelAndView mv = new ModelAndView();
+        if(formType==0){
+            mv.setViewName("workflow/form_edit");
+         }else if(formType==2){
+            mv.setViewName("workflow/autoForm_edit");
+         }
+         Form form;
         if (id == null) {
             form = new Form();
         } else {

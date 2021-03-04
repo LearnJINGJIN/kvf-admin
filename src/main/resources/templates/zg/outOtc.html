@@ -51,6 +51,7 @@
 <!--头部工具栏模板-->
 <script type="text/html" id="headToolbarTpl">
     <button class="layui-btn layui-btn-sm " lay-event="add">添加</button>
+    <button class="layui-btn layui-btn-sm " lay-event="process">流程提交</button>
 </script>
 
 <!--表格行工具栏模板-->
@@ -58,7 +59,7 @@
     <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit" th:title="编辑"><i class="layui-icon layui-icon-edit"></i></a>
     <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del" th:title="删除"><i class="layui-icon layui-icon-delete"></i></a>
     <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="weekly" th:title="周报"><i class="layui-icon layui-icon-template-1"></i></a>
-</script>
+ </script>
 
 <!--表格列格式化模板 start-->
 <script type="text/html" id="statusTpl">
@@ -79,6 +80,17 @@
  <span class="layui-badge layui-bg-gray">未知</span>
  {{# } }}
 </script>
+<script type="text/html" id="processStatusTpl">
+  {{#  if(d.processStatus == 0){ }}
+ <span class="layui-badge layui-bg-blue">未提交</span>
+ {{#  } else if(d.processStatus == 1) { }}
+ <span class="layui-badge layui-bg-green">审批中</span>
+ {{#  } else if(d.processStatus == 2) { }}
+ <span class="layui-badge layui-bg-green">已完成</span>
+ {{#  } else { }}
+ <span class="layui-badge layui-bg-gray">未知</span>
+ {{# } }}
+</script>
 <!--表格列格式化模板 end-->
 
 <script type="text/javascript" th:inline="javascript">
@@ -94,9 +106,10 @@
             ,toolbar: '#headToolbarTpl'
             ,method: 'post' //这里可以写post请求,默认get
             ,cols: [[ //表头
-                {type:'checkbox', fixed: 'left'}
+                {type:'radio', fixed: 'left'}
                 ,{field: 'personName', title: '外包人员',filter: true}
                 ,{field: 'personId', hide:true}
+                ,{field: 'processInstanceId', hide:true}
                 ,{field: 'outsourceType', title: '外包类型', templet: '#outsourceTypeTp1'}
                 ,{field: 'contractNo', title: '合同编号'}
                 ,{field: 'personMonth', title: '采购人月(月)'}
@@ -106,6 +119,7 @@
                 ,{field: 'havePay', title: '已支付(万)'}
                 ,{field: 'pendPay', title: '剩余待支付(万)'}
                 ,{field: 'status', title: '状态',  templet: '#statusTpl'}
+                ,{field: 'processStatus', title: '流程状态',  templet: '#processStatusTpl'}
                 ,{field: 'remarks', title: '备注',  autoWidth: false}
                 ,{field: '', title: '操作', fixed: 'right', templet: '#rowToolbarTpl'}
             ]]
@@ -154,6 +168,38 @@
                             submit.click();
                         }
                     });
+                    break;
+                case 'process':
+                    if(checkData.length === 0){
+                        return kvfKit.warningMsg('请选择数据');
+                    }
+                    var id=null;
+                    var processStatus=null;
+                    var formCode='FA_202102222586';
+                    $.each(checkData, function(i, n){
+                        id = n.id;
+                        processStatus=n.processStatus;
+                    });
+                    if(processStatus!=0){
+                        return kvfKit.warningMsg('请选择未提交的数据!');
+                    }
+                        kvfKit.aGet(
+                            BASE_WEB + 'workflow/process/autoForm/start?id='+id+'&formCode='+formCode,
+                            function (r) {
+                                if (r.code === req.status.ok) {
+                                    idx = layer.open({
+                                        type: 2
+                                        ,title: '外包人员入场申请'
+                                        ,content:BASE_WEB + 'workflow/task/{taskId}/form'.replace('{taskId}', r.data)
+                                        ,maxmin: false
+                                        ,area: area   // 宽高
+                                    });
+                                    layer.full(idx);
+                                } else {
+                                    kvfKit.errorMsg(r.msg);
+                                }
+                            }
+                        )
                     break;
             }
         });
