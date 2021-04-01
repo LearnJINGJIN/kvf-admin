@@ -33,16 +33,17 @@ public class OutApplyleaveController extends BaseController {
     }
 
     @GetMapping(value = "edit")
-    public ModelAndView edit(Long id) {
+    public ModelAndView edit(Long id,String deploymentId) {
         ModelAndView mv = new ModelAndView("zg/outApplyleave_edit");
         OutApplyleave outApplyleave;
         if (id == null) {
             outApplyleave = new OutApplyleave();
+            outApplyleave.setDeploymentId(deploymentId);
         } else {
             outApplyleave = outApplyleaveService.getOutApplyleaveById(id);
-        }
+         }
         mv.addObject("editInfo", outApplyleave);
-        return mv;
+         return mv;
     }
 
     @GetMapping(value = "list/data")
@@ -54,13 +55,13 @@ public class OutApplyleaveController extends BaseController {
     @RequiresPermissions("zg:outApplyleave:add")
     @PostMapping(value = "add")
     public R add(OutApplyleave outApplyleave) {
-        outApplyleaveService.save(outApplyleave);
-        return R.ok();
+         return outApplyleaveService.startForm(outApplyleave);
     }
 
     @RequiresPermissions("zg:outApplyleave:edit")
     @PostMapping(value = "edit")
     public R edit(OutApplyleave outApplyleave) {
+        outApplyleave.setDeploymentId(null);
         outApplyleaveService.updateById(outApplyleave);
         return R.ok();
     }

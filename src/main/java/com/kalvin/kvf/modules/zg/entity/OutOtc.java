@@ -43,6 +43,10 @@ public class OutOtc extends BaseEntity {
      */
     private String contractNo;
     /**
+     * 流程编号
+     */
+    private String deploymentId;
+    /**
      * 外包类型
      */
     private Integer outsourceType;

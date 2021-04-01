@@ -48,6 +48,45 @@
             </if>
         </trim>
     </select>
+    <select id="selectOtcLeaveList" resultType="com.kalvin.kvf.modules.zg.entity.OutOtc">
+        SELECT
+        t.id,
+        t.person_id,
+        t.process_instance_id,
+        t.process_status,
+        t.contract_no,
+        t.outsource_type,
+        t.person_month,
+        t.start_date,
+        t.plan_date,
+        t.unit_price,
+        t.have_pay,
+        t.pend_pay,
+        t. STATUS,
+        t.out_role,
+        t.bank_person,
+        t.remarks,
+        t.create_user,
+        t.create_date,
+        t.update_user,
+        t.update_date,
+        t.dr,
+        a. NAME AS person_name,
+        a.sex,
+        a.birth_date,
+        a.phone,
+        a.email,
+        a.document_type,
+        a.id_number,
+        c.company_name,
+        b.realname as bank_name
+    FROM
+        zg_out_otc t
+    LEFT JOIN zg_out_person a ON a.id = t.person_id
+    left join sys_user b on b.id=t.bank_person
+    left join zg_out_company c on c.id=a.company_id
+        where t.status='0' and t.process_status='2'
+    </select>
 
     <select id="selectInfoById" resultType="com.kalvin.kvf.modules.zg.entity.OutOtc">
         select <include refid="Base_Column_List" /> from zg_out_otc t

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="common/base::pagetitle"></title>
+    <link th:replace="common/base::static"/>
+</head>
+
+<body>
+<div class="layui-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item layui-hide">
+        <div class="layui-input-inline">
+            <input type="text"  name="deploymentId" th:value="${editInfo.deploymentId==null?'':editInfo.deploymentId}" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item layui-hide">
+        <label class="layui-form-label">登记编码</label>
+        <div class="layui-input-inline">
+            <input type="text" id="registerCode" name="registerCode" th:value="${editInfo.registerCode}" lay-verify="required" placeholder="请输入登记编码" autocomplete="off" class="layui-input" readonly>
+        </div>
+
+    </div>
+    <div class="layui-form-item layui-hide">
+        <div class="layui-input-inline">
+            <input type="text" id="personId" name="personId" th:value="${editInfo.personId==null?'':editInfo.personId}" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-inline">
+                <input type="text"  id="personName" th:value="${editInfo.personName==null?'':editInfo.personName}" lay-verify="required" placeholder="请选择外包人员" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-inline">
+                <select id="sex">
+                    <option value="0" th:selected="${editInfo.sex == 0}">请选择</option>
+                    <option value="1" th:selected="${editInfo.sex == 1}">男</option>
+                    <option value="2" th:selected="${editInfo.sex == 2}">女</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">出生年月</label>
+            <div class="layui-input-inline">
+                <input type="text" id="birthDate"  th:value="${#strings.replace(editInfo.birthDate,'T',' ')}"  readonly autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">联系电话</label>
+            <div class="layui-input-inline">
+                <input type="text"   id="phone" th:value="${editInfo.phone}" readonly  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">证件类型</label>
+            <div class="layui-input-inline">
+                <select id="documentType"  readonly="true" >
+                    <option value="0" th:selected="${editInfo.documentType == 0}">请选择</option>
+                    <option value="1" th:selected="${editInfo.documentType == 1}">身份证</option>
+                    <option value="2" th:selected="${editInfo.documentType == 2}">居住证</option>
+                    <option value="3" th:selected="${editInfo.documentType == 3}">签证</option>
+                    <option value="4" th:selected="${editInfo.documentType == 4}">护照</option>
+                    <option value="5" th:selected="${editInfo.documentType == 5}">户口本</option>
+                    <option value="6" th:selected="${editInfo.documentType == 6}">军人证</option>
+                    <option value="7" th:selected="${editInfo.documentType == 7}">团员证</option>
+                    <option value="8" th:selected="${editInfo.documentType == 8}">党员证</option>
+                    <option value="9" th:selected="${editInfo.documentType == 9}">港澳通行证</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">证件号码</label>
+            <div class="layui-input-inline">
+                <input type="text"   id="idNumber" th:value="${editInfo.idNumber}" readonly  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">公司名称</label>
+            <div class="layui-input-inline">
+                <input type="text"   id="companyName" th:value="${editInfo.companyName}" autocomplete="off" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">项目名称</label>
+            <div class="layui-input-inline">
+                <input type="text"   name="projectName" th:value="${editInfo.projectName}" lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">离场日期</label>
+        <div class="layui-input-inline">
+            <input type="text" name="leaveDate" id="leaveDate" th:value="${#strings.replace(editInfo.leaveDate,'T',' ')}" lay-verify="required" placeholder="请输入离场日期" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">事由</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入事由" name="reason" th:text="${editInfo.reason}"  class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-card-body">
+        <table id="kContentTable" lay-filter="kContentTable"></table>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit="" lay-filter="kFormSubmit" id="kFormSubmit">
+        <input type="text" name="id" th:value="${editInfo.id}" autocomplete="off" class="layui-input">
+    </div>
+</div>
+<!--头部工具栏模板-->
+<script type="text/html" id="headToolbarTpl">
+    <button class="layui-btn layui-btn-sm " lay-event="addTransfer">添加交接清单</button>
+</script>
+<!--表格行工具栏模板-->
+<script type="text/html" id="rowToolbarTpl">
+    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+</script>
+<!--表格列格式化模板 start-->
+<script type="text/html" id="itemTypeTpl">
+      {{#  if(d.itemType == 0){ }}
+     <span class="layui-badge layui-bg-red">设备</span>
+     {{#  } else if(d.itemType == 1) { }}
+     <span class="layui-badge layui-bg-blue">工作任务</span>
+     {{#  } else if(d.itemType == 2) { }}
+     <span class="layui-badge layui-bg-blue">其它</span>
+     {{#  } else { }}
+     <span class="layui-badge layui-bg-gray">未知</span>
+     {{# } }}
+</script>
+<script type="text/html" id="handoverExecTpl">
+     {{#  if(d.handoverExec == 0){ }}
+    <span class="layui-badge layui-bg-red">完成</span>
+    {{#  } else if(d.handoverExec == 1) { }}
+    <span class="layui-badge layui-bg-blue">未完成</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
+</script>
+<script type="text/html" id="sexTpl">
+    {{#  if(d.sex == 0){ }}
+    <span class="layui-badge layui-bg-red">女</span>
+    {{#  } else if(d.sex == 1) { }}
+    <span class="layui-badge layui-bg-blue">男</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">未知</span>
+    {{# } }}
+</script>
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+<script>
+    layui.use(['form', 'laydate', 'tableSelect', 'table','soulTable'], function () {
+        var $ = layui.$, form = layui.form, laydate = layui.laydate,tableSelect=layui.tableSelect,table=layui.table,soulTable=layui.soulTable;
+        var tableId = 'kContentTable';
+        var area = ['90%', '95%'];
+        var registerCode=document.getElementById("registerCode").value;
+        // 实例化table
+        var tableIns = table.render($.extend(config.layui.table, {
+            elem: '#' + tableId
+            ,url: BASE_WEB + 'zg/transferList/list/data' // 数据接口
+            ,where:{registerCode:registerCode}
+            ,toolbar: '#headToolbarTpl'
+            ,height: 200
+            ,defaultToolbar: false
+            ,overflow: 'tips'
+            ,page:false
+            ,cols: [
+                [ //表头
+                {type:'checkbox', fixed: 'left'}
+                ,{field: 'itemType', title: '事项类型', width: 130, templet: '#itemTypeTpl'}
+                ,{field: 'transferContent', title: '交接内容'}
+                ,{field: 'handoverExec', title: '移交执行情况', width: 130, templet: '#handoverExecTpl'}
+                ,{field: 'transferUser', title: '交接人', }
+                ,{field: 'transferDate', title: '交接日期',}
+                ,{field: '', title: '操作', width: 235, fixed: 'right', templet: '#rowToolbarTpl'}
+            ]
+            ]
+            ,autoColumnWidth: {
+                init: true
+            }
+            ,done: function () {
+                soulTable.render(this)
+            }
+        }));
+
+        // 监听表格头部事件
+        table.on('toolbar(' + tableId + ')', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            var checkData = checkStatus.data; // 得到选中的数据
+            switch(obj.event) {
+                case 'addTransfer':
+                    layer.open({
+                        type: 2
+                        ,title: '添加'
+                        ,content: BASE_WEB + 'zg/transferList/edit?registerCode='+registerCode
+                        ,maxmin: true
+                        ,area: area   // 宽高
+                        ,btn: ['确定', '取消']
+                        ,yes: function(index, layero){
+                            //点击确认触发 iframe 内容中的按钮提交
+                            var submit = layero.find('iframe').contents().find("#kFormSubmit");
+                            submit.click();
+                        }
+                    });
+                    break;
+            }
+        });
+
+        // 表格行按钮 监听事件
+        table.on('tool(' + tableId + ')', function (obj) {
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+            if (layEvent === 'edit') {
+                layer.open({
+                    type: 2
+                    ,title: '编辑'
+                    ,content: BASE_WEB + 'zg/transferList/edit?id=' + data.id
+                    ,maxmin: true
+                    ,area: area   // 宽高
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        //点击确认触发 iframe 内容中的按钮提交
+                        var submit = layero.find('iframe').contents().find("#kFormSubmit");
+                        submit.click();
+                    }
+                });
+            }
+            if (layEvent === 'del') {
+                layer.confirm('确定删除吗？', function(index) {
+                    //执行 Ajax 后重载
+                    $.ajax({
+                        type: req.type.post,
+                        url: BASE_WEB + 'zg/transferList/del/' + data.id,
+                        async: false,
+                        success: function (r) {
+                            if (r.code === req.status.ok) {
+                                table.reload(tableId);
+                                kvfKit.sucessMsg('已删除');
+                            } else {
+                                kvfKit.errorMsg(r.msg);
+                            }
+                        }
+                    });
+                });
+            }
+        });
+        laydate.render({
+            elem: '#leaveDate' // 指定元素
+            ,trigger: 'click' //采用click弹出
+        });
+        tableSelect.render({
+            elem: '#personName',
+            checkedKey: 'id',
+            table: {
+                url: BASE_WEB + 'zg/outOtc/list/getOtcdata',
+                cols: [
+                    [
+                        { type: 'radio' }
+                        ,{field: 'personId', title: 'personId', hide:true}
+                        ,{field: 'birthDate', title: 'birthDate', hide:true}
+                        ,{field: 'phone', title: 'phone', hide:true}
+                        ,{field: 'documentType', title: 'documentType', hide:true}
+                        ,{field: 'idNumber', title: 'idNumber', hide:true}
+                        ,{field: 'personName', title: '姓名', width: 130}
+                        ,{field: 'sex', title: '性别', width: 130, templet: '#sexTpl'}
+                        ,{field: 'companyName', title: '所属公司', width: 130}
+                    ]
+                ]
+            },
+            done: function (elem, data) {
+                layui.each(data.data, function (index, item) {
+                    elem.val(item.personName);
+                    $('#personId').val(item.personId);
+                    $('#phone').val(item.phone);
+                     $("#sex option[value='1']").prop("selected",true);
+                     $('#birthDate').val(item.birthDate);
+                    kvfKit.set_select_checked('documentType',item.documentType);
+                    $('#documentType').val(item.documentType);
+                    $('#idNumber').val(item.idNumber);
+                    $('#companyName').val(item.companyName);
+                })
+                //alert(JSON.stringify(data.data.realname))
+            }
+        });
+
+
+        //监听提交
+        form.on('submit(kFormSubmit)', function(data){
+            var field = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+            var url = field.id ? 'zg/outLeaveperson/edit' : 'zg/outLeaveperson/add';
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            $.ajax({
+                type: req.type.post,
+                url: BASE_WEB + url,
+                data: field,
+                async: false,
+                success: function (r) {
+                    if (r.code === req.status.ok) {
+                        // 重载表格
+                        parent.layui.table.reload('kContentTable');
+                        parent.layer.close(index); //再执行关闭
+                    } else {
+                        kvfKit.errorMsg(r.msg);
+                    }
+                }
+            });
+
+        });
+    })
+</script>
+</body>
+</html>

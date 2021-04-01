@@ -52,6 +52,7 @@ public class OutPersonController extends BaseController {
         return R.ok(page);
     }
 
+
     @RequiresPermissions("zg:outPerson:add")
     @PostMapping(value = "add")
     public R add(OutPerson outPerson) {

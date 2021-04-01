@@ -88,7 +88,7 @@
         var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, laydate = layui.laydate;
         var upload = layui.upload;
         var tableId = 'kContentTable';
-        var area = ['449px', '95%'];
+        var area = ['80%', '95%'];
 
         // 实例化table
         var tableIns = table.render($.extend(config.layui.table, {
@@ -126,23 +126,46 @@
                     kvfKit.warningMsg("该流程未发布，不能启动");
                     return false;
                 }
-                kvfKit.aGet(
-                    BASE_WEB + 'workflow/process/{deploymentId}/start'.replace("{deploymentId}", data.deploymentId),
-                    function (r) {
-                        if (r.code === req.status.ok) {
-                            idx = layer.open({
-                                type: 2
-                                ,title: data.processName
-                                ,content: BASE_WEB + 'workflow/task/{taskId}/form'.replace('{taskId}', r.data)
-                                ,maxmin: false
-                                ,area: area   // 宽高
-                            });
-                            layer.full(idx);
-                        } else {
-                            kvfKit.errorMsg(r.msg);
+                var url=null;
+                //自定义表单判断，赋值url
+                if(data.deploymentId=='25008'){
+                    url=BASE_WEB + 'zg/outApplyleave/edit?deploymentId='+data.deploymentId;
+                }else if(data.deploymentId=='25023'){
+                    url= BASE_WEB + 'zg/outOtc/edit?deploymentId='+data.deploymentId;
+                }else if(data.deploymentId=='75001') {
+                    url = BASE_WEB + 'zg/outLeaveperson/edit?deploymentId=' + data.deploymentId;
+                }else{
+                    kvfKit.aGet(
+                        BASE_WEB + 'workflow/process/{deploymentId}/start'.replace("{deploymentId}", data.deploymentId),
+                        function (r) {
+                            if (r.code === req.status.ok) {
+                                idx = layer.open({
+                                    type: 2
+                                    ,title: data.processName
+                                    ,content: BASE_WEB + 'workflow/task/{taskId}/form'.replace('{taskId}', r.data)
+                                    ,maxmin: false
+                                    ,area: area   // 宽高
+                                });
+                                layer.full(idx);
+                            } else {
+                                kvfKit.errorMsg(r.msg);
+                            }
                         }
+                    )
+                }
+                layer.open({
+                    type: 2
+                    ,title: data.processName
+                    ,content: url
+                    ,maxmin: true
+                    ,area: area   // 宽高
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        //点击确认触发 iframe 内容中的按钮提交
+                        var submit = layero.find('iframe').contents().find("#kFormSubmit");
+                        submit.click();
                     }
-                )
+                });
             }
         });
 

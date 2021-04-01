@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalvin.kvf.modules.zg.mapper.TransferListMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.TransferList">
+        <id column="id" property="id" />
+        <result column="register_code" property="registerCode" />
+        <result column="item_type" property="itemType" />
+        <result column="transfer_content" property="transferContent" />
+        <result column="handover_exec" property="handoverExec" />
+        <result column="transfer_user" property="transferUser" />
+        <result column="transfer_date" property="transferDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       id, register_code, item_type, transfer_content, handover_exec, transfer_user, transfer_date
+    </sql>
+
+    <select id="selectTransferListList" resultType="com.kalvin.kvf.modules.zg.entity.TransferList">
+        select <include refid="Base_Column_List" /> from zg_transfer_list
+        <trim prefix="where" prefixOverrides="and">
+            <if test="transferList.registerCode != null and transferList.registerCode != ''">
+                and register_code like concat(#{transferList.registerCode}, "%")
+            </if>
+            <if test="transferList.itemType != null">
+                and item_type = #{transferList.itemType}
+            </if>
+            <if test="transferList.transferContent != null and transferList.transferContent != ''">
+                and transfer_content like concat(#{transferList.transferContent}, "%")
+            </if>
+            <if test="transferList.handoverExec != null">
+                and handover_exec = #{transferList.handoverExec}
+            </if>
+            <if test="transferList.transferUser != null and transferList.transferUser != ''">
+                and transfer_user like concat(#{transferList.transferUser}, "%")
+            </if>
+            <if test="transferList.transferDate != null">
+                and transfer_date = #{transferList.transferDate}
+            </if>
+        </trim>
+    </select>
+
+</mapper>

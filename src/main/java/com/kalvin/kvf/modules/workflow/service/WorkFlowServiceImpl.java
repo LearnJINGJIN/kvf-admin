@@ -26,12 +26,14 @@ import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.HistoryService;
+import org.activiti.engine.IdentityService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
+import org.activiti.engine.impl.UserQueryImpl;
 import org.activiti.engine.impl.persistence.entity.ModelEntity;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
@@ -75,8 +77,7 @@ public class WorkFlowServiceImpl implements IWorkFlowService {
     private ActivityMapper activityMapper;
 
     @Resource
-    private FormService formService;
-
+    private IdentityService identityService;
     @Override
     public String create(ModelVO modelVO) {
 
@@ -282,8 +283,11 @@ public class WorkFlowServiceImpl implements IWorkFlowService {
         return page;
     }
 
+
+
     @Override
     public ProcessQuery<List<MyTodoVO>> getTodoTasks(ProcessQueryVO processQueryVO) {
+
         TaskQuery taskQuery = taskService.createTaskQuery();
 
         if (StrUtil.isNotBlank(processQueryVO.getUsername())) {

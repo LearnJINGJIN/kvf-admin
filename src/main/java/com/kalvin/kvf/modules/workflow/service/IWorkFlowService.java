@@ -49,6 +49,7 @@ public interface IWorkFlowService {
 
     ProcessQuery<List<MyApplyVO>> getApplyTasks(ProcessQueryVO processQueryVO);
 
+
     HistoricProcessInstance getHistoricProcessInstanceByProcessInstanceId(String processInstanceId);
 
     /**

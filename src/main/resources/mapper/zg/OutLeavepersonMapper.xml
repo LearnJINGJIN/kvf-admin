@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalvin.kvf.modules.zg.mapper.OutLeavepersonMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kalvin.kvf.modules.zg.entity.OutLeaveperson">
+        <id column="id" property="id" />
+        <result column="register_code" property="registerCode" />
+        <result column="person_id" property="personId" />
+        <result column="person_name" property="personName" />
+        <result column="project_name" property="projectName" />
+        <result column="leave_date" property="leaveDate" />
+        <result column="reason" property="reason" />
+        <result column="process_status" property="processStatus" />
+        <result column="process_instance_id" property="processInstanceId" />
+        <result column="create_user" property="createUser" />
+        <result column="create_date" property="createDate" />
+        <result column="update_user" property="updateUser" />
+        <result column="birth_date" property="birthDate" />
+        <result column="sex" property="sex" />
+        <result column="phone" property="phone" />
+         <result column="company_name" property="companyName" />
+        <result column="document_type" property="documentType" />
+        <result column="id_number" property="idNumber" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       t.id, t.register_code, t.person_id, t.leave_date, t.reason, t.process_status,t.project_name, t.process_instance_id,
+       t.create_user, t.create_date, t.update_user, t.update_date,a.name as person_name,a.birth_date,a.sex,a.phone,a.document_type,
+       a.id_number,b.company_name
+    </sql>
+
+    <select id="selectOutLeavepersonList" resultType="com.kalvin.kvf.modules.zg.entity.OutLeaveperson">
+        select <include refid="Base_Column_List" /> from zg_out_leaveperson t
+        left join zg_out_person a on a.id=t.person_id
+        left join zg_out_company b on b.id=a.company_id
+        <trim prefix="where" prefixOverrides="and">
+            <if test="outLeaveperson.registerCode != null and outLeaveperson.registerCode != ''">
+                and t.register_code like concat(#{outLeaveperson.registerCode}, "%")
+            </if>
+            <if test="outLeaveperson.personName != null and outLeaveperson.personName != ''">
+                and a.name = #{outLeaveperson.personName}
+            </if>
+            <if test="outLeaveperson.leaveDate != null">
+                and t.leave_date = #{outLeaveperson.leaveDate}
+            </if>
+            <if test="outLeaveperson.reason != null and outLeaveperson.reason != ''">
+                and t.reason like concat(#{outLeaveperson.reason}, "%")
+            </if>
+            <if test="outLeaveperson.processStatus != null">
+                and t.process_status = #{outLeaveperson.processStatus}
+            </if>
+            <if test="outLeaveperson.processInstanceId != null">
+                and t.process_instance_id = #{outLeaveperson.processInstanceId}
+            </if>
+        </trim>
+    </select>
+    <select id="selectLeavePersonById" resultType="com.kalvin.kvf.modules.zg.entity.OutLeaveperson">
+        select <include refid="Base_Column_List" /> from zg_out_leaveperson t
+        left join zg_out_person a on a.id=t.person_id
+        left join zg_out_company b on b.id=a.company_id
+        where t.id=#{id}
+    </select>
+    <select id="selectLeavePersonByProcess" resultType="com.kalvin.kvf.modules.zg.entity.OutLeaveperson">
+        select <include refid="Base_Column_List" /> from zg_out_leaveperson t
+        left join zg_out_person a on a.id=t.person_id
+        left join zg_out_company b on b.id=a.company_id
+        where t.process_instance_id=#{processInstanceId}
+    </select>
+
+</mapper>

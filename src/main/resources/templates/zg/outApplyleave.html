@@ -17,9 +17,9 @@
                         <div class="layui-form layui-card-header kvf-card-header-auto">
                             <div class="layui-form-item">
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">外包人员id</label>
+                                    <label class="layui-form-label">外包人员</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="personId" placeholder="请输入外包人员id" autocomplete="off" class="layui-input">
+                                        <input type="text" name="personName" placeholder="请输入外包人员姓名" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
 
@@ -50,7 +50,7 @@
 
 <!--头部工具栏模板-->
 <script type="text/html" id="headToolbarTpl">
-    <button class="layui-btn layui-btn-sm " lay-event="add">添加</button>
+    <!--<button class="layui-btn layui-btn-sm " lay-event="add">添加</button>-->
 </script>
 
 <!--表格行工具栏模板-->
@@ -90,6 +90,8 @@
 <span class="layui-badge layui-bg-green">审批中</span>
 {{#  } else if(d.processStatus == 2) { }}
 <span class="layui-badge layui-bg-green">已完成</span>
+{{#  } else if(d.processStatus == 3) { }}
+<span class="layui-badge layui-bg-green">已驳回</span>
 {{#  } else { }}
 <span class="layui-badge layui-bg-gray">未知</span>
 {{# } }}
@@ -101,7 +103,7 @@
         var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, laydate = layui.laydate;
         var tableId = 'kContentTable';
         var area = ['80%', '95%'];
-
+        var deploymentId='45004';
         // 实例化table
         var tableIns = table.render($.extend(config.layui.table, {
             elem: '#' + tableId
@@ -130,7 +132,7 @@
                     layer.open({
                         type: 2
                         ,title: '添加'
-                        ,content: BASE_WEB + 'zg/outApplyleave/edit'
+                        ,content: BASE_WEB + 'zg/outApplyleave/edit?deploymentId='+deploymentId
                         ,maxmin: true
                         ,area: area   // 宽高
                         ,btn: ['确定', '取消']
@@ -154,7 +156,7 @@
                 layer.open({
                     type: 2
                     ,title: '编辑'
-                    ,content: BASE_WEB + 'zg/outApplyleave/edit?id=' + data.id
+                    ,content: BASE_WEB + 'zg/outApplyleave/edit?id=' + data.id+'&deploymentId='+deploymentId
                     ,maxmin: true
                     ,area: area   // 宽高
                     ,btn: ['确定', '取消']

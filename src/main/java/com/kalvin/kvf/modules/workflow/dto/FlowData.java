@@ -33,21 +33,23 @@ public class FlowData implements Serializable {
     private String taskId;  // 任务ID
     private String mainFormKey; // 主表单key
     private String formKey; // 任务表单key
+    private String businessId; // 任务表单id
     private String firstNodeId;  // 首节点ID
     private String currentNodeId;  // 当前节点ID
     private String currentNodeName; // 当前节点名称
     private String targetNodeId; // 目标任务节点ID
     private String comment; // 审批意见
     private String execType;    // 执行类型：默认正常，test为测试方式启动
-//    private List<NodeAssignee> nodeAssignees;   // 每个节点的审批人
-    private HashMap<String, NodeAssignee> nodeAssignee; // 每个节点的审批人
+     private HashMap<String, NodeAssignee> nodeAssignee; // 每个节点的审批人
     private List<ProcessNode> nextNodes;   // 当前节点所有可能的出口路由节点列表
     private int nextNodeNum;   // 当前节点所有可能的出口路由节点个数
     private boolean agency; // 是否是代理申请
     private boolean firstNode;  // 是否首节点
     private boolean firstSubmit;    // 是否第一次已提交，用于判断流程首环节是否回退过
+    private boolean isPass=true;   // 是否驳回
     private Date firstSubmitTime;   // 申请时间
     private List<ProcessNode> canBackNodes; // 当前节点所有可驳回的节点列表
     private boolean readOnly = false;   // 只读
+
 
 }

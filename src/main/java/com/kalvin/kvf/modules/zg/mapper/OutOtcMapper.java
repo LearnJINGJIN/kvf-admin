@@ -21,6 +21,13 @@ public interface OutOtcMapper extends BaseMapper<OutOtc> {
      * @return list
      */
     List<OutOtc> selectOutOtcList(OutOtc outOtc, IPage page);
+    /**
+     * 查询可离场列表(分页)
+     * @param outOtc 查询参数
+     * @param page 分页参数
+     * @return list
+     */
+    List<OutOtc> selectOtcLeaveList(OutOtc outOtc, IPage page);
 
     OutOtc selectInfoById(Long id);
     OutOtc selectInfoByProcess(String processInstanceId);

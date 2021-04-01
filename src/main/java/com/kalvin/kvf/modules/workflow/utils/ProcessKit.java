@@ -49,10 +49,13 @@ public class ProcessKit {
     public final static String FORM_CONFIG_KEY = "FORM_CONFIG_KEY";
     public final static String FORM_FORM_KEY = "FORM_FORM_KEY";
     public final static String FLOW_VARIABLES_KEY = "FLOW_VARIABLES_KEY";
-    public final static Integer FLOW_STATUS_NOT_SUBMIT = 0;
+    public final static String FLOW_IS_PASS = "isPass";
+     public final static Integer FLOW_STATUS_NOT_SUBMIT = 0;
     public final static Integer FLOW_STATUS_RUNNING = 1;
     public final static Integer FLOW_STATUS_END = 2;
     public final static String DEFAULT_AGREE_COMMENT = "同意";
+    public final static String DEFAULT_REJECT_COMMENT = "驳回";
+    public final static String DEFAULT_END_COMMENT = "结束流程";
     public final static Integer USER_TASK_TYPE_NORMAL = 0;
     public final static Integer USER_TASK_TYPE_SEQUENTIAL = 1;
     public final static Integer USER_TASK_TYPE_PARALLEL = 2;

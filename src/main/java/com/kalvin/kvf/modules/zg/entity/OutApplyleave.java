@@ -10,6 +10,7 @@ import com.kalvin.kvf.common.entity.BaseEntity;
 import java.math.BigDecimal;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -45,18 +46,20 @@ public class OutApplyleave extends BaseEntity {
      * 请假事由
      */
     private String leaveReason;
+    /**
+     * 请假流程部署id
+     */
+    private String deploymentId;
 
     /**
      * 请假开始时间
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime startTime;
+     private String startTime;
 
     /**
      * 请假结束时间
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime endTime;
+     private String endTime;
 
     /**
      * 请假总天数
@@ -83,7 +86,9 @@ public class OutApplyleave extends BaseEntity {
     /**
      * 流程id
      */
-    private Long processInstanceId;
+    private String processInstanceId;
+
+    private String theme;
 
     /**
      * 流程状态(0-申请 1-审批中 2-已完成)

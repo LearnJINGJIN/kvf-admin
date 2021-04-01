@@ -18,5 +18,11 @@ public interface FileService extends IService<File> {
      * @return page
      */
     Page<File> listFilePage(File file);
+    /**
+     * 获取单条数据
+     * @param id 查询参数
+     * @return page
+     */
+    File getFileById(Long id);
 
 }

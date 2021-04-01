@@ -23,9 +23,15 @@ public interface OutApplyleaveMapper extends BaseMapper<OutApplyleave> {
     List<OutApplyleave> selectOutApplyleaveList(OutApplyleave outApplyleave, IPage page);
     /**
      * 查询单条数据
-     * @param outApplyleave 查询参数
+     * @param id 查询参数
       * @return list
      */
     OutApplyleave selectOutApplyleavebyId(Long id);
+    /**
+     * 查询单条数据
+     * @param processInstanceId 查询参数
+      * @return list
+     */
+    OutApplyleave selectOutApplyleavebyProcess(String processInstanceId);
 
 }

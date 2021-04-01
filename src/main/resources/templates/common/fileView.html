@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>文件在线预览</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <link rel="stylesheet" th:href="@{/static/plugins/magnify/jquery.magnify.css}">
+    <script th:src="@{/static/js/jquery.min.js}"></script>
+    <script th:src="@{/static/plugins/magnify/jquery.magnify.min.js}"></script>
+    <script th:src="@{/static/plugins/pdf/pdfobject.min.js}"></script>
+    <script th:src="@{/static/plugins/video/video.js}"></script>
+</head>
+<body style="margin:0;background:#ececec;">
+<div class="layui-form-item" style="display: none">
+         <input type="text"  id="fileType" th:value="${fileType}">
+         <input type="text"  id="fileUrl" th:value="${fileUrl}">
+ </div>
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+<script language="javascript">
+    var fileType = document.getElementById("fileType").value, fileUrl = document.getElementById("fileUrl").value;
+    //alert(JSON.stringify(encodeURIComponent(fileUrl)));
+     if (fileType == '.pdf'){
+        if (PDFObject.supportsPDFs){
+            document.write('<div id="pdfViewer" class="box"></div>');
+            PDFObject.embed(fileUrl, "#pdfViewer" );
+        }else{
+            document.write('<div class="box" style="display:flex;align-items:center">'
+                + '<div style="flex:1;display:flex;justify-content:center">'
+                + '该文件不支持在线预览</div></div>');
+        }
+    }else if (fileType == '.doc' || fileType == '.xls' || fileType == '.ppt' || fileType == '.xlsx' ){
+        document.write('<iframe id="mainFrame" name="mainFrame" class="box" style="border:0;"></iframe>');
+        $('#mainFrame').attr('src', 'https://view.officeapps.live.com/op/view.aspx?src='
+            + encodeURIComponent(fileUrl));
+    }else if (fileType == '.txt' || fileType == '.html'){
+        document.write('<iframe id="mainFrame" name="mainFrame" class="box" style="border:0;background:#fff;"></iframe>');
+        $('#mainFrame').attr('src', (fileUrl));
+    }else if (fileType == '.img' || fileType == '.png' || fileType == ".jpg" || fileType == '.gif'){
+        document.write('<div class="box" style="display:flex;align-items:center">'
+            + '<div style="flex:1;display:flex;justify-content:center">'
+            + '<a href="'+fileUrl+'"></a></div></div>');
+        $('.box a').magnify({headToolbar: [], footToolbar: [
+                'zoomIn', 'zoomOut', 'fullscreen', 'actualSize', 'rotateLeft', 'rotateRight' ],
+            title: false, initMaximized: true }).click();
+    }else if (fileType == '.mp3' || fileType == '.mp4' || fileType == '.wav'){
+    	document.write('<div id="video" class="box"></div>');
+    	new Player({
+    	    id: 'video',
+    	    url: fileUrl,
+    	    width: 600,
+    	    height: 337.5,
+    	    playbackRate: [0.5, 1, 1.5, 2],
+    	    pip: true,
+    	    lang: 'zh-cn'
+    	});  
+    }else{
+        document.write('<div class="box" style="display:flex;align-items:center">'
+            + '<div style="flex:1;display:flex;justify-content:center">'
+            + '该文件不支持在线预览</div></div>');
+    }
+    $(function(){
+        var win = window;
+        if (parent.$ && window.name != ''){
+            var iframe = parent.$('.layui-layer iframe[name='+window.name+']');
+            if (iframe && iframe.length >= 1){ win = iframe[0].contentWindow; }
+        }
+        var box = $('.box, .magnify-modal'), boxResize = function(){
+            box.height(win.innerHeight - 30).width(win.innerWidth);
+        };
+        $(window).resize(function(){
+            boxResize();
+            setTimeout(function(){
+                boxResize();
+            }, 500);
+        });
+        boxResize();
+    });
+
+    function startWith(value, start) {
+        var reg = new RegExp("^" + start);
+        return reg.test(value)
+    }
+</script>
+
+</body>
+</html>

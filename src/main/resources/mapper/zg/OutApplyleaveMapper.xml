@@ -35,8 +35,8 @@
         left join zg_out_person a on a.id=t.person_id
         left join zg_out_company b on b.id=a.company_id
         <trim prefix="where" prefixOverrides="and">
-            <if test="outApplyleave.personId != null">
-                and person_id = #{outApplyleave.personId}
+            <if test="outApplyleave.personName != null">
+                and a.name LIKE concat("%", #{outApplyleave.personName, jdbcType=VARCHAR}, "%")
             </if>
         </trim>
     </select>
@@ -45,6 +45,12 @@
         left join zg_out_person a on a.id=t.person_id
         left join zg_out_company b on b.id=a.company_id
         where t.id=#{id}
+    </select>
+    <select id="selectOutApplyleavebyProcess" resultType="com.kalvin.kvf.modules.zg.entity.OutApplyleave">
+        select <include refid="Base_Column_List" /> from zg_out_applyleave t
+        left join zg_out_person a on a.id=t.person_id
+        left join zg_out_company b on b.id=a.company_id
+        where t.process_instance_id=#{processInstanceId}
     </select>
 
 </mapper>

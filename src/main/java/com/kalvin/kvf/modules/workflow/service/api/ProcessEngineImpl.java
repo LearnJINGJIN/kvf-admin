@@ -13,6 +13,8 @@ import com.kalvin.kvf.modules.workflow.service.FormService;
 import com.kalvin.kvf.modules.workflow.service.ProcessFormService;
 import com.kalvin.kvf.modules.workflow.utils.ProcessKit;
 import com.kalvin.kvf.modules.workflow.vo.FormConfigVO;
+import com.kalvin.kvf.modules.zg.entity.OutApplyleave;
+import com.kalvin.kvf.modules.zg.entity.OutLeaveperson;
 import com.kalvin.kvf.modules.zg.entity.OutOtc;
 import com.kalvin.kvf.modules.zg.service.OutOtcService;
 import lombok.extern.slf4j.Slf4j;
@@ -145,89 +147,6 @@ public class ProcessEngineImpl implements IProcessEngine {
         log.debug("用户【{}】启动流程【{}】实例【{}】", startUser, processName, processInstance.getId());
         return taskId;
     }
-    @Override
-    public String businessStart(String formCode, String businessId, String startUser) {
-        // 流程流转任务变量集合
-        final HashMap<String, Object> taskVariables = new HashMap<>();
-        final FlowData flowData = new FlowData();
-        Form form=formService.getByCode(formCode);
-        String deploymentId=form.getDeploymentId();
-        if (StrUtil.isBlank(deploymentId)) {
-            throw new KvfException("流程发布ID不允许为空");
-        }
-        if (StrUtil.isBlank(form.getFormAddrs())) {
-            throw new KvfException("关联表单不能为空");
-        }
-        if (StrUtil.isBlank(startUser)) {
-            // 获取当前登录用户
-            startUser = ShiroKit.getUser().getUsername();
-        }
-
-        ProcessForm processForm = processFormService.getByModelId(ProcessKit.getModel(deploymentId).getId());
-        if (processForm == null) {
-            throw new KvfException("该流程未关联绑定流程表单，无法使用");
-        }
-
-        flowData.setMainFormKey(processForm.getFormCode());
-        flowData.setFormKey(processForm.getFormAddrs());//设置自定义表单
-        flowData.setStartUser(startUser);
-        flowData.setCurrentUser(startUser);
-        flowData.setFirstNode(true);
-        flowData.setFirstSubmit(true);
-        flowData.setNextUser(startUser);
-        flowData.setFormKey(form.getFormAddrs());
-        taskVariables.put(ProcessKit.FLOW_DATA_KEY, flowData);
-
-        // 设置当前任务的办理人  // TODO: 2020/4/22 不知是否有用？
-        Authentication.setAuthenticatedUserId(startUser);
-
-        ProcessDefinition processDefinition = ProcessKit.getProcessDefinition(deploymentId);
-        if (processDefinition.isSuspended()) {
-            throw new KvfException("该流程已被挂起，无法使用，请激活后使用");
-        }
-        String processDefinitionId = processDefinition.getId();
-
-        ProcessInstance processInstance;
-        if (StrUtil.isBlank(businessId)) {
-            processInstance =  runtimeService.startProcessInstanceById(processDefinitionId, taskVariables);
-        } else {
-            // TODO: 2020/4/22 使用业务表启动流程
-            processInstance =  runtimeService.startProcessInstanceById(processDefinitionId, businessId, taskVariables);
-        }
-
-        // 设置流程启动后的相关核心变量
-        String processName = processDefinition.getName();
-        String processInstanceId = processInstance.getProcessInstanceId();
-        Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
-        String taskId = task.getId();
-
-        // 设置流程实例名称
-        runtimeService.setProcessInstanceName(processInstanceId, processName);
-
-        flowData.setProcessName(processName);
-        flowData.setProcessDefinitionId(processDefinitionId);
-        flowData.setProcessInstanceId(processInstanceId);
-        flowData.setFirstNodeId(task.getTaskDefinitionKey());
-        flowData.setCurrentNodeId(task.getTaskDefinitionKey());
-        flowData.setCurrentNodeName(task.getName());
-        flowData.setTaskId(taskId);
-        flowData.setExecutionId(task.getExecutionId());
-        // 储存流程核心流转变量
-        taskVariables.put(ProcessKit.FLOW_DATA_KEY, flowData);
-        // 储存流程表单流转数据
-        taskVariables.put(ProcessKit.FLOW_VARIABLES_KEY, new HashMap<>());
-        taskService.setVariables(taskId, taskVariables);
-        log.debug("用户【{}】启动流程【{}】实例【{}】", startUser, processName, processInstance.getId());
-        switch(form.getFormAddrs()){
-            case "zg/workflow/personApplyFlow":
-                OutOtc outOtc=new OutOtc();
-                outOtc.setId(Long.parseLong(businessId));
-                outOtc.setProcessInstanceId(processInstanceId);
-                autoProcessForm.updateOtcById(outOtc);
-                break;
-        }
-        return taskId;
-    }
 
     @Override
     public void submitTask(Map<String, Object> flowVariables) {
@@ -255,9 +174,9 @@ public class ProcessEngineImpl implements IProcessEngine {
         if (flowData.isFirstSubmit()) {
             flowData.setFirstSubmitTime(new Date());
         }
+        flowData.setBusinessId(flowVariables.get("businessId").toString());
         flowData.setFirstNode(false);
         flowData.setFirstSubmit(false);
-
         // 记录每个实例任务节点审批人
         HashMap<String, NodeAssignee> nodeAssignee = flowData.getNodeAssignee();
         if (nodeAssignee == null) {
@@ -265,11 +184,11 @@ public class ProcessEngineImpl implements IProcessEngine {
         }
         nodeAssignee.put(currentNodeId + "_" + taskId, new NodeAssignee(taskId, currentNodeId, currentUser));
         flowData.setNodeAssignee(nodeAssignee);
-
+        flowData.setPass(true);
         variables.put(ProcessKit.FLOW_VARIABLES_KEY, flowVariables);
         variables.put(ProcessKit.FLOW_DATA_KEY, flowData);
-
-        if (nextNodeNum == 0 || nextNodeNum == 1) {
+        variables.put(ProcessKit.FLOW_IS_PASS,true);
+         if (nextNodeNum == 0 || nextNodeNum == 1) {
             // 正常提交任务
             // 添加审批意见
             taskService.addComment(taskId, processInstanceId, comment);
@@ -291,26 +210,29 @@ public class ProcessEngineImpl implements IProcessEngine {
 
             // 正式提交任务
             taskService.complete(taskId, variables);
-            if(StrUtil.isNotBlank(nextUser)&&flowData.getFormKey()!=null){
-                String formAddrs=flowData.getFormKey();
-                switch(formAddrs){
-                    case "zg/workflow/personApplyFlow":
-                        OutOtc outOtc=new OutOtc();
-                        outOtc.setId(Long.parseLong(flowVariables.get("id").toString()));
-                        outOtc.setProcessStatus(1);
-                        autoProcessForm.updateOtcById(outOtc);
-                        break;
-                }
-            }
             if(StrUtil.isBlank(nextUser)&&flowData.getFormKey()!=null){
                 String formAddrs=flowData.getFormKey();
                 switch(formAddrs){
                     case "zg/workflow/personApplyFlow":
                         OutOtc outOtc=new OutOtc();
-                        outOtc.setId(Long.parseLong(flowVariables.get("id").toString()));
+                        outOtc.setId(Long.parseLong(flowData.getBusinessId()));
                         outOtc.setProcessStatus(2);
                         autoProcessForm.updateOtcById(outOtc);
                         break;
+                    case "zg/workflow/applyLeaveFlow":
+                        OutApplyleave OutApplyLeave=new OutApplyleave();
+                        OutApplyLeave.setId(Long.parseLong(flowData.getBusinessId()));
+                        OutApplyLeave.setProcessStatus(2);
+                        autoProcessForm.updateOutApplyLeaveId(OutApplyLeave);
+                        break;
+                    case "zg/workflow/leavePersonFlow":
+                        OutLeaveperson outLeaveperson=new OutLeaveperson();
+                        outLeaveperson.setId(Long.parseLong(flowData.getBusinessId()));
+                        outLeaveperson.setProcessStatus(2);
+                        autoProcessForm.updatetLeavePersonById(outLeaveperson);
+                        break;
+                    default:
+                        throw new KvfException("提交任务异常");
                 }
             }
         } else if (nextNodeNum > 1) {
@@ -319,6 +241,78 @@ public class ProcessEngineImpl implements IProcessEngine {
             throw new KvfException("提交任务异常");
         }
 
+    }
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void rejectTask(String taskId,String type) {
+        final Map<String, Object> variables = new HashMap<>();
+        final String currentUser = ShiroKit.getUser().getUsername();
+        final FlowData flowData = ProcessKit.getFlowData(taskId);
+          // 下一节点审批人
+        String comment=null;
+        if("1".equals(type)){
+            comment = StrUtil.isBlank(flowData.getComment()) ? ProcessKit.DEFAULT_REJECT_COMMENT : flowData.getComment();
+        }else{
+            comment = StrUtil.isBlank(flowData.getComment()) ? ProcessKit.DEFAULT_END_COMMENT : flowData.getComment();
+        }
+        final String processInstanceId = flowData.getProcessInstanceId();
+        final Task currentTask = ProcessKit.getCurrentTask(taskId);
+        final String currentNodeId = currentTask.getTaskDefinitionKey();
+
+        if (StrUtil.isBlank(processInstanceId)) {
+            throw new KvfException("流程实例ID不允许为空");
+        }
+        if (flowData.isFirstSubmit()) {
+            flowData.setFirstSubmitTime(new Date());
+        }
+        flowData.setFirstNode(false);
+        flowData.setFirstSubmit(false);
+
+        // 记录每个实例任务节点审批人
+        HashMap<String, NodeAssignee> nodeAssignee = flowData.getNodeAssignee();
+        if (nodeAssignee == null) {
+            nodeAssignee = new HashMap<>();
+        }
+        nodeAssignee.put(currentNodeId + "_" + taskId, new NodeAssignee(taskId, currentNodeId, currentUser));
+        flowData.setNodeAssignee(nodeAssignee);
+        variables.put(ProcessKit.FLOW_DATA_KEY, flowData);
+        flowData.setPass(false);
+        flowData.setNextUser("");
+        variables.put(ProcessKit.FLOW_IS_PASS, false);
+        variables.put("startUser", flowData.getStartUser());
+        // 正常提交任务
+        // 添加审批意见
+        taskService.addComment(taskId, processInstanceId, comment);
+        // 先置空，再设置。否则提交完任务后，历史任务表不会保存审批人。可能是activiti6的bug的吧？
+        taskService.setAssignee(taskId, "");
+        taskService.setAssignee(taskId, currentUser);
+        // 正式提交任务
+        taskService.complete(taskId, variables);
+        if("2".equals(type)&flowData.getFormKey()!=null){
+            String formAddrs=flowData.getFormKey();
+            switch(formAddrs){
+                case "zg/workflow/personApplyFlow":
+                    OutOtc outOtc=new OutOtc();
+                    outOtc.setId(Long.parseLong(flowData.getBusinessId()));
+                    outOtc.setProcessStatus(3);
+                    autoProcessForm.updateOtcById(outOtc);
+                    break;
+                case "zg/workflow/applyLeaveFlow":
+                    OutApplyleave OutApplyLeave=new OutApplyleave();
+                    OutApplyLeave.setId(Long.parseLong(flowData.getBusinessId()));
+                     OutApplyLeave.setProcessStatus(3);
+                    autoProcessForm.updateOutApplyLeaveId(OutApplyLeave);
+                    break;
+                case "zg/workflow/leavePersonFlow":
+                    OutLeaveperson outLeaveperson=new OutLeaveperson();
+                    outLeaveperson.setId(Long.parseLong(flowData.getBusinessId()));
+                    outLeaveperson.setProcessStatus(3);
+                    autoProcessForm.updatetLeavePersonById(outLeaveperson);
+                    break;
+                default:
+                    throw new KvfException("结束任务异常");
+            }
+        }
     }
 
     @Override
@@ -418,30 +412,31 @@ public class ProcessEngineImpl implements IProcessEngine {
          * 当前流程绑定的表单代号。
          * 如果在流转过程中把流程绑定的表单移除掉或者更换了表单，它不会使当前流程实例生效。依旧使用的是启动时绑定的表单
          */
-        final String formKey = flowData.getMainFormKey();
+        final String  formKey= flowData.getMainFormKey();
         final String processDefinitionId = flowData.getProcessDefinitionId();
         final String processInstanceId = flowData.getProcessInstanceId();
         final String currentNodeId = currentTask.getTaskDefinitionKey();
         final String currentExecutionId = currentTask.getExecutionId();
         final String currentNodeName = currentTask.getName();
-        Form form=formService.getByCode(formKey);
-        if (form == null) {
-            throw new KvfException("异常：form为空");
-        }
+
         //如果是自定义表单，则读取自定义表单数据
-         if (form.getType()==2){
-            if(StringUtils.isEmpty(form.getFormAddrs())){
-                throw new KvfException("异常：未配置对应表单!");
-            }
-            String formAddrs=form.getFormAddrs();
-            flowData.setFormKey(formAddrs);
+         if (!StringUtils.isEmpty(flowData.getFormKey())){
+             String formAddrs=flowData.getFormKey();
             hashMap.put(ProcessKit.FORM_FORM_KEY, formAddrs);
             //流程配置
             switch(formAddrs){
                 case "zg/workflow/personApplyFlow":
                     hashMap.put(ProcessKit.FORM_CONFIG_KEY, autoProcessForm.getOutOtcFormConfig(processInstanceId));
                     break;
-             }
+                case "zg/workflow/applyLeaveFlow":
+                    hashMap.put(ProcessKit.FORM_CONFIG_KEY, autoProcessForm.getOutApplyLeaveFormConfig(processInstanceId));
+                    break;
+                case "zg/workflow/leavePersonFlow":
+                    hashMap.put(ProcessKit.FORM_CONFIG_KEY, autoProcessForm.getLeavePersonFormConfig(processInstanceId));
+                    break;
+                default:
+                    throw new KvfException("异常：未配置对应表单!");
+            }
          }else{
             // 获取当前流程表单的配置数据
             FormConfigVO formConfig;
@@ -476,8 +471,8 @@ public class ProcessEngineImpl implements IProcessEngine {
         flowData.setNextNodeNum(processNodes.size());
 
         // 设置当前环节可驳回的所有任务节点集
-        List<ProcessNode> canBackNodes = ProcessKit.getCanBackNodes(currentNodeId, processDefinitionId);
-        flowData.setCanBackNodes(canBackNodes);
+//        List<ProcessNode> canBackNodes = ProcessKit.getCanBackNodes(currentNodeId, processDefinitionId);
+//        flowData.setCanBackNodes(canBackNodes);
 
         log.debug("hashMap={}", hashMap);
         return hashMap;
@@ -510,6 +505,14 @@ public class ProcessEngineImpl implements IProcessEngine {
                 case "zg/workflow/personApplyFlow":
                     hashMap.put(ProcessKit.FORM_CONFIG_KEY, autoProcessForm.getOutOtcFormConfig(processInstanceId));
                     break;
+                case "zg/workflow/applyLeaveFlow":
+                    hashMap.put(ProcessKit.FORM_CONFIG_KEY, autoProcessForm.getOutApplyLeaveFormConfig(processInstanceId));
+                    break;
+                case "zg/workflow/leavePersonFlow":
+                    hashMap.put(ProcessKit.FORM_CONFIG_KEY, autoProcessForm.getLeavePersonFormConfig(processInstanceId));
+                    break;
+                default:
+                    throw new KvfException("异常：流程配置表单未匹配上!");
             }
         }else{
             // 获取当前流程表单的配置数据

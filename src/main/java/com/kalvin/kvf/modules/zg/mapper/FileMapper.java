@@ -21,5 +21,11 @@ public interface FileMapper extends BaseMapper<File> {
      * @return list
      */
     List<File> selectFileList(File file, IPage page);
+    /**
+     * 查询单条数据(分页)
+     * @param id 查询参数
+      * @return File
+     */
+    File selectFileById(Long id);
 
 }

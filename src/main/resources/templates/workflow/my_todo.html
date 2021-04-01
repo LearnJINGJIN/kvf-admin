@@ -65,8 +65,8 @@
 
 <!--表格行工具栏模板-->
 <script type="text/html" id="rowToolbarTpl">
-    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="view"><i class="layui-icon layui-icon-more"></i>查看</a>
-    <a class="layui-btn layui-btn-xs" lay-event="todoTask"><i class="layui-icon layui-icon-ok"></i>办理</a>
+    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="view"><i class="layui-icon layui-icon-more"></i>办理</a>
+    <!--<a class="layui-btn layui-btn-xs" lay-event="todoTask"><i class="layui-icon layui-icon-ok"></i>办理</a>-->
     <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="historicReview"><i class="layui-icon layui-icon-help"></i>历史审批</a>
 <!--    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><i class="layui-icon layui-icon-delete"></i>挂起</a>-->
 </script>
@@ -86,7 +86,7 @@
         var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, laydate = layui.laydate;
         var upload = layui.upload;
         var tableId = 'kContentTable';
-        var area = ['449px', '95%'];
+        var area = ['90%', '95%'];
 
         // 实例化table
         var tableIns = table.render($.extend(config.layui.table, {
@@ -96,7 +96,7 @@
             ,cols: [[ //表头
                 {type:'checkbox', fixed: 'left'}
                  ,{field: 'id', title: '流程ID', width: 130}
-                ,{field: 'name', title: '任务名称', width: 250}
+                ,{field: 'name', title: '节点名称', width: 250}
                 ,{field: 'processName', title: '所属流程'}
                 ,{field: 'startUser', title: '流程发起人', width: 100}
                 ,{field: 'deploymentId', hide:true}
@@ -150,15 +150,14 @@
             var tr = obj.tr; //获得当前行 tr 的DOM对象
 
             if (layEvent === 'view') {
-                var idx = layer.open({
+                layer.open({
                     type: 2
                     ,title: data.processName
                     ,content: BASE_WEB + 'workflow/task/{taskId}/form'.replace('{taskId}', data.id)
                     ,maxmin: false
                     ,area: area   // 宽高
                 });
-                layer.full(idx);
-            }
+             }
             if (layEvent === 'todoTask') {
                 layer.open({
                     type: 2

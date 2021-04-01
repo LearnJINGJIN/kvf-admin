@@ -44,6 +44,7 @@
 
 
 <script type="text/html" id="rowToolbarTpl">
+    <a class="layui-btn layui-btn-xs layui-btn-blue" lay-event="show"><i class="layui-icon layui-icon-read"></i></a>
     <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><i class="layui-icon layui-icon-delete"></i></a>
     <a class="layui-btn layui-btn-xs " lay-event="download"><i class="layui-icon layui-icon-download-circle"></i></a>
 </script>
@@ -54,7 +55,7 @@
     layui.use(['element', 'form', 'layer', 'table','upload'], function () {
         var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, upload = layui.upload;
         var tableId = 'kContentTable';
-        var area = ['449px', '95%'];
+        var area = ['90%', '95%'];
 
         // 实例化table
         var tableIns = table.render($.extend(config.layui.table, {
@@ -120,7 +121,16 @@
             if (layEvent === 'download') {
                 window.location.href = api.comm.download+"?filePath="+data.fileAddrs+"&fileName="+data.fileName;
             }
-
+            if(layEvent === 'show'){
+                layer.open({
+                    type: 2
+                    ,title: '预览'
+                    ,content: BASE_WEB + 'zg/file/showFile?id=' + data.id
+                    ,maxmin: true
+                    ,area: area   // 宽高
+                    ,btn: false
+                });
+            }
         });
         // 监听查询
         form.on('submit(kTableSearchFilter)', function (obj) {

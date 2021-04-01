@@ -82,6 +82,17 @@ public class FileController extends BaseController {
         }
         return R.ok(upload);
     }
+    /**
+     * 预览
+     */
 
+    @GetMapping(value="showFile")
+    public ModelAndView showFile(Long id){
+        ModelAndView mv=new ModelAndView("common/fileView");
+        File file = fileService.getFileById(id);
+        mv.addObject("fileType", file.getFileType());
+        mv.addObject("fileUrl",file.getFileAddrs());
+        return mv;
+    }
 }
 

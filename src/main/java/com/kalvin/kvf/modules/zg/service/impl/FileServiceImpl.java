@@ -24,5 +24,9 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
         List<File> files = baseMapper.selectFileList(file, page);
         return page.setRecords(files);
     }
+    @Override
+    public File getFileById(Long id) {
+        return baseMapper.selectFileById(id);
+    }
 
 }

@@ -12,6 +12,11 @@
             <input type="text" id="personId" name="personId" th:value="${editInfo.personId==null?'':editInfo.personId}" autocomplete="off" class="layui-input">
         </div>
     </div>
+    <div class="layui-form-item layui-hide">
+        <div class="layui-input-inline">
+            <input type="text"  name="deploymentId" th:value="${editInfo.deploymentId==null?'':editInfo.deploymentId}" autocomplete="off" class="layui-input">
+        </div>
+    </div>
     <div class="layui-form-item">
         <div class="layui-inline">
             <label class="layui-form-label"><span style="color: red">*</span>姓名</label>

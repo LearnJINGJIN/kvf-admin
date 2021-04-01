@@ -231,17 +231,6 @@ public class WorkflowController {
         return R.ok(taskId);
     }
     /**
-     * 当前用户启动自定义流程流程
-     * @param formCode 流程对应表单code
-     */
-    @RequiresPermissions("workflow:autoForm:start")
-    @GetMapping(value = "process/autoForm/start")
-    public R start(Long id,String formCode) {
-        final String taskId = processEngine.businessStart(formCode,id.toString(),ShiroKit.getUser().getUsername());
-        return R.ok(taskId);
-    }
-
-    /**
      * 当前用户启动流程（一般用于开发者开发测试流程）
      * @param deploymentId 流程发布ID
      */
@@ -260,6 +249,16 @@ public class WorkflowController {
     @PostMapping(value = "submit/task")
     public R submit(@RequestParam Map<String, Object> flowVariables) {
         processEngine.submitTask(flowVariables);
+        return R.ok();
+    }
+    /**
+     * 驳回任务
+     * @param taskId 流程id，type:1-驳回 2-结束流程
+     * @return r
+     */
+    @PostMapping(value = "reject/task")
+    public R reject(String taskId,String type) {
+        processEngine.rejectTask(taskId,type);
         return R.ok();
     }
 

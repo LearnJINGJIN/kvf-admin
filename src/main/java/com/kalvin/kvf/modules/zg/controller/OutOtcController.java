@@ -32,14 +32,15 @@ public class OutOtcController extends BaseController {
     }
 
     @GetMapping(value = "edit")
-    public ModelAndView edit(Long id) {
+    public ModelAndView edit(Long id,String deploymentId) {
         ModelAndView mv = new ModelAndView("zg/outOtc_edit");
         OutOtc outOtc;
         if (id == null) {
             outOtc = new OutOtc();
+            outOtc.setDeploymentId(deploymentId);
         } else {
             outOtc = outOtcService.getInfoById(id);
-        }
+         }
         mv.addObject("editInfo", outOtc);
         return mv;
     }
@@ -49,19 +50,24 @@ public class OutOtcController extends BaseController {
         Page<OutOtc> page = outOtcService.listOutOtcPage(outOtc);
         return R.ok(page);
     }
+    @GetMapping(value = "list/getOtcdata")
+    public R listOtcData(OutOtc outOtc) {
+        Page<OutOtc> page = outOtcService.listOtcLeavePage(outOtc);
+        return R.ok(page);
+    }
 
     @RequiresPermissions("zg:outOtc:add")
     @PostMapping(value = "add")
     public R add(OutOtc outOtc) {
         outOtc.setCreateUser(ShiroKit.getUserId());
-        outOtcService.save(outOtc);
-        return R.ok();
+        return  outOtcService.startForm(outOtc);
     }
 
     @RequiresPermissions("zg:outOtc:edit")
     @PostMapping(value = "edit")
     public R edit(OutOtc outOtc) {
         outOtc.setUpdateUser(ShiroKit.getUserId());
+        outOtc.setDeploymentId(null);
         outOtcService.updateById(outOtc);
         return R.ok();
     }

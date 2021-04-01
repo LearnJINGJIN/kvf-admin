@@ -33,5 +33,10 @@
             </if>
         </trim>
     </select>
+    <select id="selectFileById" resultType="com.kalvin.kvf.modules.zg.entity.File">
+        select <include refid="Base_Column_List" /> from zg_file t
+        left join sys_user a on a.id=t.user_id
+        where t.id=#{id}
+    </select>
 
 </mapper>

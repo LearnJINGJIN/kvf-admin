@@ -2,6 +2,7 @@ package com.kalvin.kvf.modules.zg.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.kalvin.kvf.common.dto.R;
 import com.kalvin.kvf.modules.zg.entity.OutApplyleave;
 
 /**
@@ -25,4 +26,17 @@ public interface OutApplyleaveService extends IService<OutApplyleave> {
      * @return
      */
     OutApplyleave getOutApplyleaveById(Long id);
+    /**
+     * 通过流程id查询
+     * @param processInstanceId
+     * @return
+     */
+    OutApplyleave getOutApplyleaveByProcess(String processInstanceId);
+
+    /**
+     * 保存并启动流程
+     * @param outApplyleave
+     * @return
+     */
+    R startForm(OutApplyleave outApplyleave);
 }
